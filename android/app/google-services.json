@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1066661762461",
+    "project_id": "printerval-b9a7d",
+    "storage_bucket": "printerval-b9a7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066661762461:android:b5d430ec45f8d864c94b74",
+        "android_client_info": {
+          "package_name": "com.printervalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066661762461-h146u4kunpd43un8b15oj3n6ubraldqd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.printervalapp",
+            "certificate_hash": "98947418e86feb50713ef8d29e3554f890d3ba5d"
+          }
+        },
+        {
+          "client_id": "1066661762461-ojsjpaf0dqup6reb3s0g7fnc5jis3c4u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHzZc66m87OsNW3EUhmog7o9qtNFH3lVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066661762461-ojsjpaf0dqup6reb3s0g7fnc5jis3c4u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1066661762461-c0bog4qtl0s8oefnm7kggh0co8p5njia.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.megaads.printervalApp",
+                "app_store_id": "1642438715"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
