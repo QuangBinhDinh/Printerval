@@ -11,7 +11,7 @@ import {
     Image,
     Platform,
 } from 'react-native';
-import { useFetchCategoryBannerQuery, useFetchHomeBannerQuery, useFetchPopularDesignQuery } from './service';
+import { useFetchCategoryBanner2Query, useFetchHomeBanner2Query } from './service';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { Icon } from '@rneui/base';
 import { SCREEN_WIDTH } from '@util/index';
@@ -22,8 +22,8 @@ import { cdnImage } from '@util/cdnImage';
 
 const SharedImage = Platform.OS == 'android' ? FastImage : Image;
 const HomeScreen = () => {
-    const banner = useFetchHomeBannerQuery();
-    const category = useFetchCategoryBannerQuery();
+    const banner = useFetchHomeBanner2Query();
+    const category = useFetchCategoryBanner2Query();
 
     const image_list = category.data?.result?.map((i: any) => ({ url: i.image_url }));
     const firstLoad = banner.isLoading || category.isLoading;

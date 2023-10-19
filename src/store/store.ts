@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './reducer';
-import { api } from '@api/service';
+import { api, domainApi } from '@api/service';
 const Store = configureStore({
     reducer: rootReducer,
-    middleware: gDM => gDM().concat(api.middleware),
+    middleware: gDM => gDM().concat(api.middleware).concat(domainApi.middleware),
 });
 export default Store;
 

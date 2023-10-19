@@ -72,6 +72,7 @@ const axiosBaseQuery =
     };
 
 export const api = createApi({
+    reducerPath: 'api',
     baseQuery: axiosBaseQuery({
         baseUrl: API_URL,
         timeout: 15000,
@@ -83,6 +84,7 @@ export const api = createApi({
 });
 
 export const domainApi = createApi({
+    reducerPath: 'domainApi',
     baseQuery: axiosBaseQuery({
         baseUrl: DOMAIN_URL,
         timeout: 15000,
