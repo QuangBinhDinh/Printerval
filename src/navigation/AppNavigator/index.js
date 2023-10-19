@@ -5,6 +5,7 @@ import { Apps, AppsFill, Bell, BellFill, Home, HomeFill, User, UserFill } from '
 import EmptyScreen from '../../moudle/test/EmptyScreen';
 import HomeScreen from '../../moudle/home';
 import ProductListScreen from '../../moudle/productList';
+import Login from '../../moudle/auth';
 
 const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
@@ -62,7 +63,7 @@ const BottomTabs = () => {
                     },
                 }}
                 name="UserScreen"
-                component={EmptyScreen}
+                component={Login}
             />
         </Tab.Navigator>
     );

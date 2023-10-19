@@ -20,6 +20,27 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1066661762461-c0bog4qtl0s8oefnm7kggh0co8p5njia</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>peoplesapp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb359752269498517</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -35,6 +56,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>FacebookAppID</key>
+	<string>359752269498517</string>
+	<key>FacebookClientToken</key>
+	<string>3f00509da0bade2c26549408b07df9de</string>
+	<key>FacebookDisplayName</key>
+	<string>Printerval</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>

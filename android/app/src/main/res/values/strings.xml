@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Printerval</string>
+    <string name="facebook_app_id">359752269498517</string><string name="facebook_client_token">3f00509da0bade2c26549408b07df9de</string>
 </resources>
