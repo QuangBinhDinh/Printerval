@@ -1,4 +1,4 @@
-package com.templatenew;
+package com.printervalapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
