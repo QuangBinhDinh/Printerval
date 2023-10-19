@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": false,//set true sẽ bắt buộc 1 file phải có ít nhất 1 import/export statement
+    "jsx": "react-native",
+    "lib": ["es2017"],
+    "types": ["react-native", "jest"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext",
+    
+    // "baseUrl": "./src",
+    "paths": {
+      "@navigation/*": ["./src/navigation/*"],
+      "@components/*": ["./src/components/*"],
+      "@components": ["./src/components"],
+      "@assets/*": ["./src/assets/*"],
+      "@api/*": ["./src/api/*"],
+      "@store/*": ["./src/store/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@util/*": ["./src/util/*"],
+      "@type/*": ["./src/type/*"],
+      
+      "@animation/*": ["./src/assets/animation/*"],
+      "@banner/*": ["./src/assets/banner/*"],
+      "@image/*": ["./src/assets/image/*"],
+      "@svg/*": ["./src/assets/svg/*"],
+     
+    }
+
+  },
+  "exclude": [
+    "node_modules",
+    // "babel.config.js",
+    // "metro.config.js",
+    // "jest.config.js"
+  ]
+}
