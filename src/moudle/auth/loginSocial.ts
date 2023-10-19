@@ -1,7 +1,7 @@
 import authFir from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-// import appleAuth from '@invertase/react-native-apple-authentication';
+import appleAuth from '@invertase/react-native-apple-authentication';
 import Store from '@store/store';
 import auth from './reducer';
 
@@ -40,25 +40,25 @@ async function googleLogin() {
 }
 
 async function appleLogin() {
-    // Start the sign-in request
-    // const appleAuthRequestResponse = await appleAuth.performRequest({
-    //     requestedOperation: appleAuth.Operation.LOGIN,
-    //     requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-    // });
-    // Store.dispatch(auth.actions.setLogging(true));
-    // // Ensure Apple returned a user identityToken
-    // if (!appleAuthRequestResponse.identityToken) {
-    //     throw 'Apple Sign-In failed - no identify token returned';
-    // }
-    // // Create a Firebase credential from the response
-    // const { identityToken, nonce, fullName } = appleAuthRequestResponse;
-    // const appleCredential = authFir.AppleAuthProvider.credential(identityToken, nonce);
-    // // Sign the user in with the credential
-    // var firebaseCredential = await authFir().signInWithCredential(appleCredential);
-    // return {
-    //     ...firebaseCredential,
-    //     fullName,
-    // };
+    //Start the sign-in request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    });
+    Store.dispatch(auth.actions.setLogging(true));
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+        throw 'Apple Sign-In failed - no identify token returned';
+    }
+    // Create a Firebase credential from the response
+    const { identityToken, nonce, fullName } = appleAuthRequestResponse;
+    const appleCredential = authFir.AppleAuthProvider.credential(identityToken, nonce);
+    // Sign the user in with the credential
+    var firebaseCredential = await authFir().signInWithCredential(appleCredential);
+    return {
+        ...firebaseCredential,
+        fullName,
+    };
 }
 
 export { facebookLogin, googleLogin, appleLogin };

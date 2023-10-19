@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { facebookLogin, googleLogin } from './loginSocial';
+import { appleLogin, facebookLogin, googleLogin } from './loginSocial';
 
 const Login = () => {
     const facebookAuth = async () => {
@@ -12,6 +12,11 @@ const Login = () => {
         var credit = await googleLogin();
         console.log(credit);
     };
+
+    const appleAuth = async () => {
+        var credit = await appleLogin();
+        console.log(credit);
+    };
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginTop: 100 }}>
@@ -19,7 +24,7 @@ const Login = () => {
 
                 <Pressable style={styles.social} onPress={googleAuth}></Pressable>
 
-                <Pressable style={styles.social}></Pressable>
+                <Pressable style={styles.social} onPress={appleAuth}></Pressable>
             </View>
         </View>
     );
