@@ -26,6 +26,7 @@
     "@reduxjs/toolkit": "^1.9.6",
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
+    "@types/he": "^1.2.2",
     "@types/lodash": "^4.14.199",
     "axios": "^1.5.1",
     "formik": "^2.4.5",
