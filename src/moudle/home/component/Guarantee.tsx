@@ -34,7 +34,7 @@ const Guarantee = () => {
             <TextNormal style={{ color: '#222', fontSize: 17, marginTop: 8 }}>Complimentary On All Orders</TextNormal>
             <ScrollView
                 style={styles.scroll}
-                contentContainerStyle={{ paddingLeft: 4 }}
+                contentContainerStyle={{ paddingLeft: 4, paddingRight: 16 }}
                 horizontal
                 showsHorizontalScrollIndicator={false}
             >
