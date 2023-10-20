@@ -7,10 +7,13 @@ import MainCategory from './component/MainCategory';
 
 import { useFetchCategoryBannerQuery, useFetchExploreProdQuery } from './service';
 import ExploreProd from './component/ExploreProd';
-import IntroView from './component/IntroView';
+import SpiceUpView from './component/SpiceUpView';
 import SupportArtist from './component/SupportArtist';
 import Guarantee from './component/Guarantee';
 import ReferFriend from './component/ReferFriend';
+import HeaderBanner from './component/HeaderBanner';
+import BlogHome from './component/BlogHome';
+import PopularDesign from './component/PopularDesign';
 
 //testing commit
 const HomeScreen = () => {
@@ -21,15 +24,18 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} removeClippedSubviews>
-                <View style={{ height: 10 + insets.top / 1.5 }} />
+                <View style={{ height: 16 + insets.top / 1.5 }} />
+                <HeaderBanner />
                 <TrendExplore />
                 <MainCategory data={banner?.result} />
                 <ExploreProd data={explore?.result} />
-                <IntroView />
+                <SpiceUpView />
+                <PopularDesign />
                 <SupportArtist />
                 <Guarantee />
                 <ReferFriend />
-                <View style={{ height: 80 }} />
+                <BlogHome />
+                <View style={{ height: 20 }} />
             </ScrollView>
         </View>
     );

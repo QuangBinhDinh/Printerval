@@ -57,21 +57,21 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     title: {
-        fontSize: 18,
-        lineHeight: 23,
+        fontSize: 16,
+        lineHeight: 20,
         width: '100%',
     },
     subTitle: {
-        fontSize: 16,
+        fontSize: 14,
         color: lightColor.grayout,
         marginTop: 3,
     },
     price: {
         color: lightColor.price,
-        fontSize: 20,
+        fontSize: 18,
         marginTop: 0,
     },
-    oldPrice: { fontSize: 16, color: lightColor.grayout, textDecorationLine: 'line-through' },
+    oldPrice: { fontSize: 14, color: lightColor.grayout, textDecorationLine: 'line-through' },
     discount: {
         width: 52,
         height: 28,

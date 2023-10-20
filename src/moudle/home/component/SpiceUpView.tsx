@@ -5,7 +5,7 @@ import React, { memo } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-const IntroView = () => {
+const SpiceUpView = () => {
     return (
         <View style={{ width: '100%', marginTop: 32 }}>
             <View style={styles.contentView}>
@@ -36,7 +36,7 @@ const IntroView = () => {
     );
 };
 
-export default memo(IntroView);
+export default memo(SpiceUpView);
 
 const styles = StyleSheet.create({
     contentView: { width: SCREEN_WIDTH, height: 460, marginTop: 100 },

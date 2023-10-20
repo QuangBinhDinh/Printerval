@@ -10,12 +10,12 @@ const ExploreProd = ({ data }: { data: any[] }) => {
     if (!newData) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 12 }}>Explore by trends</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 22, marginLeft: 16 }}>Explore by trends</TextSemiBold>
             <View style={styles.list}>
                 {newData.map((col, index) => (
                     <View key={index} style={[{ width: '48%' }]}>
                         {col.map((item, i) => (
-                            <DynamicCard item={item} key={item.id} style={{ marginTop: i == 0 ? 18 : 24 }} />
+                            <DynamicCard item={item} key={item.id} style={{ marginTop: i == 0 ? 16 : 24 }} />
                         ))}
                     </View>
                 ))}
@@ -28,7 +28,7 @@ export default memo(ExploreProd);
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 30,
+        marginTop: 32,
         width: '100%',
     },
     list: { width: '100%', flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between' },

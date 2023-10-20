@@ -9,7 +9,7 @@ const MainCategory = ({ data }: { data: any[] }) => {
     if (!data) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 12, marginBottom: 16 }}>
+            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, marginBottom: 16 }}>
                 Best for the collections
             </TextSemiBold>
             <View style={styles.rowUp}>
