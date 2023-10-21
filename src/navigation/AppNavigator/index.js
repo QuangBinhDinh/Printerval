@@ -1,7 +1,20 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CustomTabBar from './CustomTabBar';
-import { Apps, AppsFill, Bell, BellFill, Home, HomeFill, User, UserFill } from '@svg/index';
+import {
+    Apps,
+    AppsFill,
+    Bell,
+    BellFill,
+    Home,
+    HomeFill,
+    User,
+    UserFill,
+    Search,
+    Heart,
+    SearchFill,
+    HeartFill,
+} from '@svg/index';
 import EmptyScreen from '../../moudle/test/EmptyScreen';
 import HomeScreen from '../../moudle/home';
 import ProductListScreen from '../../moudle/productList';
@@ -22,8 +35,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <HomeFill width={18} height={18} />;
-                        else return <Home width={18} height={18} />;
+                        if (focused) return <HomeFill width={25} height={25} />;
+                        else return <Home width={25} height={25} />;
                     },
                 }}
                 name="HomeScreen"
@@ -32,22 +45,33 @@ const BottomTabs = () => {
 
             <Tab.Screen
                 options={{
-                    title: 'Category',
+                    title: 'Search',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <AppsFill width={18} height={18} />;
-                        else return <Apps width={18} height={18} />;
+                        if (focused) return <SearchFill width={24} height={24} />;
+                        else return <Search width={24} height={24} />;
                     },
                 }}
                 name="CategoryScreen"
-                component={ProductListScreen}
+                component={EmptyScreen}
+            />
+            <Tab.Screen
+                options={{
+                    title: 'Cart',
+                    tabBarIcon: ({ focused }) => {
+                        if (focused) return <SearchFill width={24} height={24} />;
+                        else return <Search width={24} height={24} />;
+                    },
+                }}
+                name="CartScreen"
+                component={EmptyScreen}
             />
 
             <Tab.Screen
                 options={{
-                    title: 'Updates',
+                    title: 'Wishlist',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <BellFill width={18} height={18} />;
-                        else return <Bell width={18} height={18} />;
+                        if (focused) return <HeartFill width={24} height={24} />;
+                        else return <Heart width={24} height={24} />;
                     },
                 }}
                 name="Notify"
@@ -58,12 +82,12 @@ const BottomTabs = () => {
                 options={{
                     title: 'You',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <UserFill width={18} height={18} />;
-                        else return <User width={18} height={18} />;
+                        if (focused) return <UserFill width={27} height={24} />;
+                        else return <User width={27} height={24} />;
                     },
                 }}
                 name="UserScreen"
-                component={Login}
+                component={EmptyScreen}
             />
         </Tab.Navigator>
     );

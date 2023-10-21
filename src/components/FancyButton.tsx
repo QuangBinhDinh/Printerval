@@ -29,12 +29,7 @@ const FancyButton = ({ style, backgroundColor, onPress, children }: IProps) => {
         buttonScale.value = withTiming(1, { duration: 150 });
     };
     return (
-        <AnimatedHightlight
-            onPress={onPress}
-            style={[style, styles.container, animStyle]}
-            onPressIn={pressIn}
-            onPressOut={pressOut}
-        >
+        <AnimatedHightlight onPress={onPress} style={[style, animStyle]} onPressIn={pressIn} onPressOut={pressOut}>
             <View style={[styles.innerButton, { backgroundColor }]}>{children}</View>
         </AnimatedHightlight>
     );
@@ -43,13 +38,11 @@ const FancyButton = ({ style, backgroundColor, onPress, children }: IProps) => {
 export default FancyButton;
 
 const styles = StyleSheet.create({
-    container: {
-        overflow: 'hidden',
-    },
     innerButton: {
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
         backgroundColor: 'white',
+        overflow: 'hidden',
     },
 });

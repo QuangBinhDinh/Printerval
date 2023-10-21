@@ -22,9 +22,9 @@ const HomeScreen = () => {
     const { data: banner } = useFetchCategoryBannerQuery();
     const { data: explore } = useFetchExploreProdQuery();
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: 12 + insets.top / 1.5 }]}>
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} removeClippedSubviews>
-                <View style={{ height: 16 + insets.top / 1.5 }} />
+                {/* <View style={{ height: 12 + insets.top / 1.5 }} /> */}
                 <HeaderBanner />
                 <TrendExplore />
                 <MainCategory data={banner?.result} />

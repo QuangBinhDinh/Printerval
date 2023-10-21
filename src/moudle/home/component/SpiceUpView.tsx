@@ -19,9 +19,9 @@ const SpiceUpView = () => {
                         life
                     </TextSemiBold>
                     <TextNormal style={{ fontSize: 17, marginTop: 14 }}>
-                        Printerval.com is an online marketplace, where people come together to make, sell, buy, and
-                        collect unique items. There’s no Printerval warehouse – just independent sellers selling the
-                        things they love.{'\n'}
+                        <TextNormal style={{ color: lightColor.secondary }}>Printerval.com</TextNormal> is an online
+                        marketplace, where people come together to make, sell, buy, and collect unique items. There’s no
+                        Printerval warehouse – just independent sellers selling the things they love.{'\n'}
                         {'\n'}We make the whole process easy, helping you connect directly with makers to find something
                         extraordinary.
                     </TextNormal>

@@ -1,6 +1,11 @@
+import { CartWhite } from '@assets/svg';
+import FancyButton from '@components/FancyButton';
+import { TextNormal } from '@components/text';
+import { lightColor } from '@styles/color';
+import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH } from '@util/index';
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -9,16 +14,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
     return (
         <View>
-            <View
-                style={{
-                    width: SCREEN_WIDTH,
-                    height: 64,
-                    backgroundColor: 'white',
-                    flexDirection: 'row',
-                    borderTopColor: '#dcdcdc',
-                    borderTopWidth: 1,
-                }}
-            >
+            <View style={[styles.rowContainer, shadowTop]}>
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
                     const label =
@@ -43,11 +39,32 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                             navigation.navigate({ name, merge: true });
                         }
                     };
-
+                    if (label == 'Cart')
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.button}
+                                accessibilityRole="button"
+                                accessibilityState={isFocused ? { selected: true } : {}}
+                                accessibilityLabel={options.tabBarAccessibilityLabel}
+                                testID={options.tabBarTestID}
+                                onPress={onPress}
+                            >
+                                <View
+                                    style={styles.cartOuter}
+                                    // onPress={onPress}
+                                    // backgroundColor="rgba(255, 205, 169, 1)"
+                                >
+                                    <View style={styles.cartInner}>
+                                        <CartWhite width={28} height={28} />
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
                     return (
                         <TouchableOpacity
                             key={index}
-                            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                            style={styles.button}
                             accessibilityRole="button"
                             accessibilityState={isFocused ? { selected: true } : {}}
                             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -55,13 +72,55 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                             onPress={onPress}
                         >
                             {options.tabBarIcon({ focused: isFocused })}
+                            <TextNormal
+                                style={[
+                                    styles.label,
+                                    { color: isFocused ? lightColor.secondary : lightColor.lightBlack },
+                                ]}
+                            >
+                                {label}
+                            </TextNormal>
                         </TouchableOpacity>
                     );
                 })}
             </View>
-            <View style={{ width: SCREEN_WIDTH, height: insets.bottom / 3, backgroundColor: 'white' }} />
+            <View style={{ width: SCREEN_WIDTH, height: insets.bottom / 2.5, backgroundColor: 'white' }} />
         </View>
     );
 };
 
 export default CustomTabBar;
+
+const styles = StyleSheet.create({
+    rowContainer: {
+        width: SCREEN_WIDTH,
+        height: 64,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+    },
+    button: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    label: {
+        fontSize: 14,
+        marginTop: 3,
+    },
+
+    cartOuter: {
+        height: 76,
+        width: 76,
+        backgroundColor: 'rgba(255, 205, 169, 1)',
+        borderRadius: 56,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -30,
+
+        overflow: 'hidden',
+    },
+    cartInner: {
+        height: 54,
+        width: 54,
+        backgroundColor: lightColor.secondary,
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
