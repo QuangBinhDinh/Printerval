@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 
 const SpiceUpView = () => {
     return (
-        <View style={{ width: '100%', marginTop: 32 }}>
+        <View style={{ width: SCREEN_WIDTH, marginTop: 32 }}>
             <View style={styles.contentView}>
                 <ImageBackground
                     style={{ flex: 1, paddingHorizontal: 16 }}

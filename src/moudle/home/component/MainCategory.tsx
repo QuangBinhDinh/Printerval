@@ -4,12 +4,15 @@ import { StyleSheet, View } from 'react-native';
 import { useFetchCategoryBannerQuery } from '../service';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
+import { SCREEN_WIDTH } from '@util/index';
 
+const LARGE_WIDTH = (SCREEN_WIDTH - 44) / 2;
+const SMALL_HEIGHT = (LARGE_WIDTH - 12) / 2;
 const MainCategory = ({ data }: { data: any[] }) => {
     if (!data) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, marginBottom: 16 }}>
+            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, marginBottom: 16, lineHeight: 28 }}>
                 Best for the collections
             </TextSemiBold>
             <View style={styles.rowUp}>
@@ -65,7 +68,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     bigView: {
-        width: '48.5%',
+        width: LARGE_WIDTH,
         aspectRatio: 1,
         borderRadius: 6,
         overflow: 'hidden',
@@ -76,13 +79,13 @@ const styles = StyleSheet.create({
     rowDown: {
         flexDirection: 'row-reverse',
         width: '100%',
-        paddingHorizontal: 12,
-        marginTop: 14,
+        paddingHorizontal: 16,
+        marginTop: 12,
         justifyContent: 'space-between',
     },
     smallView: {
         width: '100%',
-        height: '48%',
+        height: SMALL_HEIGHT,
         borderRadius: 6,
         overflow: 'hidden',
         //borderWidth: 1,

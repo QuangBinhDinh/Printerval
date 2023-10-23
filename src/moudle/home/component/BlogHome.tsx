@@ -8,7 +8,7 @@ import FastImage from 'react-native-fast-image';
 const BlogHome = () => {
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginBottom: 18 }}>Printerval Blog</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 22, marginBottom: 18, lineHeight: 28 }}>Printerval Blog</TextSemiBold>
             {[1, 2, 3].map(item => (
                 <BlogItem key={item} item={item} />
             ))}

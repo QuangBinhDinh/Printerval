@@ -9,7 +9,7 @@ const TrendExplore = () => {
     const renderItem = ({ item }: { item: any }) => <TrendItem item={item} />;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16 }}>Explore by trends</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, lineHeight: 28 }}>Explore by trends</TextSemiBold>
             <FlatList
                 style={styles.list}
                 data={[1, 2, 3, 4, 5]}
@@ -40,8 +40,9 @@ const styles = StyleSheet.create({
         marginTop: 16,
         width: '100%',
         height: 150,
+        //borderWidth: 1,
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
     image: { width: 100, height: 100, borderRadius: 50, borderWidth: 1 },
-    itemTitle: { fontSize: 16, marginTop: 7, width: '90%', textAlign: 'center', lineHeight: 18 },
+    itemTitle: { fontSize: 16, marginTop: 10, width: '90%', textAlign: 'center', lineHeight: 18 },
 });

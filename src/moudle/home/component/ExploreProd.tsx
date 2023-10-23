@@ -10,7 +10,9 @@ const ExploreProd = ({ data }: { data: any[] }) => {
     if (!newData) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16 }}>Explore by trends</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, lineHeight: 28 }}>
+                Explore products picked for you
+            </TextSemiBold>
             <View style={styles.list}>
                 {newData.map((col, index) => (
                     <View key={index} style={[{ width: '48%' }]}>
