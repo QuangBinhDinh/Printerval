@@ -1,6 +1,7 @@
 export const lightColor = {
     //use for text
     primary: '#5441B5',
+    primaryBold: 'rgba(25, 18, 79, 1)',
     secondary: '#FF7300',
     grayout: '#999999',
     lightBlack: '#333333',

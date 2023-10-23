@@ -1,13 +1,15 @@
+import { PrintervalLogo } from '@assets/svg';
 import { SCREEN_WIDTH } from '@util/index';
 import React, { memo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { RANDOM_IMAGE_URL } from '../../../constant';
 
 const HeaderBanner = () => {
     const renderItem = ({ item }: { item: any }) => <Banner item={item} />;
     return (
         <View style={{ width: '100%' }}>
-            <FastImage style={styles.img} source={require('@image/app-logo-2.png')} />
+            <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} />
             <FlatList
                 data={[1, 2, 3, 4, 5]}
                 style={styles.list}
@@ -25,7 +27,7 @@ export default memo(HeaderBanner);
 const Banner = ({ item }: { item: any }) => {
     return (
         <Pressable style={styles.item}>
-            <FastImage style={{ width: '100%', height: '100%' }} />
+            <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: RANDOM_IMAGE_URL }} />
         </Pressable>
     );
 };
@@ -47,6 +49,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         overflow: 'hidden',
         marginLeft: 12,
-        borderWidth: 1,
+        //borderWidth: 1,
     },
 });

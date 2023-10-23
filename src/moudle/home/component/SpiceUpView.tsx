@@ -6,11 +6,12 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const SpiceUpView = () => {
+    console.log(SCREEN_WIDTH);
     return (
         <View style={{ width: SCREEN_WIDTH, marginTop: 32 }}>
             <View style={styles.contentView}>
                 <ImageBackground
-                    style={{ flex: 1, paddingHorizontal: 16 }}
+                    style={{ flex: 1, paddingHorizontal: 12 }}
                     source={require('@assets/image/bg-spice.png')}
                     resizeMode="cover"
                 >
@@ -39,9 +40,9 @@ const SpiceUpView = () => {
 export default memo(SpiceUpView);
 
 const styles = StyleSheet.create({
-    contentView: { width: SCREEN_WIDTH, height: 460, marginTop: 100 },
+    contentView: { width: SCREEN_WIDTH, height: SCREEN_WIDTH >= 400 ? 460 : 500, marginTop: 100 },
     imageContainer: {
-        width: '100%',
+        width: SCREEN_WIDTH,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -50,15 +51,15 @@ const styles = StyleSheet.create({
         top: 0,
     },
     smallImage: {
-        width: 130,
-        height: 130,
+        width: (SCREEN_WIDTH - 5) / 3,
+        aspectRatio: 1,
         borderRadius: 130,
         borderWidth: 1.5,
         borderColor: lightColor.primary,
     },
     bigImage: {
-        width: 130,
-        height: 130,
+        width: (SCREEN_WIDTH - 5) / 3,
+        aspectRatio: 1,
         borderRadius: 130,
         borderWidth: 1.5,
         borderColor: lightColor.secondary,

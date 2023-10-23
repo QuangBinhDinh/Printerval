@@ -4,6 +4,7 @@ import { lightColor } from '@styles/color';
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { RANDOM_IMAGE_URL } from '../../../constant';
 
 const BlogHome = () => {
     return (
@@ -21,7 +22,7 @@ export default memo(BlogHome);
 const BlogItem = ({ item }: { item: any }) => {
     return (
         <Pressable style={styles.item}>
-            <FastImage style={{ width: 112, height: 112, borderWidth: 1 }} />
+            <FastImage style={{ width: 112, height: 112 }} source={{ uri: RANDOM_IMAGE_URL }} />
             <View style={styles.itemContent}>
                 <View>
                     <TextNormal style={styles.itemTitle} numberOfLines={2}>

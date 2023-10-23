@@ -4,6 +4,7 @@ import { Platform, Text } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
+import { RANDOM_IMAGE_URL } from '../../../constant';
 
 const TrendExplore = () => {
     const renderItem = ({ item }: { item: any }) => <TrendItem item={item} />;
@@ -24,7 +25,7 @@ const TrendExplore = () => {
 
 const TrendItem = ({ item }: { item: any }) => (
     <View style={styles.item}>
-        <FastImage style={styles.image} />
+        <FastImage style={styles.image} source={{ uri: RANDOM_IMAGE_URL }} />
         <TextNormal style={styles.itemTitle}>Sample Test Text </TextNormal>
     </View>
 );
@@ -43,6 +44,6 @@ const styles = StyleSheet.create({
         //borderWidth: 1,
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
-    image: { width: 100, height: 100, borderRadius: 50, borderWidth: 1 },
+    image: { width: 100, height: 100, borderRadius: 50 },
     itemTitle: { fontSize: 16, marginTop: 10, width: '90%', textAlign: 'center', lineHeight: 18 },
 });

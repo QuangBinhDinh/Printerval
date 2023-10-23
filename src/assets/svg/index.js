@@ -12,6 +12,7 @@ import Heart from './heart.svg';
 import HeartFill from './heart-fill.svg';
 import CartWhite from './cart-white.svg';
 import Favorite from './favorite.svg';
+import PrintervalLogo from './printerval-logo.svg';
 export {
     Apps,
     AppsFill,
@@ -27,4 +28,5 @@ export {
     HeartFill,
     CartWhite,
     Favorite,
+    PrintervalLogo,
 };
