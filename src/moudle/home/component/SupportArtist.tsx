@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     card: { width: CARD_WIDTH, aspectRatio: 1, borderRadius: 5 },
     button: {
         width: '100%',
-        height: 50,
+        height: 52,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 6,

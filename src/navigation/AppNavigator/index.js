@@ -62,7 +62,7 @@ const BottomTabs = () => {
                         else return <Search width={24} height={24} />;
                     },
                 }}
-                name="CartScreen"
+                name="Cart"
                 component={EmptyScreen}
             />
 

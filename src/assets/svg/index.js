@@ -11,6 +11,7 @@ import SearchFill from './search-fill.svg';
 import Heart from './heart.svg';
 import HeartFill from './heart-fill.svg';
 import CartWhite from './cart-white.svg';
+import Favorite from './favorite.svg';
 export {
     Apps,
     AppsFill,
@@ -25,4 +26,5 @@ export {
     Heart,
     HeartFill,
     CartWhite,
+    Favorite,
 };

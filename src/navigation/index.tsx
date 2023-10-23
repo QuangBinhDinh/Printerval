@@ -5,6 +5,8 @@ import BottomTabs from './AppNavigator';
 import { navigationRef } from './service';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import DetailScreen from '../moudle/test/DetailScreen';
+import EmptyScreen from '../moudle/test/EmptyScreen';
+import CartScreen from '../moudle/cart';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
@@ -13,9 +15,6 @@ const Router = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
-                    // cardStyleInterpolator: ({ current: { progress } }) => {
-                    //     return { cardStyle: { opacity: progress } };
-                    // },
                 }}
             >
                 <Stack.Screen name="App" component={BottomTabs} options={{ animationEnabled: false }} />
@@ -32,7 +31,7 @@ const Router = () => {
                         return [url];
                     }}
                 />
-                <Stack.Screen name="Detail2" component={DetailScreen} />
+                <Stack.Screen name="CartNavigator" component={CartScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
