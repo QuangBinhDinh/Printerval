@@ -41,25 +41,25 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     };
                     if (label == 'Cart')
                         return (
-                            <TouchableOpacity
+                            <View
                                 key={index}
                                 style={styles.button}
                                 accessibilityRole="button"
                                 accessibilityState={isFocused ? { selected: true } : {}}
                                 accessibilityLabel={options.tabBarAccessibilityLabel}
                                 testID={options.tabBarTestID}
-                                onPress={onPress}
+                                //onPress={onPress}
                             >
-                                <View
+                                <FancyButton
                                     style={styles.cartOuter}
-                                    // onPress={onPress}
-                                    // backgroundColor="rgba(255, 205, 169, 1)"
+                                    onPress={onPress}
+                                    backgroundColor="rgba(255, 205, 169, 1)"
                                 >
                                     <View style={styles.cartInner}>
                                         <CartWhite width={28} height={28} />
                                     </View>
-                                </View>
-                            </TouchableOpacity>
+                                </FancyButton>
+                            </View>
                         );
                     return (
                         <TouchableOpacity

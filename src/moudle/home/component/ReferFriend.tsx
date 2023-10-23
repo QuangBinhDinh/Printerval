@@ -1,3 +1,4 @@
+import FancyButton from '@components/FancyButton';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import React, { memo } from 'react';
@@ -5,14 +6,15 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const ReferFriend = () => {
+    const toRefer = () => {};
     return (
         <View style={styles.container}>
             <FastImage style={styles.image} source={require('@image/Refer.png')} />
             <TextSemiBold style={{ fontSize: 22, marginTop: 14 }}>Refer a Friend</TextSemiBold>
             <TextNormal style={styles.subTitle}>Get $7.50 to spend each time you refer a friend</TextNormal>
-            <TouchableOpacity style={styles.button}>
+            <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toRefer}>
                 <TextSemiBold style={{ fontSize: 17, color: 'white' }}>Refer Friend Now</TextSemiBold>
-            </TouchableOpacity>
+            </FancyButton>
         </View>
     );
 };
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
         height: 52,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 6,
+        borderRadius: 5,
         marginTop: 10,
         backgroundColor: lightColor.primary,
     },

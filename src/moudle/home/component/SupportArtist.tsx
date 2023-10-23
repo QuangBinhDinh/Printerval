@@ -1,3 +1,4 @@
+import FancyButton from '@components/FancyButton';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { SCREEN_WIDTH } from '@util/index';
@@ -10,6 +11,7 @@ const AnimPressable = Animated.createAnimatedComponent(Pressable);
 
 const CARD_WIDTH = (SCREEN_WIDTH - 32) / 2;
 const SupportArtist = () => {
+    const toSelling = () => {};
     return (
         <View style={styles.container}>
             <TextSemiBold style={{ fontSize: 22, lineHeight: 28 }}>
@@ -25,9 +27,9 @@ const SupportArtist = () => {
             </TextNormal>
 
             <CardSlider />
-            <TouchableOpacity style={styles.button}>
+            <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toSelling}>
                 <TextSemiBold style={{ fontSize: 17, color: 'white' }}>Start selling</TextSemiBold>
-            </TouchableOpacity>
+            </FancyButton>
         </View>
     );
 };
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
         height: 52,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 6,
+        borderRadius: 5,
         marginTop: 18,
         backgroundColor: lightColor.primary,
     },

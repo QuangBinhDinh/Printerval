@@ -1,3 +1,4 @@
+import { SCREEN_WIDTH } from '@util/index';
 import React, { memo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -38,11 +39,11 @@ const styles = StyleSheet.create({
     list: {
         marginTop: 16,
         width: '100%',
-        height: 210,
+        minHeight: 210,
     },
     item: {
-        width: 335,
-        height: 210,
+        width: (SCREEN_WIDTH * 335) / 375,
+        aspectRatio: 335 / 210,
         borderRadius: 6,
         overflow: 'hidden',
         marginLeft: 12,
