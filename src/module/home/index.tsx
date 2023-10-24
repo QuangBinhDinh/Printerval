@@ -14,6 +14,7 @@ import ReferFriend from './component/ReferFriend';
 import HeaderBanner from './component/HeaderBanner';
 import BlogHome from './component/BlogHome';
 import PopularDesign from './component/PopularDesign';
+import { PrintervalLogo } from '@assets/svg';
 
 //testing commit
 const HomeScreen = () => {
@@ -21,10 +22,13 @@ const HomeScreen = () => {
 
     const { data: banner } = useFetchCategoryBannerQuery();
     const { data: explore } = useFetchExploreProdQuery();
+
     return (
-        <View style={[styles.container, { paddingTop: 12 + insets.top / 1.5 }]}>
+        <View style={[styles.container, { paddingTop: 10 + insets.top / 1.25 }]}>
+            <View style={{ width: '100%', paddingBottom: 14 }}>
+                <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} />
+            </View>
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} removeClippedSubviews>
-                {/* <View style={{ height: 12 + insets.top / 1.5 }} /> */}
                 <HeaderBanner />
                 <TrendExplore />
                 <MainCategory data={banner?.result} />

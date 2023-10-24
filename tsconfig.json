@@ -23,12 +23,13 @@
       "@styles/*": ["./src/styles/*"],
       "@util/*": ["./src/util/*"],
       "@type/*": ["./src/type/*"],
-      
+      "@constant/*":  ["./src/constant/*"],
       "@animation/*": ["./src/assets/animation/*"],
       "@banner/*": ["./src/assets/banner/*"],
       "@image/*": ["./src/assets/image/*"],
       "@svg/*": ["./src/assets/svg/*"],
-     
+      "@home/*": ["./src/module/home/*"],
+      "@category/*": ["./src/module/category/*"],
     }
 
   },

@@ -10,6 +10,7 @@ export const lightColor = {
 
     //use for background
     lightbg: '#fafafa',
+    graybg: '#f2f2f2',
     primarybg: '#5441B5',
 };
 

@@ -4,9 +4,9 @@ import React, { memo } from 'react';
 import BottomTabs from './AppNavigator';
 import { navigationRef } from './service';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
-import DetailScreen from '../moudle/test/DetailScreen';
-import EmptyScreen from '../moudle/test/EmptyScreen';
-import CartScreen from '../moudle/cart';
+import DetailScreen from '../module/test/DetailScreen';
+import EmptyScreen from '../module/test/EmptyScreen';
+import CartScreen from '../module/cart';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {

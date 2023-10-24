@@ -15,10 +15,11 @@ import {
     SearchFill,
     HeartFill,
 } from '@svg/index';
-import EmptyScreen from '../../moudle/test/EmptyScreen';
-import HomeScreen from '../../moudle/home';
-import ProductListScreen from '../../moudle/productList';
-import Login from '../../moudle/auth';
+import EmptyScreen from '../../module/test/EmptyScreen';
+import HomeScreen from '@home/index';
+import ProductListScreen from '../../module/productList';
+import Login from '../../module/auth';
+import Category from '@category/index';
 
 const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
@@ -51,8 +52,8 @@ const BottomTabs = () => {
                         else return <Search width={24} height={24} />;
                     },
                 }}
-                name="CategoryScreen"
-                component={EmptyScreen}
+                name="Category"
+                component={Category}
             />
             <Tab.Screen
                 options={{

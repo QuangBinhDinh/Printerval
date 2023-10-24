@@ -18,7 +18,7 @@ interface QueryArgs {
     header?: AxiosRequestConfig['headers'];
 }
 const axiosBaseQuery =
-    (args: BaseQueryArgs): BaseQueryFn<QueryArgs, unknown, unknown> =>
+    (args: BaseQueryArgs): BaseQueryFn<QueryArgs, any, unknown> =>
     async (queryArg, api) => {
         const { baseUrl, timeout, headers } = args;
         const { url, method, data, params, header } = queryArg;

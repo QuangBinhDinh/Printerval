@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@rneui/base';
 import { TextNormal } from './text';
+import { SCREEN_WIDTH } from '@util/index';
 
 interface IProps {
     title: string;
@@ -14,11 +15,11 @@ interface IProps {
 const HeaderScreen = ({ title }: IProps) => {
     const insets = useSafeAreaInsets();
     return (
-        <View style={[styles.container, shadow, { height: 50 + insets.top / 1.5, paddingTop: insets.top / 1.5 }]}>
+        <View style={[styles.container, shadow, { height: 56 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
             <Pressable style={styles.iconBack} hitSlop={10} onPress={goBack}>
                 <Icon type="antdesign" name="arrowleft" size={24} color={lightColor.secondary} />
-                <TextNormal style={{ fontSize: 18, color: lightColor.primaryBold }}>{title}</TextNormal>
             </Pressable>
+            <TextNormal style={{ fontSize: 18, color: lightColor.primaryBold }}>{title}</TextNormal>
         </View>
     );
 };
@@ -29,8 +30,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%',
+        width: SCREEN_WIDTH,
         backgroundColor: 'white',
+        zIndex: 100,
+        //borderWidth: 1,
     },
     iconBack: {
         height: 50,

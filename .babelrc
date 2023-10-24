@@ -25,7 +25,7 @@
           "alias": {
             "@components": "./src/components",
             "@assets": "./src/assets",
-            "@constants": "./src/constants",
+            "@constant": "./src/constant",
             "@api": "./src/api",
             "@store": "./src/store",
             "@styles": "./src/styles",
@@ -34,7 +34,10 @@
             "@navigation": "./src/navigation",
             "@animation": "./src/assets/animation",
             "@image": "./src/assets/image",
-            "@svg": "./src/assets/svg"
+            "@svg": "./src/assets/svg",
+            "@home": "./src/module/home",
+            "@category": "./src/module/category"
+            
           }
         }
       ],

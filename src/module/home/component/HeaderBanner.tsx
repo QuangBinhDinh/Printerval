@@ -8,8 +8,8 @@ import { RANDOM_IMAGE_URL } from '../../../constant';
 const HeaderBanner = () => {
     const renderItem = ({ item }: { item: any }) => <Banner item={item} />;
     return (
-        <View style={{ width: '100%' }}>
-            <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} />
+        <View style={{ width: '100%', marginTop: 18 }}>
+            {/* <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} /> */}
             <FlatList
                 data={[1, 2, 3, 4, 5]}
                 style={styles.list}
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         width: 144,
     },
     list: {
-        marginTop: 16,
         width: '100%',
         minHeight: 210,
     },
