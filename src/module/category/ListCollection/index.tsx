@@ -1,42 +1,76 @@
 import HeaderScreen from '@components/HeaderScreen';
 import { lightColor } from '@styles/color';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@rneui/base';
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
 import SuggestText from './SuggestText';
 import { useBlur } from '@navigation/customHook';
+import { useFetchCategoryTreeQuery } from '@category/service';
+import { useDeepEffect } from '@components/hooks/useDeepEffect';
+import { useAppDispatch } from '@store/hook';
+import category from '@category/reducer';
+import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '@store/store';
+import { CATEGORY_EXPIRE_DAY } from '@constant/index';
+import { useSelector } from 'react-redux';
+import LoadingCategory from './LoadingCategory';
 
+const checkSelector = createSelector(
+    (state: RootState) => state.category.valid_timestamp,
+    time => !!time && time >= Date.now(),
+);
 const ListCollection = () => {
-    const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
+    // skip fetch nếu data cũ chưa expire
+    const isOld = useSelector(checkSelector);
+    const { data: tree, isLoading } = useFetchCategoryTreeQuery(undefined, { skip: isOld });
+    useDeepEffect(() => {
+        if (tree) {
+            console.log('Tree', tree);
+            var today = new Date();
+            today.setDate(today.getDate() + CATEGORY_EXPIRE_DAY);
+            dispatch(
+                category.actions.setCategoryTree({
+                    tree,
+                    timestamp: today.getTime(),
+                }),
+            );
+        }
+    }, [tree]);
+
     const [textSearch, setText] = useState('');
     const searchTerm = useDebounceValue(textSearch); // dùng để search keyword
-
     useBlur(() => {
         setText('');
     });
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Collection" />
-            <ScrollView
-                style={{ flex: 1, backgroundColor: 'white' }}
-                contentContainerStyle={{ alignItems: 'center' }}
-                showsVerticalScrollIndicator={false}
-                removeClippedSubviews
-            >
-                <View style={styles.inputContainer}>
-                    <Icon type="feather" name="search" size={28} color={lightColor.secondary} />
-                    <TextInput
-                        style={styles.input}
-                        value={textSearch}
-                        onChangeText={setText}
-                        placeholder="Search products..."
-                        placeholderTextColor={'#444'}
-                    />
-                </View>
-                <SuggestText searchTerm={searchTerm} />
-            </ScrollView>
+            {isLoading ? (
+                <LoadingCategory />
+            ) : (
+                <ScrollView
+                    style={{ flex: 1, backgroundColor: 'white' }}
+                    contentContainerStyle={{ alignItems: 'center' }}
+                    showsVerticalScrollIndicator={false}
+                    removeClippedSubviews
+                >
+                    <View style={styles.inputContainer}>
+                        <Icon type="feather" name="search" size={28} color={lightColor.secondary} />
+                        <TextInput
+                            style={styles.input}
+                            value={textSearch}
+                            onChangeText={setText}
+                            placeholder="Search products..."
+                            placeholderTextColor={'#444'}
+                        />
+                    </View>
+                    <SuggestText searchTerm={searchTerm} />
+                </ScrollView>
+            )}
         </View>
     );
 };

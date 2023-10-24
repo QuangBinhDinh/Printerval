@@ -6,7 +6,6 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const SpiceUpView = () => {
-    console.log(SCREEN_WIDTH);
     return (
         <View style={{ width: SCREEN_WIDTH, marginTop: 32 }}>
             <View style={styles.contentView}>

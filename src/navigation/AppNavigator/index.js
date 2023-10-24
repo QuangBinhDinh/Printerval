@@ -51,6 +51,7 @@ const BottomTabs = () => {
                         if (focused) return <SearchFill width={24} height={24} />;
                         else return <Search width={24} height={24} />;
                     },
+                    lazy: false,
                 }}
                 name="Category"
                 component={Category}

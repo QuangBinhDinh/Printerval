@@ -3,8 +3,9 @@ import codePush from 'react-native-code-push';
 import { LogBox } from 'react-native';
 import Router from './navigation';
 import { Provider } from 'react-redux';
-import Store from '@store/store';
+import Store, { persistor } from '@store/store';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { PersistGate } from 'redux-persist/integration/react';
 
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -14,7 +15,9 @@ GoogleSignin.configure({
 const App = () => {
     return (
         <Provider store={Store}>
-            <Router></Router>
+            <PersistGate loading={null} persistor={persistor}>
+                <Router></Router>
+            </PersistGate>
         </Provider>
     );
 };
