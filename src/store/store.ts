@@ -3,6 +3,7 @@ import { rootReducer } from './reducer';
 import { api, domainApi } from '@api/service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist';
+import { logger } from './middleware';
 
 const persistConfig = {
     key: 'root',
@@ -13,7 +14,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const Store = configureStore({
     reducer: persistedReducer,
-    middleware: gDM => gDM().concat(api.middleware).concat(domainApi.middleware),
+    middleware: gDM =>
+        gDM({ serializableCheck: false }).concat(api.middleware).concat(domainApi.middleware).concat(logger),
 });
 export default Store;
 
