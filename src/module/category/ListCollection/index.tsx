@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/base';
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
-import SuggestText from './SuggestText';
+import TrendingView from './TrendingView';
 import { useBlur } from '@navigation/customHook';
 import { useFetchCategoryTreeQuery } from '@category/service';
 import { useDeepEffect } from '@components/hooks/useDeepEffect';
@@ -65,7 +65,7 @@ const ListCollection = () => {
                             placeholderTextColor={'#444'}
                         />
                     </View>
-                    <SuggestText searchTerm={searchTerm} />
+                    <TrendingView searchTerm={searchTerm} />
                     {!textSearch && <Collection />}
                 </ScrollView>
             )}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 50,
-        marginTop: 24,
+        marginTop: 18,
         paddingLeft: 20,
     },
     input: {

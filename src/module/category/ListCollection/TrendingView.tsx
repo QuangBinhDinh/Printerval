@@ -5,8 +5,9 @@ import { TrendingUp } from '@assets/svg';
 import { TextNormal } from '@components/text';
 import FastImage from 'react-native-fast-image';
 import { RANDOM_IMAGE_URL } from '../../../constant';
+import { lightColor } from '@styles/color';
 
-const SuggestText = ({ searchTerm }: { searchTerm: string }) => {
+const TrendingView = ({ searchTerm }: { searchTerm: string }) => {
     const { data: trend } = useFetchDefaultTrendingQuery();
     const { data: suggest } = useFetchSuggestWordQuery(searchTerm, { skip: !searchTerm });
 
@@ -25,13 +26,13 @@ const SuggestText = ({ searchTerm }: { searchTerm: string }) => {
     );
 };
 
-export default memo(SuggestText);
+export default memo(TrendingView);
 
 const SuggestCategory = memo(({ data }: { data: any[] }) => {
     const renderItem = ({ item }: { item: any }) => (
         <Pressable style={styles.item}>
             <FastImage style={{ width: 200, height: 120, borderRadius: 6 }} source={{ uri: RANDOM_IMAGE_URL }} />
-            <TextNormal style={[styles.normalText, { marginLeft: 3 }]}>Sample Category</TextNormal>
+            <TextNormal style={styles.horizonText}>Sample Category</TextNormal>
         </Pressable>
     );
     return (
@@ -50,12 +51,12 @@ const SuggestCategory = memo(({ data }: { data: any[] }) => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 24,
-        paddingLeft: 16,
+
         width: '100%',
     },
-    trendItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+    trendItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, marginLeft: 16 },
     list: {
-        marginTop: 32,
+        marginTop: 26,
         height: 154,
         width: '100%',
     },
@@ -66,4 +67,5 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     normalText: { fontSize: 16, marginLeft: 8, lineHeight: 22 },
+    horizonText: { fontSize: 16, marginLeft: 3, lineHeight: 22, color: lightColor.primaryBold },
 });

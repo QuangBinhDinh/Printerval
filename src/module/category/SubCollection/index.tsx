@@ -9,6 +9,7 @@ import FastImage from 'react-native-fast-image';
 import { TextNormal } from '@components/text';
 import { Icon } from '@rneui/base';
 import { cdnImage } from '@util/cdnImage';
+import { SCREEN_WIDTH } from '@util/index';
 
 const SubCollection = () => {
     const category = useAppSelector(state => state.category.categoryTree);
@@ -17,7 +18,7 @@ const SubCollection = () => {
     } = useRoute<SubCollectionRouteProp>();
 
     const subList: any[] = useMemo(() => category.find(item => item.id == parentId)?.children, []);
-    console.log(subList);
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={title} />
@@ -42,7 +43,9 @@ const SubItem = memo(({ item, last }: { item: any; last: boolean }) => {
         <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
-                <TextNormal style={{ fontSize: 17 }}>{item.name}</TextNormal>
+                <TextNormal style={{ fontSize: 17, width: SCREEN_WIDTH * 0.5 }} numberOfLines={2}>
+                    {item.name}
+                </TextNormal>
             </View>
             <Icon type="feather" name="chevron-right" size={26} color={lightColor.grayout} />
         </Pressable>
