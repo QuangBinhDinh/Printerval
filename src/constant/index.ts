@@ -9,3 +9,5 @@ export const CATEGORY_EXPIRE_DAY = 7;
  * Thời gian (giây) lưu trữ cache của 1 fetch query
  */
 export const CACHE_TIME_SECONDS = 90;
+
+export const SCREEN_WITH_COLOR = [''];
