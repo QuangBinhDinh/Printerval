@@ -56,7 +56,7 @@ const ListCollection = () => {
                     showsVerticalScrollIndicator={false}
                 >
                     <View style={styles.inputContainer}>
-                        <Icon type="feather" name="search" size={26} color={lightColor.secondary} />
+                        <Icon type="feather" name="search" size={24} color={lightColor.secondary} />
                         <TextInput
                             style={styles.input}
                             value={textSearch}
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 8,
         height: '100%',
-        fontSize: 16,
+        fontSize: 15,
         fontFamily: 'Poppins-Regular',
         color: '#444',
         padding: 0,

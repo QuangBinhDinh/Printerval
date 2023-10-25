@@ -6,7 +6,7 @@ import { SubCollectionRouteProp } from '@navigation/navigationRoute';
 import { useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
 import FastImage from 'react-native-fast-image';
-import { TextNormal } from '@components/text';
+import { TextNormal, TextSemiBold } from '@components/text';
 import { Icon } from '@rneui/base';
 import { cdnImage } from '@util/cdnImage';
 import { SCREEN_WIDTH } from '@util/index';
@@ -47,11 +47,11 @@ const SubItem = memo(({ item, last }: { item: any; last: boolean }) => {
         <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]} onPress={toSearchResult}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
-                <TextNormal style={{ fontSize: 17, width: SCREEN_WIDTH * 0.5 }} numberOfLines={2}>
+                <TextSemiBold style={{ fontSize: 15, width: SCREEN_WIDTH * 0.5, color: '#444' }} numberOfLines={2}>
                     {item.name}
-                </TextNormal>
+                </TextSemiBold>
             </View>
-            <Icon type="feather" name="chevron-right" size={26} color={lightColor.grayout} />
+            <Icon type="feather" name="chevron-right" size={22} color={lightColor.grayout} />
         </Pressable>
     );
 });

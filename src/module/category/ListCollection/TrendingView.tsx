@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         justifyContent: 'space-between',
     },
-    normalText: { fontSize: 16, marginLeft: 8, lineHeight: 22 },
-    horizonText: { fontSize: 16, marginLeft: 3, lineHeight: 22, color: lightColor.primaryBold },
+    normalText: { fontSize: 15, marginLeft: 8, lineHeight: 21 },
+    horizonText: { fontSize: 15, marginLeft: 3, lineHeight: 21 },
 });

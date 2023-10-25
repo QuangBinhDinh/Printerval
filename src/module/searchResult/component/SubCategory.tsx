@@ -49,5 +49,5 @@ const styles = StyleSheet.create({
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
     image: { width: 100, height: 100, borderRadius: 50, backgroundColor: lightColor.graybg },
-    itemTitle: { fontSize: 16, marginTop: 10, width: '100%', textAlign: 'center', lineHeight: 18 },
+    itemTitle: { fontSize: 14, marginTop: 10, width: '100%', textAlign: 'center', lineHeight: 18 },
 });

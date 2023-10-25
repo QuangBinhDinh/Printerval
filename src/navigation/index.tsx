@@ -9,13 +9,13 @@ import EmptyScreen from '../module/test/EmptyScreen';
 import CartScreen from '../module/cart';
 import SearchResult from '../module/searchResult/index';
 import { TransitionPresets } from '@react-navigation/stack';
-import { StatusBar, StatusBarStyle } from 'react-native';
+import { ColorValue, StatusBar, StatusBarStyle } from 'react-native';
 import { SCREEN_WITH_COLOR } from '@constant/index';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
     const [barColor, setBarColor] = useState<StatusBarStyle>('dark-content');
-
+    const [barBg, setBarBg] = useState<ColorValue>('white');
     const onNavigationReady = () => {
         const currentScreen = navigationRef?.getCurrentRoute()?.name ?? '';
 
@@ -34,7 +34,7 @@ const Router = () => {
     };
     return (
         <NavigationContainer ref={navigationRef} onReady={onNavigationReady} onStateChange={onNavigationStateChange}>
-            <StatusBar barStyle={barColor} />
+            <StatusBar barStyle={barColor} backgroundColor={barBg} />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

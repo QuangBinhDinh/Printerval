@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
     return (
         <View style={[styles.container, { paddingTop: 10 + insets.top / 1.25 }]}>
-            <View style={{ width: '100%', paddingBottom: 14 }}>
+            <View style={{ width: '100%', paddingBottom: 10 }}>
                 <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} />
             </View>
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} removeClippedSubviews>

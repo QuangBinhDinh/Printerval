@@ -72,9 +72,9 @@ const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub:
             <SubCategory data={sub} />
 
             <View style={styles.rowFilter}>
-                <TextNormal style={{ fontSize: 17 }}>About {meta.total_count} results</TextNormal>
+                <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
                 <Pressable style={styles.filterButton}>
-                    <FilterIcon width={22} height={22} />
+                    <FilterIcon width={20} height={20} />
                 </Pressable>
             </View>
 
@@ -82,7 +82,7 @@ const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub:
                 {newData.map((col, index) => (
                     <View key={index} style={[{ width: '48%' }]}>
                         {col.map((item, i) => (
-                            <DynamicCard item={item} key={item.id} style={{ marginTop: i == 0 ? 0 : 24 }} />
+                            <DynamicCard item={item} key={item.id} />
                         ))}
                     </View>
                 ))}
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: 0,
     },
     filterButton: {
         width: 38,

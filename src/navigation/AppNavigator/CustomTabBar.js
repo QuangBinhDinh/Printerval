@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     },
     button: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     label: {
-        fontSize: 14,
+        fontSize: 13,
         marginTop: 3,
     },
 

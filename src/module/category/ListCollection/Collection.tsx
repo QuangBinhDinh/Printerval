@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         zIndex: 100,
     },
     title: {
-        fontSize: 16,
+        fontSize: 15,
         marginTop: 6,
         color: 'white',
         marginLeft: 10,
