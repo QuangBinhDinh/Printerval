@@ -72,5 +72,6 @@ const styles = StyleSheet.create({
         borderRadius: 60,
         overflow: 'hidden',
         marginRight: 18,
+        backgroundColor: lightColor.graybg,
     },
 });

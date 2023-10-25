@@ -1,6 +1,7 @@
 import { TextSemiBold } from '@components/text';
 import { navigate } from '@navigation/service';
 import { useAppSelector } from '@store/hook';
+import { lightColor } from '@styles/color';
 import { cdnImage } from '@util/cdnImage';
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -28,10 +29,13 @@ const CollectionItem = memo(({ item }: { item: any }) => {
     };
     return (
         <Pressable style={styles.item} onPress={toSubCollection}>
-            <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: cdnImage(item.image_url, 400, 400) }} />
+            <FastImage
+                style={{ width: '100%', height: '100%', backgroundColor: lightColor.graybg }}
+                source={{ uri: cdnImage(item.image_url, 400, 400) }}
+            />
             <LinearGradient
                 style={styles.shadowView}
-                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']}
+                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.5)']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
             >

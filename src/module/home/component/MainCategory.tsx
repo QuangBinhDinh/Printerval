@@ -58,11 +58,11 @@ const ImageCover = ({ item }: { item: any }) => {
             <FastImage style={{ width: '100%', height: '100%' }} resizeMode="cover" source={{ uri: item.image_url }} />
             <LinearGradient
                 style={styles.shadowView}
-                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']}
+                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.5)']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
             >
-                <TextSemiBold style={{ color: 'white', fontSize: 18 }}>{item.name}</TextSemiBold>
+                <TextSemiBold style={{ color: 'white', fontSize: 18, marginTop: 8 }}>{item.name}</TextSemiBold>
             </LinearGradient>
         </Pressable>
     );
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: 45,
+        height: 40,
         zIndex: 100,
     },
 });
