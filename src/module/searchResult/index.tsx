@@ -11,6 +11,8 @@ import { lightColor } from '@styles/color';
 import { FilterIcon } from '@assets/svg';
 import SubCategory from './component/SubCategory';
 import { useScrollReachEnd } from '@components/hooks/useScrollReachEnd';
+import LoadingResult from './component/LoadingResult';
+import LoadingMore from './component/LoadingMore';
 
 const SearchResult = () => {
     const {
@@ -21,6 +23,7 @@ const SearchResult = () => {
         id: categoryId,
         category_id: categoryId,
         q: keyword,
+        // dt: Date.now(),
     });
     //nest destructing with possible undefined value
     const { data: { result, filterOptions, priceRange, categories, meta } = {}, isLoading } =
@@ -32,15 +35,19 @@ const SearchResult = () => {
         }
     }, [meta]);
 
-    useEffect(() => {
-        console.log('Meta', meta);
-    }, [meta]);
+    // useEffect(() => {
+    //     console.log('Meta', meta);
+    // }, [meta]);
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={title} />
             <View style={{ flex: 1 }}>
-                <ProductList data={result} meta={meta} sub={categories} loadMore={loadMore} />
+                {isLoading ? (
+                    <LoadingResult />
+                ) : (
+                    <ProductList data={result} meta={meta} sub={categories} loadMore={loadMore} />
+                )}
             </View>
         </View>
     );
@@ -51,15 +58,11 @@ export default SearchResult;
 const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub: any; loadMore: any }) => {
     const { onEndReached } = useScrollReachEnd();
 
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
     const newData = splitColArray(data);
     if (!newData) return null;
     return (
         <ScrollView
             style={{ flex: 1 }}
-            // showsVerticalScrollIndicator={false}
             onScroll={({ nativeEvent }) => {
                 onEndReached(nativeEvent, loadMore);
             }}
@@ -84,6 +87,7 @@ const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub:
                     </View>
                 ))}
             </View>
+            {meta?.has_next && <LoadingMore />}
         </ScrollView>
     );
 };
@@ -107,8 +111,3 @@ const styles = StyleSheet.create({
     },
     productList: { width: '100%', flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between' },
 });
-
-const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
-    const paddingToBottom = SCREEN_WIDTH / 3;
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
-};

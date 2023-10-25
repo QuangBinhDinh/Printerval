@@ -1,10 +1,11 @@
 import { TextNormal, TextSemiBold } from '@components/text';
 import React, { memo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useFetchCategoryBannerQuery } from '../service';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import { SCREEN_WIDTH } from '@util/index';
+import { navigate } from '@navigation/service';
 
 const LARGE_WIDTH = (SCREEN_WIDTH - 44) / 2;
 const SMALL_HEIGHT = (LARGE_WIDTH - 12) / 2;
@@ -48,19 +49,24 @@ const MainCategory = ({ data }: { data: any[] }) => {
 
 export default memo(MainCategory);
 
-const ImageCover = ({ item }: { item: any }) => (
-    <>
-        <FastImage style={{ width: '100%', height: '100%' }} resizeMode="cover" source={{ uri: item.image_url }} />
-        <LinearGradient
-            style={styles.shadowView}
-            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-        >
-            <TextSemiBold style={{ color: 'white', fontSize: 18 }}>{item.name}</TextSemiBold>
-        </LinearGradient>
-    </>
-);
+const ImageCover = ({ item }: { item: any }) => {
+    const toSearchResult = () => {
+        navigate('SearchResult', { title: item.name, categoryId: item.id });
+    };
+    return (
+        <Pressable style={{ flex: 1 }} onPress={toSearchResult}>
+            <FastImage style={{ width: '100%', height: '100%' }} resizeMode="cover" source={{ uri: item.image_url }} />
+            <LinearGradient
+                style={styles.shadowView}
+                colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+            >
+                <TextSemiBold style={{ color: 'white', fontSize: 18 }}>{item.name}</TextSemiBold>
+            </LinearGradient>
+        </Pressable>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
