@@ -40,7 +40,7 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
                 <StarRating rating={5} width={80} />
                 <TextNormal style={styles.ratingText}>{`(${20})`}</TextNormal>
             </View>
-            <TextSemiBold style={styles.title} numberOfLines={3}>
+            <TextSemiBold style={styles.title} numberOfLines={4}>
                 {he.decode(item.name)}
             </TextSemiBold>
 
