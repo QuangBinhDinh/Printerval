@@ -14,7 +14,7 @@ import CartWhite from './cart-white.svg';
 import Favorite from './favorite.svg';
 import PrintervalLogo from './printerval-logo.svg';
 import TrendingUp from './trending-up.svg';
-
+import FilterIcon from './filter.svg';
 export {
     Apps,
     AppsFill,
@@ -32,4 +32,5 @@ export {
     Favorite,
     PrintervalLogo,
     TrendingUp,
+    FilterIcon,
 };

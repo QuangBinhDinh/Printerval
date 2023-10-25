@@ -1,19 +1,21 @@
 import { TextNormal, TextSemiBold } from '@components/text';
+import { lightColor } from '@styles/color';
+import { cdnImage } from '@util/cdnImage';
 import React, { memo } from 'react';
 import { Platform, Text } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
-import { RANDOM_IMAGE_URL } from '../../../constant';
 
-const TrendExplore = () => {
-    const renderItem = ({ item }: { item: any }) => <TrendItem item={item} />;
+const SubCategory = ({ data }: { data: any }) => {
+    const renderItem = ({ item }: { item: any }) => <SubItem item={item} />;
+
+    if (!data || data.length == 0) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, lineHeight: 28 }}>Explore by trends</TextSemiBold>
             <FlatList
                 style={styles.list}
-                data={[1, 2, 3, 4, 5]}
+                data={data}
                 contentContainerStyle={{ paddingLeft: 4, paddingRight: 16 }}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
@@ -23,18 +25,20 @@ const TrendExplore = () => {
     );
 };
 
-const TrendItem = ({ item }: { item: any }) => (
+const SubItem = ({ item }: { item: any }) => (
     <View style={styles.item}>
-        <FastImage style={styles.image} source={{ uri: RANDOM_IMAGE_URL }} />
-        <TextNormal style={styles.itemTitle}>Sample Test </TextNormal>
+        <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
+        <TextNormal style={styles.itemTitle} numberOfLines={2}>
+            {item.name}
+        </TextNormal>
     </View>
 );
 
-export default memo(TrendExplore);
+export default memo(SubCategory);
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 32,
+        marginBottom: 32,
         width: '100%',
     },
     list: {
@@ -44,6 +48,6 @@ const styles = StyleSheet.create({
         //borderWidth: 1,
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
-    image: { width: 100, height: 100, borderRadius: 50 },
-    itemTitle: { fontSize: 16, marginTop: 10, width: '90%', textAlign: 'center', lineHeight: 18 },
+    image: { width: 100, height: 100, borderRadius: 50, backgroundColor: lightColor.graybg },
+    itemTitle: { fontSize: 16, marginTop: 10, width: '100%', textAlign: 'center', lineHeight: 18 },
 });

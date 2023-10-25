@@ -19,7 +19,7 @@ const HeaderScreen = ({ title }: IProps) => {
             <Pressable style={styles.iconBack} hitSlop={10} onPress={goBack}>
                 <Icon type="antdesign" name="arrowleft" size={24} color={lightColor.secondary} />
             </Pressable>
-            <TextNormal style={{ fontSize: 18, color: lightColor.primaryBold }}>{title}</TextNormal>
+            <TextNormal style={{ fontSize: 18, color: lightColor.primaryBold, marginTop: 4 }}>{title}</TextNormal>
         </View>
     );
 };

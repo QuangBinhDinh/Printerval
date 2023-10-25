@@ -1,23 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CustomTabBar from './CustomTabBar';
-import {
-    Apps,
-    AppsFill,
-    Bell,
-    BellFill,
-    Home,
-    HomeFill,
-    User,
-    UserFill,
-    Search,
-    Heart,
-    SearchFill,
-    HeartFill,
-} from '@svg/index';
+import { Home, HomeFill, User, UserFill, Search, Heart, SearchFill, HeartFill } from '@svg/index';
 import EmptyScreen from '../../module/test/EmptyScreen';
 import HomeScreen from '@home/index';
-import ProductListScreen from '../../module/productList';
 import Login from '../../module/auth';
 import Category from '@category/index';
 

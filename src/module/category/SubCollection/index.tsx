@@ -10,6 +10,7 @@ import { TextNormal } from '@components/text';
 import { Icon } from '@rneui/base';
 import { cdnImage } from '@util/cdnImage';
 import { SCREEN_WIDTH } from '@util/index';
+import { navigate } from '@navigation/service';
 
 const SubCollection = () => {
     const category = useAppSelector(state => state.category.categoryTree);
@@ -39,8 +40,11 @@ const SubCollection = () => {
 export default SubCollection;
 
 const SubItem = memo(({ item, last }: { item: any; last: boolean }) => {
+    const toSearchResult = () => {
+        navigate('SearchResult', { title: item.name, categoryId: item.id });
+    };
     return (
-        <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]}>
+        <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]} onPress={toSearchResult}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
                 <TextNormal style={{ fontSize: 17, width: SCREEN_WIDTH * 0.5 }} numberOfLines={2}>

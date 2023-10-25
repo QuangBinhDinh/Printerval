@@ -49,7 +49,7 @@ const axiosBaseQuery =
             });
 
             if (SERVICE_DEBUG.includes(endpoint)) {
-                console.info('response', res.data.result);
+                console.info('response', res.data);
             }
             if (res.data.status == 'successful') return { data: res.data };
             else

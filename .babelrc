@@ -36,8 +36,8 @@
             "@image": "./src/assets/image",
             "@svg": "./src/assets/svg",
             "@home": "./src/module/home",
-            "@category": "./src/module/category"
-            
+            "@category": "./src/module/category",
+            "@searchResult": "./src/module/searchResult"
           }
         }
       ],

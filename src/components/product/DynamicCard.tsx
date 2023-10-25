@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         marginBottom: 14,
         borderRadius: 6,
         overflow: 'hidden',
+        backgroundColor: lightColor.graybg,
     },
     rating: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
     ratingText: { color: lightColor.grayout, marginLeft: 5, fontSize: 12, lineHeight: 14, marginTop: 2 },

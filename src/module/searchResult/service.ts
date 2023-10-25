@@ -2,9 +2,10 @@ import { api } from '@api/service';
 import { defaultSerializeQueryArgs } from '@reduxjs/toolkit/query';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
+import { CACHE_TIME_SECONDS } from '@constant/index';
 
 export interface ProductFilterArgs {
-    id: string;
+    id: string | number;
     category_id: string | number;
     category_slug: string;
     q: string;
@@ -13,12 +14,17 @@ export interface ProductFilterArgs {
     minPrice: string | number;
     maxPrice: string | number;
     order: string;
+
+    /**
+     * Timestamp để phân biệt các request (tránh trường hợp cache bị trùng)
+     */
     dt: number;
 }
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
         fetchProductResult: build.query<any, Partial<ProductFilterArgs>>({
+            keepUnusedDataFor: CACHE_TIME_SECONDS,
             query: args => {
                 var newArgs = Object.assign({ page_size: 40, page_type: 'category' }, args);
                 return { url: 'mobile/product/category-filter', method: 'get', params: newArgs };
@@ -29,10 +35,10 @@ const extendedApi = api.injectEndpoints({
             },
             merge: (curCache, newData, { arg }) => {
                 // chỉ merge data trả về khi load more (page_id >=1)
-                console.log('merging', newData.result);
-                if (newData.result?.length > 0) {
+                if (newData.result?.length > 0 && !!arg.page_id && arg.page_id >= 1) {
                     var merged = curCache.result.concat(newData.result);
                     curCache.result = merged;
+                    curCache.meta = newData.meta;
                 }
             },
             forceRefetch({ currentArg, previousArg }) {

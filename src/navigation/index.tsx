@@ -7,6 +7,8 @@ import { createSharedElementStackNavigator } from 'react-navigation-shared-eleme
 import DetailScreen from '../module/test/DetailScreen';
 import EmptyScreen from '../module/test/EmptyScreen';
 import CartScreen from '../module/cart';
+import SearchResult from '../module/searchResult/index';
+import { TransitionPresets } from '@react-navigation/stack';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
@@ -15,6 +17,7 @@ const Router = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
+                    ...TransitionPresets.SlideFromRightIOS,
                 }}
             >
                 <Stack.Screen name="App" component={BottomTabs} options={{ animationEnabled: false }} />
@@ -32,6 +35,7 @@ const Router = () => {
                     }}
                 />
                 <Stack.Screen name="CartNavigator" component={CartScreen} />
+                <Stack.Screen name="SearchResult" component={SearchResult} />
             </Stack.Navigator>
         </NavigationContainer>
     );

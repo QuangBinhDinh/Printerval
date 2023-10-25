@@ -10,7 +10,6 @@ import LinearGradient from 'react-native-linear-gradient';
 const ListCollection = () => {
     const category = useAppSelector(state => state.category.categoryTree);
 
-    console.log(category);
     return (
         <View style={styles.container}>
             {category?.map(item => (

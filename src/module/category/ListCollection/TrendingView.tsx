@@ -4,7 +4,7 @@ import { useFetchDefaultTrendingQuery, useFetchSuggestWordQuery } from '../servi
 import { TrendingUp } from '@assets/svg';
 import { TextNormal } from '@components/text';
 import FastImage from 'react-native-fast-image';
-import { RANDOM_IMAGE_URL } from '../../../constant';
+import { RANDOM_IMAGE_URL } from '@constant/index';
 import { lightColor } from '@styles/color';
 
 const TrendingView = ({ searchTerm }: { searchTerm: string }) => {
@@ -39,7 +39,7 @@ const SuggestCategory = memo(({ data }: { data: any[] }) => {
         <FlatList
             data={data}
             style={styles.list}
-            contentContainerStyle={{ paddingRight: 4 }}
+            contentContainerStyle={{ paddingRight: 16, paddingLeft: 4 }}
             renderItem={renderItem}
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     item: {
         width: 200,
         height: 154,
-        marginRight: 12,
+        marginLeft: 12,
         justifyContent: 'space-between',
     },
     normalText: { fontSize: 16, marginLeft: 8, lineHeight: 22 },
