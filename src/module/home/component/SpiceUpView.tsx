@@ -14,11 +14,11 @@ const SpiceUpView = () => {
                     source={require('@assets/image/bg-spice.png')}
                     resizeMode="cover"
                 >
-                    <TextSemiBold style={{ fontSize: 22, marginTop: 150 }}>
+                    <TextSemiBold style={{ fontSize: 20, marginTop: 150 }}>
                         <TextSemiBold style={{ color: lightColor.secondary }}>Printerval</TextSemiBold> Spice up your
                         life
                     </TextSemiBold>
-                    <TextNormal style={{ fontSize: 17, marginTop: 14 }}>
+                    <TextNormal style={{ fontSize: 15, marginTop: 14 }}>
                         <TextNormal style={{ color: lightColor.secondary }}>Printerval.com</TextNormal> is an online
                         marketplace, where people come together to make, sell, buy, and collect unique items. There’s no
                         Printerval warehouse – just independent sellers selling the things they love.{'\n'}
@@ -39,7 +39,7 @@ const SpiceUpView = () => {
 export default memo(SpiceUpView);
 
 const styles = StyleSheet.create({
-    contentView: { width: SCREEN_WIDTH, height: SCREEN_WIDTH >= 400 ? 460 : 500, marginTop: 100 },
+    contentView: { width: SCREEN_WIDTH, height: SCREEN_WIDTH >= 400 ? 420 : 450, marginTop: 100 },
     imageContainer: {
         width: SCREEN_WIDTH,
         flexDirection: 'row',

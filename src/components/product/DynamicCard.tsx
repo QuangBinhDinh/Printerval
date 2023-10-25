@@ -27,7 +27,7 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
         <Pressable style={[styles.container, style]} onPress={toDetail}>
             {!!discountText && (
                 <View style={styles.discount}>
-                    <TextNormal style={{ fontSize: 13, color: 'white', lineHeight: 16 }}>{discountText}</TextNormal>
+                    <TextNormal style={{ fontSize: 12, color: 'white', lineHeight: 16 }}>{discountText}</TextNormal>
                 </View>
             )}
 
@@ -37,10 +37,10 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
 
             <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url) }} resizeMode="cover" />
             <View style={styles.rating}>
-                <StarRating rating={5} />
+                <StarRating rating={5} width={80} />
                 <TextNormal style={styles.ratingText}>{`(${20})`}</TextNormal>
             </View>
-            <TextSemiBold style={styles.title} numberOfLines={4}>
+            <TextSemiBold style={styles.title} numberOfLines={3}>
                 {he.decode(item.name)}
             </TextSemiBold>
 
@@ -71,15 +71,15 @@ const styles = StyleSheet.create({
     rating: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
     ratingText: { color: lightColor.grayout, marginLeft: 5, fontSize: 12, lineHeight: 14, marginTop: 2 },
     title: {
-        fontSize: 16,
-        lineHeight: 20,
+        fontSize: 14,
+        lineHeight: 18,
         width: '100%',
     },
     subTitle: {
-        fontSize: 14,
+        fontSize: 12,
         color: lightColor.grayout,
         marginTop: 3,
-        lineHeight: 18,
+        lineHeight: 16,
     },
     price: {
         color: lightColor.price,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },
     oldPrice: { fontSize: 14, color: lightColor.grayout, textDecorationLine: 'line-through' },
     discount: {
-        width: 54,
+        width: 48,
         height: 26,
         borderRadius: 24,
         justifyContent: 'center',

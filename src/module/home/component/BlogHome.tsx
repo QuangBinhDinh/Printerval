@@ -9,7 +9,7 @@ import { RANDOM_IMAGE_URL } from '../../../constant';
 const BlogHome = () => {
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginBottom: 18, lineHeight: 28 }}>Printerval Blog</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 20, marginBottom: 18, lineHeight: 26 }}>Printerval Blog</TextSemiBold>
             {[1, 2, 3].map(item => (
                 <BlogItem key={item} item={item} />
             ))}
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     itemContent: { flex: 1, paddingLeft: 10, justifyContent: 'space-between' },
-    itemTitle: { fontSize: 16, lineHeight: 20, color: lightColor.primary },
-    itemSubtitle: { fontSize: 14, marginTop: 6, lineHeight: 17 },
+    itemTitle: { fontSize: 15, lineHeight: 20, color: lightColor.primary },
+    itemSubtitle: { fontSize: 13, marginTop: 6, lineHeight: 17 },
 
-    textBottom: { fontSize: 15, color: lightColor.grayout, marginLeft: 3, lineHeight: 18 },
+    textBottom: { fontSize: 13, color: lightColor.grayout, marginLeft: 3, lineHeight: 18 },
     bottom: {
         flexDirection: 'row',
         alignItems: 'center',

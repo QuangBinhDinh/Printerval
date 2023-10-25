@@ -13,7 +13,7 @@ const MainCategory = ({ data }: { data: any[] }) => {
     if (!data) return null;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, marginBottom: 16, lineHeight: 28 }}>
+            <TextSemiBold style={{ fontSize: 20, marginLeft: 16, marginBottom: 16, lineHeight: 28 }}>
                 Best for the collections
             </TextSemiBold>
             <View style={styles.rowUp}>
@@ -62,7 +62,7 @@ const ImageCover = ({ item }: { item: any }) => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
             >
-                <TextSemiBold style={{ color: 'white', fontSize: 18, marginTop: 8 }}>{item.name}</TextSemiBold>
+                <TextSemiBold style={{ color: 'white', fontSize: 14, marginTop: 8 }}>{item.name}</TextSemiBold>
             </LinearGradient>
         </Pressable>
     );

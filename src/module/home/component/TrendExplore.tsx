@@ -10,7 +10,7 @@ const TrendExplore = () => {
     const renderItem = ({ item }: { item: any }) => <TrendItem item={item} />;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, lineHeight: 28 }}>Explore by trends</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 20, marginLeft: 16, lineHeight: 26 }}>Explore by trends</TextSemiBold>
             <FlatList
                 style={styles.list}
                 data={[1, 2, 3, 4, 5]}

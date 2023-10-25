@@ -10,10 +10,10 @@ const ReferFriend = () => {
     return (
         <View style={styles.container}>
             <FastImage style={styles.image} source={require('@image/Refer.png')} />
-            <TextSemiBold style={{ fontSize: 22, marginTop: 14 }}>Refer a Friend</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 20, marginTop: 14 }}>Refer a Friend</TextSemiBold>
             <TextNormal style={styles.subTitle}>Get $7.50 to spend each time you refer a friend</TextNormal>
             <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toRefer}>
-                <TextSemiBold style={{ fontSize: 17, color: 'white' }}>Refer Friend Now</TextSemiBold>
+                <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Refer Friend Now</TextSemiBold>
             </FancyButton>
         </View>
     );
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         aspectRatio: 340 / 133,
     },
     subTitle: {
-        fontSize: 17,
+        fontSize: 15,
         marginTop: 8,
         width: '100%',
         textAlign: 'center',

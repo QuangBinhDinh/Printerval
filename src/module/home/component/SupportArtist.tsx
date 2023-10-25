@@ -14,13 +14,13 @@ const SupportArtist = () => {
     const toSelling = () => {};
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, lineHeight: 28 }}>
+            <TextSemiBold style={{ fontSize: 20, lineHeight: 26 }}>
                 Support independent{'\n'}
                 <TextSemiBold style={{ color: lightColor.secondary }}>Artists </TextSemiBold>and
                 <TextSemiBold style={{ color: lightColor.secondary }}> Crafters</TextSemiBold>
             </TextSemiBold>
 
-            <TextNormal style={{ fontSize: 17, marginTop: 14 }}>
+            <TextNormal style={{ fontSize: 15, marginTop: 14 }}>
                 There’s no <TextNormal style={{ color: lightColor.secondary }}>Printerval</TextNormal> warehouse – all
                 products belong to creative artists and crafters. We are just a bridge to connect you with dedicated
                 makers and get eye-catching pieces.
@@ -28,7 +28,7 @@ const SupportArtist = () => {
 
             <CardSlider />
             <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toSelling}>
-                <TextSemiBold style={{ fontSize: 17, color: 'white' }}>Start selling</TextSemiBold>
+                <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Start selling</TextSemiBold>
             </FancyButton>
         </View>
     );

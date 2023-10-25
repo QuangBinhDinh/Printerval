@@ -11,7 +11,7 @@ const PopularDesign = () => {
     const renderItem = ({ item }: { item: any }) => <DesignItem item={item} />;
     return (
         <View style={styles.container}>
-            <TextSemiBold style={{ fontSize: 22, marginLeft: 16, lineHeight: 28 }}>Popular Designs</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 20, marginLeft: 16, lineHeight: 26 }}>Popular Designs</TextSemiBold>
             <FlatList
                 data={[1, 2, 3, 4]}
                 style={{ width: '100%', marginTop: 16 }}

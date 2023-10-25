@@ -1,4 +1,5 @@
 import { TextNormal, TextSemiBold } from '@components/text';
+import { SCREEN_WIDTH } from '@util/index';
 import React, { memo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -30,8 +31,8 @@ const LIST = [
 const Guarantee = () => {
     return (
         <View style={{ width: '100%', marginTop: 32, alignItems: 'center' }}>
-            <TextSemiBold style={{ fontSize: 22 }}> Our Perfect Fit Guarantee</TextSemiBold>
-            <TextNormal style={{ color: '#222', fontSize: 17, marginTop: 8 }}>Complimentary On All Orders</TextNormal>
+            <TextSemiBold style={{ fontSize: 20 }}> Our Perfect Fit Guarantee</TextSemiBold>
+            <TextNormal style={{ color: '#222', fontSize: 15, marginTop: 8 }}>Complimentary On All Orders</TextNormal>
             <ScrollView
                 style={styles.scroll}
                 contentContainerStyle={{ paddingLeft: 4, paddingRight: 16 }}
@@ -55,7 +56,7 @@ export default memo(Guarantee);
 const styles = StyleSheet.create({
     scroll: { width: '100%', height: 310, marginTop: 7 },
     item: {
-        width: 280,
+        width: (250 * SCREEN_WIDTH) / 375,
         height: 255,
         paddingHorizontal: 14,
         borderRadius: 6,
@@ -68,6 +69,6 @@ const styles = StyleSheet.create({
         marginTop: -50,
         zIndex: 100,
     },
-    itemTitle: { fontSize: 18, marginTop: 2 },
-    itemContent: { fontSize: 16, lineHeight: 22, marginTop: 9 },
+    itemTitle: { fontSize: 15, marginTop: 5 },
+    itemContent: { fontSize: 14, marginTop: 5, letterSpacing: 0.1 },
 });

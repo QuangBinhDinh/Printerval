@@ -31,4 +31,7 @@ const randomizeColor = (numCol = 4) => {
     return arr.slice(0, numCol);
 };
 
+// const responsiveFont = (font:number,)=>{
+//     return 18 + (20 - 18) * ((100vw - 300px)/(420 - 300))
+// }
 export { SCREEN_HEIGHT, SCREEN_WIDTH, splitColArray, randomizeColor };
