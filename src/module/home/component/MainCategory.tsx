@@ -51,7 +51,7 @@ export default memo(MainCategory);
 
 const ImageCover = ({ item }: { item: any }) => {
     const toSearchResult = () => {
-        navigate('SearchResult', { title: item.name, categoryId: item.id });
+        navigate('ProductCategory', { title: item.name, categoryId: item.id });
     };
     return (
         <Pressable style={{ flex: 1 }} onPress={toSearchResult}>

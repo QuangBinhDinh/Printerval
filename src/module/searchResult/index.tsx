@@ -24,7 +24,7 @@ const SearchResult = () => {
         id: categoryId,
         category_id: categoryId,
         q: keyword,
-        // dt: Date.now(),
+        dt: Date.now(),
     });
     //nest destructing with possible undefined value
     const { data: { result, filterOptions, priceRange, categories, meta } = {}, isFetching } =

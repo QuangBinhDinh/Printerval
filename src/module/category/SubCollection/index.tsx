@@ -41,7 +41,7 @@ export default SubCollection;
 
 const SubItem = memo(({ item, last }: { item: any; last: boolean }) => {
     const toSearchResult = () => {
-        navigate('SearchResult', { title: item.name, categoryId: item.id });
+        navigate('ProductCategory', { title: item.name, categoryId: item.id });
     };
     return (
         <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]} onPress={toSearchResult}>
