@@ -1,4 +1,4 @@
-import { api } from '@api/service';
+import { api, domainApi } from '@api/service';
 import { defaultSerializeQueryArgs } from '@reduxjs/toolkit/query';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
@@ -31,7 +31,7 @@ const extendedApi = api.injectEndpoints({
         fetchProductResult: build.query<any, Partial<ProductFilterArgs>>({
             keepUnusedDataFor: CACHE_TIME_SECONDS,
             query: args => {
-                var newArgs = Object.assign({ page_size: 40, page_type: 'category' }, args);
+                var newArgs = Object.assign({ page_size: 40, page_type: 'category', dt: Date.now() }, args);
                 return { url: 'mobile/product/category-filter', method: 'get', params: newArgs };
             },
             serializeQueryArgs: ({ queryArgs, endpointName, endpointDefinition }) => {
@@ -39,7 +39,6 @@ const extendedApi = api.injectEndpoints({
                     queryArgs;
                 return `fetchProductResult?${qs.stringify({
                     id,
-                    q,
                     minPrice,
                     maxPrice,
                     order,
@@ -64,13 +63,57 @@ const extendedApi = api.injectEndpoints({
     }),
 });
 
-export const { useFetchProductResultQuery } = extendedApi;
+const extendedDomain = domainApi.injectEndpoints({
+    endpoints: build => ({
+        fetchProductSearch: build.query<any, Partial<ProductFilterArgs>>({
+            keepUnusedDataFor: CACHE_TIME_SECONDS,
+            query: args => {
+                var newArgs = Object.assign({ page_size: 40, dt: Date.now() }, args);
+                return { url: 'search/api', method: 'get', params: newArgs };
+            },
+            serializeQueryArgs: ({ queryArgs, endpointName, endpointDefinition }) => {
+                const { id, q, minPrice, maxPrice, order, color_variant_id, size_variant_id, type_variant_id, dt } =
+                    queryArgs;
+                return `fetchProductSearch?${qs.stringify({
+                    q,
+                    minPrice,
+                    maxPrice,
+                    order,
+                    dt,
+                    color_variant_id,
+                    size_variant_id,
+                    type_variant_id,
+                })}`;
+            },
+            merge: (curCache, newData, { arg }) => {
+                // chỉ merge data trả về khi load more (page_id >=1)
 
-/**
- * Kiểm tra xem 2 bộ lọc sp được xem là giống nhau (không quan tâm page_id)
- */
-export const distinctFilter = (filter1: Partial<ProductFilterArgs>, filter2: Partial<ProductFilterArgs>) => {
-    const { category_id, page_size, page_id, ...uniq1 } = filter1;
-    const { category_id: c, page_size: p, page_id: pid, ...uniq2 } = filter2;
-    return isEqual(uniq1, uniq2);
-};
+                if (newData.products?.length > 0 && !!arg.page_id && arg.page_id >= 1) {
+                    var merged = curCache.products.concat(newData.products);
+                    curCache.products = merged;
+                    curCache.meta = newData.meta;
+                }
+            },
+            forceRefetch({ currentArg, previousArg }) {
+                return !isEqual(currentArg, previousArg);
+            },
+            transformResponse: response => {
+                //chuẩn hoá data giống như api lấy product theo category ở trên
+                var allFilter = response.result?.allFilters;
+                var typeList = allFilter?.find((i: any) => i.type == 'Type')?.filters;
+                var colorList = allFilter?.find((i: any) => i.type == 'Color')?.filters;
+                var sizeList = allFilter?.find((i: any) => i.type == 'Size')?.filters;
+
+                var filterOptions = {
+                    Type: typeList,
+                    Color: colorList,
+                    Size: sizeList,
+                };
+                return { ...response.result, meta: response.meta, filterOptions };
+            },
+        }),
+    }),
+});
+
+export const { useFetchProductResultQuery } = extendedApi;
+export const { useFetchProductSearchQuery } = extendedDomain;

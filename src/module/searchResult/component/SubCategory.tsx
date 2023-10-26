@@ -1,11 +1,11 @@
-import { TextNormal, TextSemiBold } from '@components/text';
+import { TextNormal } from '@components/text';
 import { lightColor } from '@styles/color';
 import { cdnImage } from '@util/cdnImage';
 import React, { memo } from 'react';
-import { Platform, Text } from 'react-native';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
+import { navigate, pushNavigate } from '@navigation/service';
 
 const SubCategory = ({ data }: { data: any }) => {
     const renderItem = ({ item }: { item: any }) => <SubItem item={item} />;
@@ -25,14 +25,19 @@ const SubCategory = ({ data }: { data: any }) => {
     );
 };
 
-const SubItem = ({ item }: { item: any }) => (
-    <View style={styles.item}>
-        <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
-        <TextNormal style={styles.itemTitle} numberOfLines={2}>
-            {item.name}
-        </TextNormal>
-    </View>
-);
+const SubItem = memo(({ item }: { item: any }) => {
+    const toSubCategory = () => {
+        pushNavigate('ProductCategory', { title: item.name, categoryId: item.id });
+    };
+    return (
+        <Pressable style={styles.item} hitSlop={5} onPress={toSubCategory}>
+            <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 250, 250) }} />
+            <TextNormal style={styles.itemTitle} numberOfLines={2}>
+                {item.name}
+            </TextNormal>
+        </Pressable>
+    );
+});
 
 export default memo(SubCategory);
 

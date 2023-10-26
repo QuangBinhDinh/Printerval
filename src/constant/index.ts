@@ -41,3 +41,5 @@ export const RELEVANT = [
         param: 'sale',
     },
 ];
+
+export const MAX_SEARCH_HISTORY = 3;

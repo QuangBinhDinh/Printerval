@@ -10,7 +10,7 @@ import { TextNormal, TextSemiBold } from '@components/text';
 import { Icon } from '@rneui/base';
 import { cdnImage } from '@util/cdnImage';
 import { SCREEN_WIDTH } from '@util/index';
-import { navigate } from '@navigation/service';
+import { pushNavigate } from '@navigation/service';
 
 const SubCollection = () => {
     const category = useAppSelector(state => state.category.categoryTree);
@@ -41,7 +41,7 @@ export default SubCollection;
 
 const SubItem = memo(({ item, last }: { item: any; last: boolean }) => {
     const toSearchResult = () => {
-        navigate('ProductCategory', { title: item.name, categoryId: item.id });
+        pushNavigate('ProductCategory', { title: item.name, categoryId: item.id });
     };
     return (
         <Pressable style={[styles.item, last && { borderBottomWidth: 0 }]} onPress={toSearchResult}>

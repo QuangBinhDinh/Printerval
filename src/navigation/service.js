@@ -17,7 +17,7 @@ const replace = (name, params) => {
 
 const pushNavigate = (name, params, key) => {
     if (navigationRef.isReady) {
-        navigationRef.dispatch(CommonActions.navigate({ name, params, ...(!!key && { key: `${name} ${key}` }) }));
+        navigationRef.dispatch(StackActions.push(name, params));
     }
 };
 

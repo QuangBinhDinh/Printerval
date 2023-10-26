@@ -8,6 +8,7 @@ import { ProductFilterArgs } from '@searchResult/service';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH, formatPrice } from '@util/index';
+import { removeBracket } from '@util/string';
 import React, { memo, useState } from 'react';
 import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -85,7 +86,7 @@ const FilterScreen = () => {
                                             subFilter.type_variant_id == item.id ? styles.textSelected : styles.textItem
                                         }
                                     >
-                                        {item.name}
+                                        {item.name || removeBracket(item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}
@@ -113,7 +114,7 @@ const FilterScreen = () => {
                                                 : styles.textItem
                                         }
                                     >
-                                        {item.name}
+                                        {item.name || removeBracket(item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}
@@ -141,7 +142,7 @@ const FilterScreen = () => {
                                             subFilter.size_variant_id == item.id ? styles.textSelected : styles.textItem
                                         }
                                     >
-                                        {item.name}
+                                        {item.name || removeBracket(item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}

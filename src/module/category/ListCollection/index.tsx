@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import LoadingCategory from './LoadingCategory';
 import Collection from './Collection';
 import { SCREEN_WIDTH } from '@util/index';
+import { pushNavigate } from '@navigation/service';
 
 const checkSelector = createSelector(
     (state: RootState) => state.category.valid_timestamp,
@@ -42,7 +43,11 @@ const ListCollection = () => {
     }, [tree]);
 
     const [textSearch, setText] = useState('');
-    const searchTerm = useDebounceValue(textSearch); // dùng để search keyword
+    const searchTerm = useDebounceValue(textSearch, 1500); // dùng để search keyword
+    const searchByKeyword = () => {
+        pushNavigate('SearchResult', { title: `Result for ${textSearch}`, keyword: textSearch });
+        dispatch(category.actions.setHistory(textSearch));
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -54,6 +59,7 @@ const ListCollection = () => {
                     style={{ flex: 1, backgroundColor: 'white' }}
                     contentContainerStyle={{ alignItems: 'center' }}
                     showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
                 >
                     <View style={styles.inputContainer}>
                         <Icon type="feather" name="search" size={24} color={lightColor.secondary} />
@@ -63,6 +69,7 @@ const ListCollection = () => {
                             onChangeText={setText}
                             placeholder="Search products..."
                             placeholderTextColor={'#444'}
+                            onSubmitEditing={searchByKeyword}
                         />
                     </View>
                     <TrendingView searchTerm={searchTerm} />

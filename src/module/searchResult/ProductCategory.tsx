@@ -28,6 +28,8 @@ const ProductCategory = () => {
         }
     }, [meta]);
 
+    const subCategories = categories?.filter((item: any) => item.id != categoryId);
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={title} />
@@ -38,7 +40,7 @@ const ProductCategory = () => {
                     <ProductList
                         data={result}
                         meta={meta}
-                        sub={categories}
+                        sub={subCategories}
                         loadMore={loadMore}
                         filter={filterOptions}
                         priceRange={priceRange}

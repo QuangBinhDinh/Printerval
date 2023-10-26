@@ -15,9 +15,9 @@ type RootStackParams = {
         currentFilter: Partial<ProductFilterArgs>;
         setFilter: any;
         filter: {
-            Color: { id: number; name: string }[];
-            Size: { id: number; name: string }[];
-            Type: { id: number; name: string }[];
+            Color: { id: number; name: string; text: string }[];
+            Size: { id: number; name: string; text: string }[];
+            Type: { id: number; name: string; text: string }[];
         };
         priceRange: { from: number; to: number }[];
     };

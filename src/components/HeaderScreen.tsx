@@ -16,10 +16,15 @@ const HeaderScreen = ({ title }: IProps) => {
     const insets = useSafeAreaInsets();
     return (
         <View style={[styles.container, shadow, { height: 56 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
-            <Pressable style={styles.iconBack} hitSlop={10} onPress={goBack}>
+            <Pressable style={styles.iconBack} hitSlop={15} onPress={goBack}>
                 <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
             </Pressable>
-            <TextNormal style={{ fontSize: 16, color: lightColor.primaryBold, marginTop: 3 }}>{title}</TextNormal>
+            <TextNormal
+                style={{ fontSize: 16, color: lightColor.primaryBold, marginTop: 3, width: '80%' }}
+                numberOfLines={1}
+            >
+                {title}
+            </TextNormal>
         </View>
     );
 };

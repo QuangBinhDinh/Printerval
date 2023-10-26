@@ -5,7 +5,7 @@ import { useFetchCategoryBannerQuery } from '../service';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import { SCREEN_WIDTH } from '@util/index';
-import { navigate } from '@navigation/service';
+import { navigate, pushNavigate } from '@navigation/service';
 
 const LARGE_WIDTH = (SCREEN_WIDTH - 44) / 2;
 const SMALL_HEIGHT = (LARGE_WIDTH - 12) / 2;
@@ -51,7 +51,7 @@ export default memo(MainCategory);
 
 const ImageCover = ({ item }: { item: any }) => {
     const toSearchResult = () => {
-        navigate('ProductCategory', { title: item.name, categoryId: item.id });
+        pushNavigate('ProductCategory', { title: item.name, categoryId: item.id });
     };
     return (
         <Pressable style={{ flex: 1 }} onPress={toSearchResult}>

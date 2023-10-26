@@ -1,25 +1,48 @@
 import React, { memo } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, InteractionManager, Pressable, StyleSheet, View } from 'react-native';
 import { useFetchDefaultTrendingQuery, useFetchSuggestWordQuery } from '../service';
 import { TrendingUp } from '@assets/svg';
 import { TextNormal } from '@components/text';
 import FastImage from 'react-native-fast-image';
 import { RANDOM_IMAGE_URL } from '@constant/index';
 import { lightColor } from '@styles/color';
+import { useAppDispatch, useAppSelector } from '@store/hook';
+import category from '@category/reducer';
+import { pushNavigate } from '@navigation/service';
+import { Icon } from '@rneui/base';
 
 const TrendingView = ({ searchTerm }: { searchTerm: string }) => {
+    const dispatch = useAppDispatch();
     const { data: trend } = useFetchDefaultTrendingQuery();
     const { data: suggest } = useFetchSuggestWordQuery(searchTerm, { skip: !searchTerm });
-
     const displayText: any[] = suggest ?? trend ?? [];
 
+    const history = useAppSelector(state => state.category.searchHistory);
+
+    const searchByKeyword = (textSearch: string) => {
+        pushNavigate('SearchResult', { title: `Result for ${textSearch}`, keyword: textSearch });
+        InteractionManager.runAfterInteractions(() => {
+            dispatch(category.actions.setHistory(textSearch));
+        });
+    };
     return (
         <View style={styles.container}>
+            {history.map((item, index) => (
+                <Pressable key={index} style={styles.trendItem} onPress={() => searchByKeyword(item)} hitSlop={12}>
+                    <Icon type="material-icon" name="history" size={20} color={lightColor.price} />
+                    <TextNormal style={styles.normalText}>{item}</TextNormal>
+                </Pressable>
+            ))}
             {displayText.map((item, index) => (
-                <View key={index} style={styles.trendItem}>
+                <Pressable
+                    key={index}
+                    style={styles.trendItem}
+                    onPress={() => searchByKeyword(item.keyword)}
+                    hitSlop={12}
+                >
                     <TrendingUp width={18} height={18} style={{ marginTop: 2 }} />
                     <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
-                </View>
+                </Pressable>
             ))}
             <SuggestCategory data={[1, 2, 3, 4, 5]} />
         </View>
