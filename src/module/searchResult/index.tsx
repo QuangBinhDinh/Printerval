@@ -13,6 +13,7 @@ import SubCategory from './component/SubCategory';
 import { useScrollReachEnd } from '@components/hooks/useScrollReachEnd';
 import LoadingResult from './component/LoadingResult';
 import LoadingMore from './component/LoadingMore';
+import { navigate } from '@navigation/service';
 
 const SearchResult = () => {
     const {
@@ -26,7 +27,7 @@ const SearchResult = () => {
         // dt: Date.now(),
     });
     //nest destructing with possible undefined value
-    const { data: { result, filterOptions, priceRange, categories, meta } = {}, isLoading } =
+    const { data: { result, filterOptions, priceRange, categories, meta } = {}, isFetching } =
         useFetchProductResultQuery(searchFilter);
 
     const loadMore = useCallback(() => {
@@ -35,18 +36,23 @@ const SearchResult = () => {
         }
     }, [meta]);
 
-    // useEffect(() => {
-    //     console.log('Meta', meta);
-    // }, [meta]);
-
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={title} />
             <View style={{ flex: 1 }}>
-                {isLoading ? (
+                {isFetching && !searchFilter.page_id ? (
                     <LoadingResult />
                 ) : (
-                    <ProductList data={result} meta={meta} sub={categories} loadMore={loadMore} />
+                    <ProductList
+                        data={result}
+                        meta={meta}
+                        sub={categories}
+                        loadMore={loadMore}
+                        filter={filterOptions}
+                        priceRange={priceRange}
+                        currentFilter={searchFilter}
+                        setFilter={setFilter}
+                    />
                 )}
             </View>
         </View>
@@ -55,10 +61,33 @@ const SearchResult = () => {
 
 export default SearchResult;
 
-const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub: any; loadMore: any }) => {
+const ProductList = ({
+    data,
+    meta,
+    sub,
+    loadMore,
+    filter,
+    priceRange,
+    currentFilter,
+    setFilter,
+}: {
+    data: any;
+    meta: any;
+    sub: any;
+    loadMore: any;
+    filter: any;
+    priceRange: any;
+    currentFilter: Partial<ProductFilterArgs>;
+    setFilter: any;
+}) => {
     const { onEndReached } = useScrollReachEnd();
-
     const newData = splitColArray(data);
+
+    const toFilter = () => {
+        navigate('FilterScreen', { filter, priceRange, currentFilter, setFilter });
+    };
+
+    // console.log('Result', data);
     if (!newData) return null;
     return (
         <ScrollView
@@ -73,7 +102,7 @@ const ProductList = ({ data, meta, sub, loadMore }: { data: any; meta: any; sub:
 
             <View style={styles.rowFilter}>
                 <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
-                <Pressable style={styles.filterButton}>
+                <Pressable style={styles.filterButton} onPress={toFilter}>
                     <FilterIcon width={20} height={20} />
                 </Pressable>
             </View>

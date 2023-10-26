@@ -11,6 +11,7 @@ import SearchResult from '../module/searchResult/index';
 import { TransitionPresets } from '@react-navigation/stack';
 import { ColorValue, StatusBar, StatusBarStyle } from 'react-native';
 import { SCREEN_WITH_COLOR } from '@constant/index';
+import FilterScreen from '@searchResult/filterScreen';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
@@ -57,6 +58,7 @@ const Router = () => {
                 />
                 <Stack.Screen name="CartNavigator" component={CartScreen} />
                 <Stack.Screen name="SearchResult" component={SearchResult} />
+                <Stack.Screen name="FilterScreen" component={FilterScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

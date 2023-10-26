@@ -15,29 +15,29 @@ export const CACHE_TIME_SECONDS = 90;
  */
 export const SCREEN_WITH_COLOR = [''];
 
-export const RELEVANT = {
-    BEST_SELLING: {
+export const RELEVANT = [
+    {
         name: 'Best Selling',
         param: 'sold',
     },
-    NEWEST: {
+    {
         name: 'Newest',
         param: 'lastest',
     },
-    TOP_VIEW: {
+    {
         name: 'Top View',
         param: 'view',
     },
-    PRICE_LOW_TO_HIGH: {
+    {
         name: 'Price: Low to High',
         param: 'low_price',
     },
-    PRICE_HIGH_TO_LOW: {
+    {
         name: 'Price: High to Low',
         param: 'high_price',
     },
-    TOP_DISCOUNT: {
+    {
         name: 'Top Discount',
         param: 'sale',
     },
-};
+];

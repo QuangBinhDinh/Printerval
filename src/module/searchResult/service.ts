@@ -14,6 +14,11 @@ export interface ProductFilterArgs {
     minPrice: string | number;
     maxPrice: string | number;
     order: string;
+    color_variant_id: number;
+    size_variant_id: number;
+    type_variant_id: number;
+    from: number;
+    to: number;
 
     /**
      * Timestamp để phân biệt các request (tránh trường hợp cache bị trùng)
@@ -30,8 +35,19 @@ const extendedApi = api.injectEndpoints({
                 return { url: 'mobile/product/category-filter', method: 'get', params: newArgs };
             },
             serializeQueryArgs: ({ queryArgs, endpointName, endpointDefinition }) => {
-                const { id, q, minPrice, maxPrice, order, dt } = queryArgs;
-                return `fetchProductResult?${qs.stringify({ id, q, minPrice, maxPrice, order, dt })}`;
+                const { id, q, minPrice, maxPrice, order, color_variant_id, size_variant_id, type_variant_id, dt } =
+                    queryArgs;
+                return `fetchProductResult?${qs.stringify({
+                    id,
+                    q,
+                    minPrice,
+                    maxPrice,
+                    order,
+                    dt,
+                    color_variant_id,
+                    size_variant_id,
+                    type_variant_id,
+                })}`;
             },
             merge: (curCache, newData, { arg }) => {
                 // chỉ merge data trả về khi load more (page_id >=1)

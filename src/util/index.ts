@@ -1,4 +1,5 @@
 import { pastel } from '@styles/color';
+import { isNumber } from 'lodash';
 import { Dimensions } from 'react-native';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -31,7 +32,10 @@ const randomizeColor = (numCol = 4) => {
     return arr.slice(0, numCol);
 };
 
-// const responsiveFont = (font:number,)=>{
-//     return 18 + (20 - 18) * ((100vw - 300px)/(420 - 300))
-// }
-export { SCREEN_HEIGHT, SCREEN_WIDTH, splitColArray, randomizeColor };
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const formatPrice = (priceNum: string | number) => {
+    let localePrefix = '$';
+    if (isNumber(priceNum)) return formatter.format(priceNum);
+    else return localePrefix + priceNum;
+};
+export { SCREEN_HEIGHT, SCREEN_WIDTH, splitColArray, randomizeColor, formatPrice };
