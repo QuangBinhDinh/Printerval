@@ -8,6 +8,11 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { PersistGate } from 'redux-persist/integration/react';
 
 LogBox.ignoreAllLogs(); //Ignore all log notifications
+if (!__DEV__) {
+    console.log = () => null;
+    console.group = () => null;
+    console.info = () => null;
+}
 
 GoogleSignin.configure({
     webClientId: '1066661762461-ojsjpaf0dqup6reb3s0g7fnc5jis3c4u.apps.googleusercontent.com',

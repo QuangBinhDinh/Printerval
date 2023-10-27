@@ -55,10 +55,18 @@ const FilterScreen = () => {
                             hitSlop={8}
                             style={[
                                 styles.buttonItem,
-                                subFilter.order == item.param && { borderColor: lightColor.secondary },
+                                subFilter.order == item.param && {
+                                    borderColor: lightColor.secondary,
+                                    backgroundColor: 'white',
+                                },
                             ]}
                             key={item.param}
-                            onPress={() => setSubFilter(prev => ({ ...prev, order: item.param }))}
+                            onPress={() =>
+                                setSubFilter(prev => ({
+                                    ...prev,
+                                    order: subFilter.order == item.param ? undefined : item.param,
+                                }))
+                            }
                         >
                             <TextNormal style={subFilter.order == item.param ? styles.textSelected : styles.textItem}>
                                 {item.name}
@@ -76,17 +84,25 @@ const FilterScreen = () => {
                                     hitSlop={8}
                                     style={[
                                         styles.buttonItem,
-                                        subFilter.type_variant_id == item.id && { borderColor: lightColor.secondary },
+                                        subFilter.type_variant_id == item.id && {
+                                            borderColor: lightColor.secondary,
+                                            backgroundColor: 'white',
+                                        },
                                     ]}
                                     key={item.id}
-                                    onPress={() => setSubFilter(prev => ({ ...prev, type_variant_id: item.id }))}
+                                    onPress={() =>
+                                        setSubFilter(prev => ({
+                                            ...prev,
+                                            type_variant_id: subFilter.type_variant_id == item.id ? undefined : item.id,
+                                        }))
+                                    }
                                 >
                                     <TextNormal
                                         style={
                                             subFilter.type_variant_id == item.id ? styles.textSelected : styles.textItem
                                         }
                                     >
-                                        {item.name || removeBracket(item.text)}
+                                        {removeBracket(item.name || item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}
@@ -102,10 +118,19 @@ const FilterScreen = () => {
                                     hitSlop={8}
                                     style={[
                                         styles.buttonItem,
-                                        subFilter.color_variant_id == item.id && { borderColor: lightColor.secondary },
+                                        subFilter.color_variant_id == item.id && {
+                                            borderColor: lightColor.secondary,
+                                            backgroundColor: 'white',
+                                        },
                                     ]}
                                     key={item.id}
-                                    onPress={() => setSubFilter(prev => ({ ...prev, color_variant_id: item.id }))}
+                                    onPress={() =>
+                                        setSubFilter(prev => ({
+                                            ...prev,
+                                            color_variant_id:
+                                                subFilter.color_variant_id == item.id ? undefined : item.id,
+                                        }))
+                                    }
                                 >
                                     <TextNormal
                                         style={
@@ -114,7 +139,7 @@ const FilterScreen = () => {
                                                 : styles.textItem
                                         }
                                     >
-                                        {item.name || removeBracket(item.text)}
+                                        {removeBracket(item.name || item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}
@@ -131,10 +156,18 @@ const FilterScreen = () => {
                                     hitSlop={8}
                                     style={[
                                         styles.buttonSize,
-                                        subFilter.size_variant_id == item.id && { borderColor: lightColor.secondary },
+                                        subFilter.size_variant_id == item.id && {
+                                            borderColor: lightColor.secondary,
+                                            backgroundColor: 'white',
+                                        },
                                         index % SIZE_PER_ROW == SIZE_PER_ROW - 1 && { marginRight: 0 },
                                     ]}
-                                    onPress={() => setSubFilter(prev => ({ ...prev, size_variant_id: item.id }))}
+                                    onPress={() =>
+                                        setSubFilter(prev => ({
+                                            ...prev,
+                                            size_variant_id: subFilter.size_variant_id == item.id ? undefined : item.id,
+                                        }))
+                                    }
                                     key={item.id}
                                 >
                                     <TextNormal
@@ -142,7 +175,7 @@ const FilterScreen = () => {
                                             subFilter.size_variant_id == item.id ? styles.textSelected : styles.textItem
                                         }
                                     >
-                                        {item.name || removeBracket(item.text)}
+                                        {removeBracket(item.name || item.text)}
                                     </TextNormal>
                                 </Pressable>
                             ))}
@@ -160,11 +193,20 @@ const FilterScreen = () => {
                                     style={[
                                         styles.buttonPrice,
                                         subFilter.from == item.from &&
-                                            subFilter.to == item.to && { borderColor: lightColor.secondary },
+                                            subFilter.to == item.to && {
+                                                borderColor: lightColor.secondary,
+                                                backgroundColor: 'white',
+                                            },
                                         index % 2 == 1 && { marginRight: 0 },
                                     ]}
                                     key={item.from + item.to}
-                                    onPress={() => setSubFilter(prev => ({ ...prev, from: item.from, to: item.to }))}
+                                    onPress={() =>
+                                        setSubFilter(prev => ({
+                                            ...prev,
+                                            from: subFilter.from == item.from ? undefined : item.from,
+                                            to: subFilter.to == item.to ? undefined : item.to,
+                                        }))
+                                    }
                                 >
                                     <TextNormal
                                         style={

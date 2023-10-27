@@ -1,9 +1,9 @@
-import React, { memo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import React, { memo, useState, useMemo } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { ProductFilterArgs } from '@searchResult/service';
 import { splitColArray } from '@util/index';
 import DynamicCard from '@components/product/DynamicCard';
-import { TextNormal } from '@components/text';
+import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { FilterIcon } from '@assets/svg';
 import SubCategory from './SubCategory';
@@ -58,6 +58,17 @@ interface IProps {
 }
 const ProductListAnimated = memo(
     ({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter }: IProps) => {
+        const numFilter = useMemo(() => {
+            var count = 0;
+            if (currentFilter.order) ++count;
+            if (currentFilter.type_variant_id) ++count;
+            if (currentFilter.color_variant_id) ++count;
+            if (currentFilter.size_variant_id) ++count;
+            if (currentFilter.from && currentFilter.to) ++count;
+
+            return count;
+        }, [currentFilter]);
+
         const scrollY = useSharedValue(0);
         const animStyle = useAnimatedStyle(() => ({
             transform: [
@@ -89,13 +100,18 @@ const ProductListAnimated = memo(
                         },
                     ]}
                 >
-                    {/* <View style={{ height: 16 }} /> */}
                     <SubCategory data={sub} />
-
                     <View style={styles.rowFilter}>
                         <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
                         <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
                             <FilterIcon width={20} height={20} />
+                            {!!numFilter && (
+                                <View style={styles.numFilter} pointerEvents="none">
+                                    <TextSemiBold style={{ fontSize: 10, color: 'white', marginTop: 1 }}>
+                                        {numFilter}
+                                    </TextSemiBold>
+                                </View>
+                            )}
                         </Pressable>
                     </View>
                 </Animated.View>
@@ -166,4 +182,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     productList: { width: '100%', flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between' },
+    numFilter: {
+        width: 18,
+        height: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 14,
+        backgroundColor: lightColor.price,
+        position: 'absolute',
+        top: -4,
+        right: -4,
+    },
 });
