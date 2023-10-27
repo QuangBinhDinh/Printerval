@@ -11,6 +11,8 @@ import { useScrollReachEnd } from '@components/hooks/useScrollReachEnd';
 import LoadingMore from './LoadingMore';
 import { navigate } from '@navigation/service';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import EmptyResult from './EmptyResult';
+import { ListData } from './ProductList';
 
 const TRANS_THRESHOLD = 186;
 
@@ -130,29 +132,12 @@ const ProductListAnimated = memo(
                 >
                     <View style={{ height: 220 }} />
                     <ListData data={data} />
-                    {meta?.has_next && <LoadingMore />}
+                    {meta?.has_next && data.length > 0 && <LoadingMore />}
                 </Animated.ScrollView>
             </View>
         );
     },
 );
-
-const ListData = memo(({ data }: { data: any[] }) => {
-    const newData = splitColArray(data);
-    console.log('Result', data);
-    if (!newData) return null;
-    return (
-        <View style={styles.productList}>
-            {newData.map((col, index) => (
-                <View key={index} style={[{ width: '48%' }]}>
-                    {col.map(item => (
-                        <DynamicCard item={item} key={item.id} />
-                    ))}
-                </View>
-            ))}
-        </View>
-    );
-});
 
 export default memo(ProductListAnimated);
 const styles = StyleSheet.create({

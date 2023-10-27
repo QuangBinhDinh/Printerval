@@ -15,6 +15,7 @@ import Favorite from './favorite.svg';
 import PrintervalLogo from './printerval-logo.svg';
 import TrendingUp from './trending-up.svg';
 import FilterIcon from './filter.svg';
+import NoResult from './noresult.svg';
 export {
     Apps,
     AppsFill,
@@ -33,4 +34,5 @@ export {
     PrintervalLogo,
     TrendingUp,
     FilterIcon,
+    NoResult,
 };

@@ -9,6 +9,7 @@ import { FilterIcon } from '@assets/svg';
 import { useScrollReachEnd } from '@components/hooks/useScrollReachEnd';
 import LoadingMore from './LoadingMore';
 import { navigate } from '@navigation/service';
+import EmptyResult from './EmptyResult';
 
 interface IProps {
     /**
@@ -107,15 +108,15 @@ const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, curre
             </View>
 
             <ListData data={data} />
-            {meta?.has_next && <LoadingMore />}
+            {meta?.has_next && data.length > 0 && <LoadingMore />}
         </ScrollView>
     );
 });
 
-const ListData = memo(({ data }: { data: any[] }) => {
+export const ListData = memo(({ data }: { data: any[] }) => {
     const newData = splitColArray(data);
     console.log('Result', data);
-    if (!newData) return null;
+    if (!newData || data.length == 0) return <EmptyResult />;
     return (
         <View style={styles.productList}>
             {newData.map((col, index) => (
