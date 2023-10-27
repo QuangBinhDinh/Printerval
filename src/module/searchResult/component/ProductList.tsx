@@ -52,6 +52,8 @@ interface IProps {
      * Thay đổi filter hiện tại sẽ call api
      */
     setFilter: any;
+
+    refetch: any;
 }
 const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter }: IProps) => {
     const numFilter = useMemo(() => {
@@ -60,7 +62,7 @@ const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, curre
         if (currentFilter.type_variant_id) ++count;
         if (currentFilter.color_variant_id) ++count;
         if (currentFilter.size_variant_id) ++count;
-        if (currentFilter.from && currentFilter.to) ++count;
+        if (currentFilter.minPrice && currentFilter.maxPrice) ++count;
 
         return count;
     }, [currentFilter]);

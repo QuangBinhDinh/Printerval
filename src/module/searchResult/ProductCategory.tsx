@@ -20,8 +20,11 @@ const ProductCategory = () => {
         dt: Date.now(),
     });
     //nest destructing with possible undefined value
-    const { data: { result, filterOptions, priceRange, categories, meta } = {}, isFetching } =
-        useFetchProductResultQuery(searchFilter);
+    const {
+        data: { result, filterOptions, priceRange, categories, meta } = {},
+        isFetching,
+        refetch,
+    } = useFetchProductResultQuery(searchFilter);
 
     const loadMore = useCallback(() => {
         if (meta?.has_next) {
@@ -49,6 +52,7 @@ const ProductCategory = () => {
                         priceRange={priceRange}
                         currentFilter={searchFilter}
                         setFilter={setFilter}
+                        refetch={refetch}
                     />
                 )}
             </View>

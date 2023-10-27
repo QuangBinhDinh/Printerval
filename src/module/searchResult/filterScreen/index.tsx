@@ -192,8 +192,8 @@ const FilterScreen = () => {
                                     hitSlop={8}
                                     style={[
                                         styles.buttonPrice,
-                                        subFilter.from == item.from &&
-                                            subFilter.to == item.to && {
+                                        subFilter.minPrice == item.from &&
+                                            subFilter.maxPrice == item.to && {
                                                 borderColor: lightColor.secondary,
                                                 backgroundColor: 'white',
                                             },
@@ -203,14 +203,14 @@ const FilterScreen = () => {
                                     onPress={() =>
                                         setSubFilter(prev => ({
                                             ...prev,
-                                            from: subFilter.from == item.from ? undefined : item.from,
-                                            to: subFilter.to == item.to ? undefined : item.to,
+                                            minPrice: subFilter.minPrice == item.from ? undefined : item.from,
+                                            maxPrice: subFilter.maxPrice == item.to ? undefined : item.to,
                                         }))
                                     }
                                 >
                                     <TextNormal
                                         style={
-                                            subFilter.from == item.from && subFilter.to == item.to
+                                            subFilter.minPrice == item.from && subFilter.maxPrice == item.to
                                                 ? styles.textSelected
                                                 : styles.textItem
                                         }

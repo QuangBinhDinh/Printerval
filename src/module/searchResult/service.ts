@@ -17,8 +17,6 @@ export interface ProductFilterArgs {
     color_variant_id: number;
     size_variant_id: number;
     type_variant_id: number;
-    from: number;
-    to: number;
 
     /**
      * Timestamp để phân biệt các request (tránh trường hợp cache bị trùng)
@@ -87,7 +85,6 @@ const extendedDomain = domainApi.injectEndpoints({
             },
             merge: (curCache, newData, { arg }) => {
                 // chỉ merge data trả về khi load more (page_id >=1)
-
                 if (newData.products?.length > 0 && !!arg.page_id && arg.page_id >= 1) {
                     var merged = curCache.products.concat(newData.products);
                     curCache.products = merged;

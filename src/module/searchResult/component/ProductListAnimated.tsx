@@ -57,6 +57,8 @@ interface IProps {
      * Thay đổi filter hiện tại sẽ call api
      */
     setFilter: any;
+
+    refetch: any;
 }
 const ProductListAnimated = memo(
     ({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter }: IProps) => {
@@ -66,7 +68,7 @@ const ProductListAnimated = memo(
             if (currentFilter.type_variant_id) ++count;
             if (currentFilter.color_variant_id) ++count;
             if (currentFilter.size_variant_id) ++count;
-            if (currentFilter.from && currentFilter.to) ++count;
+            if (currentFilter.minPrice && currentFilter.maxPrice) ++count;
 
             return count;
         }, [currentFilter]);
