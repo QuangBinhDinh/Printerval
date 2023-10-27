@@ -6,6 +6,7 @@ import { View } from 'react-native';
 import { ProductFilterArgs, useFetchProductResultQuery } from './service';
 import LoadingResult from './component/LoadingResult';
 import ProductList from './component/ProductList';
+import ProductListAnimated from './component/ProductListAnimated';
 
 const ProductCategory = () => {
     const {
@@ -28,8 +29,10 @@ const ProductCategory = () => {
         }
     }, [meta]);
 
+    //nếu có sub category, hiển thị animated header khi scroll.
     const subCategories = categories?.filter((item: any) => item.id != categoryId);
 
+    const ListData = subCategories && subCategories.length > 0 ? ProductListAnimated : ProductList;
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={title} />
@@ -37,7 +40,7 @@ const ProductCategory = () => {
                 {isFetching && !searchFilter.page_id ? (
                     <LoadingResult />
                 ) : (
-                    <ProductList
+                    <ListData
                         data={result}
                         meta={meta}
                         sub={subCategories}

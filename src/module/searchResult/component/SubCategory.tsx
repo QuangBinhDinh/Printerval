@@ -43,14 +43,13 @@ export default memo(SubCategory);
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 32,
+        marginBottom: 20,
         width: '100%',
     },
     list: {
-        marginTop: 16,
         width: '100%',
         height: 150,
-        //borderWidth: 1,
+        // borderWidth: 1,
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
     image: { width: 100, height: 100, borderRadius: 50, backgroundColor: lightColor.graybg },

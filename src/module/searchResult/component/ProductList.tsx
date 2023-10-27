@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ProductFilterArgs } from '@searchResult/service';
-import { splitColArray } from '@util/index';
+import { SCREEN_WIDTH, splitColArray } from '@util/index';
 import DynamicCard from '@components/product/DynamicCard';
 import { TextNormal } from '@components/text';
 import { lightColor } from '@styles/color';
@@ -59,23 +59,34 @@ const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, curre
         navigate('FilterScreen', { filter, priceRange, currentFilter, setFilter });
     };
 
+    const [isHide, setHide] = useState(false);
+
     if (!data) return null;
     return (
         <ScrollView
             style={{ flex: 1 }}
             onScroll={({ nativeEvent }) => {
                 onEndReached(nativeEvent, loadMore);
+                if (nativeEvent.contentOffset.y > 40) setHide(true);
+                else setHide(false);
             }}
             removeClippedSubviews
+            stickyHeaderIndices={[0]}
+            scrollEventThrottle={8}
         >
-            <View style={{ height: 16 }} />
-            <SubCategory data={sub} />
-
-            <View style={styles.rowFilter}>
-                <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
-                <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
-                    <FilterIcon width={20} height={20} />
-                </Pressable>
+            <View style={[styles.rowFilter, isHide && { borderBottomWidth: 1, borderBottomColor: lightColor.graybg }]}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
+                    <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
+                        <FilterIcon width={20} height={20} />
+                    </Pressable>
+                </View>
             </View>
 
             <ListData data={data} />
@@ -104,16 +115,14 @@ const ListData = memo(({ data }: { data: any[] }) => {
 export default memo(ProductList);
 const styles = StyleSheet.create({
     rowFilter: {
-        width: '100%',
-        flexDirection: 'row',
+        width: SCREEN_WIDTH,
         paddingHorizontal: 16,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 0,
+        paddingVertical: 10,
+        backgroundColor: 'white',
     },
     filterButton: {
-        width: 38,
-        height: 38,
+        width: 36,
+        height: 36,
         backgroundColor: lightColor.graybg,
         borderRadius: 38,
         justifyContent: 'center',

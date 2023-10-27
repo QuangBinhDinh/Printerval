@@ -15,7 +15,7 @@ interface IProps {
 const HeaderScreen = ({ title }: IProps) => {
     const insets = useSafeAreaInsets();
     return (
-        <View style={[styles.container, shadow, { height: 56 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
+        <View style={[styles.container, shadow, { height: 46 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
             <Pressable style={styles.iconBack} hitSlop={15} onPress={goBack}>
                 <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
             </Pressable>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: SCREEN_WIDTH,
         backgroundColor: 'white',
-        zIndex: 100,
+        zIndex: 1000,
         //borderWidth: 1,
     },
     iconBack: {

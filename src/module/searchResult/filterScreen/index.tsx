@@ -210,11 +210,11 @@ const styles = StyleSheet.create({
     },
     rowContent: { flexDirection: 'row', flexWrap: 'wrap', width: '100%' },
     textItem: {
-        fontSize: 15,
+        fontSize: 14.5,
         lineHeight: 21,
     },
     textSelected: {
-        fontSize: 15,
+        fontSize: 14.5,
         lineHeight: 21,
         color: lightColor.secondary,
     },

@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { ProductFilterArgs, useFetchProductSearchQuery } from './service';
 import LoadingResult from './component/LoadingResult';
-import ProductList from './component/ProductList';
+import ProductList from './component/ProductListAnimated';
 
 const SearchResult = () => {
     const {
