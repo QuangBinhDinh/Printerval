@@ -10,13 +10,18 @@ import { SCREEN_WIDTH } from '@util/index';
 
 interface IProps {
     title: string;
+    onBack?: any;
 }
 
-const HeaderScreen = ({ title }: IProps) => {
+const HeaderScreen = ({ title, onBack }: IProps) => {
     const insets = useSafeAreaInsets();
+    const back = () => {
+        if (onBack) onBack();
+        goBack();
+    };
     return (
         <View style={[styles.container, shadow, { height: 46 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
-            <Pressable style={styles.iconBack} hitSlop={15} onPress={goBack}>
+            <Pressable style={styles.iconBack} hitSlop={15} onPress={back}>
                 <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
             </Pressable>
             <TextNormal

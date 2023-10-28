@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { FlatList, InteractionManager, Pressable, StyleSheet, View } from 'react-native';
 import { useFetchDefaultTrendingQuery, useFetchSuggestWordQuery } from '../service';
-import { TrendingUp } from '@assets/svg';
+import { TrendingUp, Search } from '@assets/svg';
 import { TextNormal } from '@components/text';
 import FastImage from 'react-native-fast-image';
 import { RANDOM_IMAGE_URL } from '@constant/index';
@@ -11,13 +11,31 @@ import category from '@category/reducer';
 import { pushNavigate } from '@navigation/service';
 import { Icon } from '@rneui/base';
 
-const TrendingView = ({ searchTerm }: { searchTerm: string }) => {
-    const dispatch = useAppDispatch();
-    const { data: trend } = useFetchDefaultTrendingQuery();
-    const { data: suggest } = useFetchSuggestWordQuery(searchTerm, { skip: !searchTerm });
-    const displayText: any[] = suggest ?? trend ?? [];
+interface IProps {
+    /**
+     * Từ khoá search
+     */
+    searchTerm: string;
 
+    /**
+     * Hiển thị dữ liệu mặc định hay không
+     */
+    showDefault: boolean;
+    setDefault: any;
+}
+const TrendingView = ({ searchTerm, showDefault, setDefault }: IProps) => {
+    const dispatch = useAppDispatch();
+
+    //default data
     const history = useAppSelector(state => state.category.searchHistory);
+    const { data: trend } = useFetchDefaultTrendingQuery();
+
+    const { data: { suggest, suggestTrend } = {}, isSuccess } = useFetchSuggestWordQuery(searchTerm, {
+        skip: !searchTerm,
+    });
+    useEffect(() => {
+        if (isSuccess) setDefault(false);
+    }, [isSuccess]);
 
     const searchByKeyword = (textSearch: string) => {
         pushNavigate('SearchResult', { title: `Result for ${textSearch}`, keyword: textSearch });
@@ -25,17 +43,46 @@ const TrendingView = ({ searchTerm }: { searchTerm: string }) => {
             dispatch(category.actions.setHistory(textSearch));
         });
     };
+    if (showDefault) {
+        return (
+            <View style={styles.container}>
+                {history.map((item, index) => (
+                    <Pressable key={index} style={styles.trendItem} onPress={() => searchByKeyword(item)} hitSlop={12}>
+                        <Icon type="material-icon" name="history" size={20} color={lightColor.price} />
+                        <TextNormal style={styles.normalText}>{item}</TextNormal>
+                    </Pressable>
+                ))}
+                {trend?.map((item: any) => (
+                    <Pressable
+                        key={item.keyword}
+                        style={styles.trendItem}
+                        onPress={() => searchByKeyword(item.keyword)}
+                        hitSlop={12}
+                    >
+                        <TrendingUp width={18} height={18} style={{ marginTop: 2 }} />
+                        <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
+                    </Pressable>
+                ))}
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
-            {history.map((item, index) => (
-                <Pressable key={index} style={styles.trendItem} onPress={() => searchByKeyword(item)} hitSlop={12}>
-                    <Icon type="material-icon" name="history" size={20} color={lightColor.price} />
-                    <TextNormal style={styles.normalText}>{item}</TextNormal>
+            {suggest?.map((item: any) => (
+                <Pressable
+                    key={item.keyword}
+                    style={styles.trendItem}
+                    onPress={() => searchByKeyword(item.keyword)}
+                    hitSlop={12}
+                >
+                    <Search width={18} height={18} style={{ marginTop: 2 }} />
+                    <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
                 </Pressable>
             ))}
-            {displayText.map((item, index) => (
+            {suggestTrend?.map((item: any) => (
                 <Pressable
-                    key={index}
+                    key={item.keyword}
                     style={styles.trendItem}
                     onPress={() => searchByKeyword(item.keyword)}
                     hitSlop={12}
@@ -74,7 +121,6 @@ const SuggestCategory = memo(({ data }: { data: any[] }) => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 24,
-
         width: '100%',
     },
     trendItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, marginLeft: 16 },

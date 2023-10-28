@@ -117,7 +117,7 @@ const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, curre
 
 export const ListData = memo(({ data }: { data: any[] }) => {
     const newData = splitColArray(data);
-    console.log('Result', data);
+    //console.log('Result', data);
     if (!newData || data.length == 0) return <EmptyResult />;
     return (
         <View style={styles.productList}>

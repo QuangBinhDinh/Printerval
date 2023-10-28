@@ -29,7 +29,7 @@ const category = createSlice({
         setHistory: (state, action: PayloadAction<string>) => {
             var tempArr = [...state.searchHistory];
             tempArr.unshift(action.payload);
-            state.searchHistory = uniq(tempArr.slice(0, MAX_SEARCH_HISTORY));
+            state.searchHistory = uniq(tempArr).slice(0, MAX_SEARCH_HISTORY);
         },
     },
 });

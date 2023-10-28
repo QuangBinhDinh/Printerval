@@ -11,11 +11,12 @@ const extendedDomain = domainApi.injectEndpoints({
             },
         }),
 
-        fetchSuggestWord: build.query<any, string>({
-            query: keyword => ({ url: 'z-search/suggest/find', params: { keyword, limit: 5 } }),
+        fetchSuggestWord: build.query<{ suggestTrend: any[]; suggest: any[] }, string>({
+            query: keyword => ({ url: 'z-search/suggest/find', params: { keyword, limit: 5, dt: Date.now() } }),
             transformResponse: response => {
-                return response?.trending;
+                return { suggestTrend: response?.trending, suggest: response?.suggest };
             },
+            //providesTags: ['DefaultTrending'],
         }),
 
         fetchPopularProduct: build.query<any, void>({

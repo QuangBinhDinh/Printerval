@@ -1,11 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import React, { memo, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import BottomTabs from './AppNavigator';
 import { navigationRef } from './service';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import DetailScreen from '../module/test/DetailScreen';
-import EmptyScreen from '../module/test/EmptyScreen';
 import CartScreen from '../module/cart';
 import SearchResult from '../module/searchResult/index';
 import { TransitionPresets } from '@react-navigation/stack';
