@@ -37,7 +37,9 @@
             "@svg": "./src/assets/svg",
             "@home": "./src/module/home",
             "@category": "./src/module/category",
-            "@searchResult": "./src/module/searchResult"
+            "@searchResult": "./src/module/searchResult",
+            "@auth": "./src/module/auth",
+            "@user": "./src/module/user"
           }
         }
       ],

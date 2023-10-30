@@ -6,6 +6,7 @@ import EmptyScreen from '../../module/test/EmptyScreen';
 import HomeScreen from '@home/index';
 import Login from '../../module/auth';
 import Category from '@category/index';
+import UserScreen from '@user/index';
 
 const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
@@ -75,7 +76,7 @@ const BottomTabs = () => {
                     },
                 }}
                 name="UserScreen"
-                component={EmptyScreen}
+                component={UserScreen}
             />
         </Tab.Navigator>
     );

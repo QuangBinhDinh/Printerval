@@ -25,7 +25,7 @@ const axiosBaseQuery =
         const { getState, endpoint } = api;
 
         var newHeader: AxiosRequestConfig['headers'] = headers ?? {};
-        var token = (getState() as RootState).auth.token;
+        var token = (getState() as RootState).auth.accessToken;
         if (token) newHeader['token'] = token;
         if (header) newHeader = Object.assign(newHeader, header);
 

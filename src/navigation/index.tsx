@@ -12,6 +12,7 @@ import { SCREEN_WITH_COLOR } from '@constant/index';
 import FilterScreen from '@searchResult/filterScreen';
 import ProductCategory from '@searchResult/ProductCategory';
 import { useFirstOpen } from './hooks/useFirstOpen';
+import LoginScreen from '@auth/index';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
@@ -23,21 +24,30 @@ const Router = () => {
         //thay đổi màu status bar khi navigate đến những màn có bg có màu
         if (SCREEN_WITH_COLOR.includes(currentScreen)) {
             setBarColor('light-content');
-        } else setBarColor('dark-content');
+            setBarBg('#000');
+        } else {
+            setBarColor('dark-content');
+            setBarBg('#fff');
+        }
     };
 
     const onNavigationStateChange = () => {
         const currentScreen = navigationRef?.getCurrentRoute()?.name ?? '';
 
+        console.log(currentScreen);
         if (SCREEN_WITH_COLOR.includes(currentScreen)) {
             setBarColor('light-content');
-        } else setBarColor('dark-content');
+            setBarBg('#000');
+        } else {
+            setBarColor('dark-content');
+            setBarBg('#fff');
+        }
     };
 
     useFirstOpen();
     return (
         <NavigationContainer ref={navigationRef} onReady={onNavigationReady} onStateChange={onNavigationStateChange}>
-            <StatusBar barStyle={barColor} backgroundColor={barBg} />
+            <StatusBar barStyle={barColor} translucent backgroundColor={'transparent'} />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
@@ -62,6 +72,7 @@ const Router = () => {
                 <Stack.Screen name="SearchResult" component={SearchResult} />
                 <Stack.Screen name="ProductCategory" component={ProductCategory} />
                 <Stack.Screen name="FilterScreen" component={FilterScreen} />
+                <Stack.Screen name="LoginScreen" component={LoginScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
