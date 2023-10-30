@@ -4,7 +4,7 @@ import CustomTabBar from './CustomTabBar';
 import { Home, HomeFill, User, UserFill, Search, Heart, SearchFill, HeartFill } from '@svg/index';
 import EmptyScreen from '../../module/test/EmptyScreen';
 import HomeScreen from '@home/index';
-import Login from '../../module/auth';
+import Login from '../../module/auth/LoginScreen';
 import Category from '@category/index';
 import UserScreen from '@user/index';
 

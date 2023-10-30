@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, Keyboard, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { appleLogin, facebookLogin, googleLogin } from './loginSocial';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,15 +16,22 @@ import { AppleIcon, GoogleIcon } from '@svg/index';
 
 const RATIO = SCREEN_HEIGHT / 810;
 const initialValues = {
+    name: '',
     email: '',
     password: '',
+    confirmPass: '',
 };
 
 const validationSchema = yup.object().shape({
+    name: yup.string().required('Field cannot be empty'),
     email: yup.string().email('Email is invalid ').required('Field cannot be empty'),
     password: yup.string().required('Field cannot be empty').min(6, 'Password must have 6 letters or more'),
+    confirmPass: yup
+        .string()
+        .required('Field cannot be empty')
+        .oneOf([yup.ref('password')], 'Password must match'),
 });
-const LoginScreen = () => {
+const CreateAccount = () => {
     const insets = useSafeAreaInsets();
 
     const onBack = () => {
@@ -39,11 +46,13 @@ const LoginScreen = () => {
             Keyboard.dismiss();
             console.log(input);
         },
+        validateOnChange: false,
+        validateOnBlur: false,
     });
 
     return (
         <View style={{ flex: 1 }}>
-            <ImageBackground style={{ flex: 1 }} source={require('@image/Login/login-bg-1.png')} resizeMode="cover">
+            <ImageBackground style={{ flex: 1 }} source={require('@image/Login/login-bg-2.png')} resizeMode="cover">
                 <LinearGradient
                     style={[styles.container, { paddingTop: insets.top / 1.5 }]}
                     colors={['rgba(0,0,0,0.85)', 'rgba(3,3,3,0.51)']}
@@ -54,39 +63,58 @@ const LoginScreen = () => {
                         <Icon size={30} type="antdesign" name="arrowleft" color="white" />
                     </Pressable>
                     <View style={styles.viewTitle} onTouchEnd={Keyboard.dismiss}>
-                        <TextNormal style={styles.title}>Log into{`\n`}your account</TextNormal>
+                        <TextNormal style={styles.title}>Create{`\n`}new account</TextNormal>
                     </View>
-
+                    <InputDark
+                        value={values.name}
+                        onChangeText={text => setFieldValue('name', text)}
+                        error={errors.name}
+                        placeholder="Your name"
+                        containerStyle={{ marginTop: 8 }}
+                    />
                     <InputDark
                         value={values.email}
                         onChangeText={text => setFieldValue('email', text)}
                         error={errors.email}
                         placeholder="Your email"
+                        containerStyle={{ marginTop: 8 }}
                     />
                     <InputDark
                         value={values.password}
                         onChangeText={text => setFieldValue('password', text)}
                         error={errors.password}
                         placeholder="Password"
+                        containerStyle={{ marginTop: 8 }}
+                    />
+                    <InputDark
+                        value={values.confirmPass}
+                        onChangeText={text => setFieldValue('confirmPass', text)}
+                        error={errors.confirmPass}
+                        placeholder="Confirm password"
+                        containerStyle={{ marginTop: 8 }}
                     />
 
                     <Pressable style={styles.loginButton} onPress={submitForm}>
-                        <TextSemiBold style={{ fontSize: 18 * RATIO, color: 'white' }}>LOG IN</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 18 * RATIO, color: 'white' }}>SIGN UP</TextSemiBold>
                     </Pressable>
-                    <TextNormal style={styles.forgotText}>Forgot Password</TextNormal>
 
                     <TextNormal style={styles.orText}>OR</TextNormal>
                     <Pressable style={styles.socialButton}>
                         <GoogleIcon width={20} height={20} />
                         <TextNormal style={styles.socialText}>Continue with Google</TextNormal>
                     </Pressable>
-                    <Pressable style={styles.socialButton}>
-                        <AppleIcon width={20} height={20} />
-                        <TextNormal style={styles.socialText}>Continue with Apple</TextNormal>
-                    </Pressable>
+                    {Platform.OS == 'ios' && (
+                        <Pressable style={styles.socialButton}>
+                            <AppleIcon width={20} height={20} />
+                            <TextNormal style={styles.socialText}>Continue with Apple</TextNormal>
+                        </Pressable>
+                    )}
 
-                    <TextNormal style={styles.bottomText}>
-                        Don't have an account? <TextNormal style={{ color: 'white' }}>Sign up</TextNormal>
+                    <TextNormal style={[styles.bottomText, { bottom: 16 + insets.bottom / 1.5 }]}>
+                        Already have an account?{' '}
+                        <TextSemiBold style={{ color: lightColor.secondary }} onPress={onBack}>
+                            Login
+                        </TextSemiBold>
                     </TextNormal>
                 </LinearGradient>
             </ImageBackground>
@@ -94,7 +122,7 @@ const LoginScreen = () => {
     );
 };
 
-export default LoginScreen;
+export default CreateAccount;
 
 const styles = StyleSheet.create({
     container: {
@@ -112,7 +140,6 @@ const styles = StyleSheet.create({
     viewTitle: {
         width: '100%',
         paddingTop: 30 * RATIO,
-        paddingBottom: 15 * RATIO,
     },
     title: {
         fontSize: 32 * RATIO,
@@ -120,7 +147,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     loginButton: {
-        marginTop: 20 * RATIO,
+        marginTop: 10 * RATIO,
         width: '100%',
         height: 46 * RATIO,
         borderRadius: 46,
@@ -140,7 +167,7 @@ const styles = StyleSheet.create({
         color: lightColor.grayout,
         alignSelf: 'center',
         lineHeight: 18,
-        marginTop: 50 * RATIO,
+        marginTop: 20 * RATIO,
     },
     socialButton: {
         marginTop: 12,
@@ -153,5 +180,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     socialText: { fontSize: 15, marginLeft: 8, marginTop: 2 },
-    bottomText: { fontSize: 15, color: 'white', alignSelf: 'center', marginTop: 68 * RATIO },
+    bottomText: { fontSize: 15, color: 'white', alignSelf: 'center', position: 'absolute' },
 });

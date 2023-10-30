@@ -16,8 +16,8 @@ import PrintervalLogo from './printerval-logo.svg';
 import TrendingUp from './trending-up.svg';
 import FilterIcon from './filter.svg';
 import NoResult from './noresult.svg';
-import GoogleIcon from './google-icon.svg';
-import AppleIcon from './apple-icon.svg';
+import GoogleIcon from './google.svg';
+import AppleIcon from './apple.svg';
 export {
     Apps,
     AppsFill,
