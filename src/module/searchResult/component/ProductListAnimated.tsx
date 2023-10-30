@@ -1,8 +1,6 @@
 import React, { memo, useState, useMemo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, RefreshControl } from 'react-native';
 import { ProductFilterArgs } from '@searchResult/service';
-import { splitColArray } from '@util/index';
-import DynamicCard from '@components/product/DynamicCard';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { FilterIcon } from '@assets/svg';
@@ -11,7 +9,6 @@ import { useScrollReachEnd } from '@components/hooks/useScrollReachEnd';
 import LoadingMore from './LoadingMore';
 import { navigate } from '@navigation/service';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import EmptyResult from './EmptyResult';
 import { ListData } from './ProductList';
 
 const TRANS_THRESHOLD = 186;
@@ -61,7 +58,7 @@ interface IProps {
     refetch: any;
 }
 const ProductListAnimated = memo(
-    ({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter }: IProps) => {
+    ({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter, refetch }: IProps) => {
         const numFilter = useMemo(() => {
             var count = 0;
             if (currentFilter.order) ++count;
@@ -131,6 +128,7 @@ const ProductListAnimated = memo(
                         else setHide(false);
                     }}
                     removeClippedSubviews
+                    refreshControl={<RefreshControl onRefresh={refetch} refreshing={false} />}
                 >
                     <View style={{ height: 220 }} />
                     <ListData data={data} />

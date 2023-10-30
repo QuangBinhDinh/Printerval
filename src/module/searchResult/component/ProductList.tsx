@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { ProductFilterArgs } from '@searchResult/service';
 import { SCREEN_WIDTH, splitColArray } from '@util/index';
 import DynamicCard from '@components/product/DynamicCard';
@@ -55,65 +55,70 @@ interface IProps {
 
     refetch: any;
 }
-const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter }: IProps) => {
-    const numFilter = useMemo(() => {
-        var count = 0;
-        if (currentFilter.order) ++count;
-        if (currentFilter.type_variant_id) ++count;
-        if (currentFilter.color_variant_id) ++count;
-        if (currentFilter.size_variant_id) ++count;
-        if (currentFilter.minPrice && currentFilter.maxPrice) ++count;
+const ProductList = memo(
+    ({ data, meta, sub, loadMore, filter, priceRange, currentFilter, setFilter, refetch }: IProps) => {
+        const numFilter = useMemo(() => {
+            var count = 0;
+            if (currentFilter.order) ++count;
+            if (currentFilter.type_variant_id) ++count;
+            if (currentFilter.color_variant_id) ++count;
+            if (currentFilter.size_variant_id) ++count;
+            if (currentFilter.minPrice && currentFilter.maxPrice) ++count;
 
-        return count;
-    }, [currentFilter]);
+            return count;
+        }, [currentFilter]);
 
-    const { onEndReached } = useScrollReachEnd();
-    const toFilter = () => {
-        navigate('FilterScreen', { filter, priceRange, currentFilter, setFilter });
-    };
+        const { onEndReached } = useScrollReachEnd();
+        const toFilter = () => {
+            navigate('FilterScreen', { filter, priceRange, currentFilter, setFilter });
+        };
 
-    const [isHide, setHide] = useState(false);
+        const [isHide, setHide] = useState(false);
 
-    if (!data) return null;
-    return (
-        <ScrollView
-            style={{ flex: 1 }}
-            onScroll={({ nativeEvent }) => {
-                onEndReached(nativeEvent, loadMore);
-                if (nativeEvent.contentOffset.y > 40) setHide(true);
-                else setHide(false);
-            }}
-            removeClippedSubviews
-            stickyHeaderIndices={[0]}
-            scrollEventThrottle={8}
-        >
-            <View style={[styles.rowFilter, isHide && { borderBottomWidth: 1, borderBottomColor: lightColor.graybg }]}>
+        if (!data) return null;
+        return (
+            <ScrollView
+                style={{ flex: 1 }}
+                onScroll={({ nativeEvent }) => {
+                    onEndReached(nativeEvent, loadMore);
+                    if (nativeEvent.contentOffset.y > 40) setHide(true);
+                    else setHide(false);
+                }}
+                removeClippedSubviews
+                stickyHeaderIndices={[0]}
+                scrollEventThrottle={8}
+                refreshControl={<RefreshControl onRefresh={refetch} refreshing={false} />}
+            >
                 <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
+                    style={[styles.rowFilter, isHide && { borderBottomWidth: 1, borderBottomColor: lightColor.graybg }]}
                 >
-                    <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
-                    <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
-                        <FilterIcon width={20} height={20} />
-                        {!!numFilter && (
-                            <View style={styles.numFilter} pointerEvents="none">
-                                <TextSemiBold style={{ fontSize: 10, color: 'white', marginTop: 1 }}>
-                                    {numFilter}
-                                </TextSemiBold>
-                            </View>
-                        )}
-                    </Pressable>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
+                        <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
+                            <FilterIcon width={20} height={20} />
+                            {!!numFilter && (
+                                <View style={styles.numFilter} pointerEvents="none">
+                                    <TextSemiBold style={{ fontSize: 10, color: 'white', marginTop: 1 }}>
+                                        {numFilter}
+                                    </TextSemiBold>
+                                </View>
+                            )}
+                        </Pressable>
+                    </View>
                 </View>
-            </View>
 
-            <ListData data={data} />
-            {meta?.has_next && data.length > 0 && <LoadingMore />}
-        </ScrollView>
-    );
-});
+                <ListData data={data} />
+                {meta?.has_next && data.length > 0 && <LoadingMore />}
+            </ScrollView>
+        );
+    },
+);
 
 export const ListData = memo(({ data }: { data: any[] }) => {
     const newData = splitColArray(data);
