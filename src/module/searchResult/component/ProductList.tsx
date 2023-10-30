@@ -95,7 +95,7 @@ const ProductList = memo(({ data, meta, sub, loadMore, filter, priceRange, curre
                         alignItems: 'center',
                     }}
                 >
-                    <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} result</TextNormal>
+                    <TextNormal style={{ fontSize: 15 }}>About {meta.total_count} results</TextNormal>
                     <Pressable style={styles.filterButton} onPress={toFilter} hitSlop={12}>
                         <FilterIcon width={20} height={20} />
                         {!!numFilter && (

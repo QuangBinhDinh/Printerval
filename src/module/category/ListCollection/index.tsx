@@ -1,11 +1,10 @@
 import HeaderScreen from '@components/HeaderScreen';
 import { lightColor } from '@styles/color';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/base';
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
 import TrendingView from './TrendingView';
-import { useBlur } from '@navigation/customHook';
 import { useFetchCategoryTreeQuery } from '@category/service';
 import { useDeepEffect } from '@components/hooks/useDeepEffect';
 import { useAppDispatch } from '@store/hook';
@@ -18,7 +17,6 @@ import LoadingCategory from './LoadingCategory';
 import Collection from './Collection';
 import { SCREEN_WIDTH } from '@util/index';
 import { pushNavigate } from '@navigation/service';
-import { api, domainApi } from '@api/service';
 
 const checkSelector = createSelector(
     (state: RootState) => state.category.valid_timestamp,
@@ -43,17 +41,15 @@ const ListCollection = () => {
         }
     }, [tree]);
 
-    const [showDefault, setDefault] = useState(true);
     const [textSearch, setText] = useState('');
-    const searchTerm = useDebounceValue(textSearch, 1200); // dùng để search keyword
+    const searchTerm = useDebounceValue(textSearch, 750); // dùng để search keyword
     const searchByKeyword = () => {
-        pushNavigate('SearchResult', { title: `Result for ${textSearch}`, keyword: textSearch });
+        pushNavigate('SearchResult', { title: `Result for "${textSearch}"`, keyword: textSearch });
         dispatch(category.actions.setHistory(textSearch));
     };
 
     const deleteText = () => {
         setText('');
-        setDefault(true);
     };
 
     return (
@@ -78,11 +74,13 @@ const ListCollection = () => {
                             placeholderTextColor={'#444'}
                             onSubmitEditing={searchByKeyword}
                         />
-                        <Pressable hitSlop={12} onPress={deleteText}>
-                            <Icon type="antdesign" name="closecircle" size={18} color="#999999" />
-                        </Pressable>
+                        {!!textSearch && (
+                            <Pressable hitSlop={12} onPress={deleteText}>
+                                <Icon type="antdesign" name="closecircle" size={18} color="#999999" />
+                            </Pressable>
+                        )}
                     </View>
-                    <TrendingView searchTerm={searchTerm} showDefault={showDefault} setDefault={setDefault} />
+                    <TrendingView searchTerm={searchTerm} showDefault={!textSearch} />
                     {!textSearch && <Collection />}
                 </ScrollView>
             )}

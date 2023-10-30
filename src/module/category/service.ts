@@ -61,5 +61,10 @@ const recursive = (data: any[], level = 0) => {
     });
 };
 
-export const { useFetchDefaultTrendingQuery, useFetchPopularProductQuery, useFetchSuggestWordQuery } = extendedDomain;
+export const {
+    useFetchDefaultTrendingQuery,
+    useFetchPopularProductQuery,
+    useFetchSuggestWordQuery,
+    useLazyFetchSuggestWordQuery,
+} = extendedDomain;
 export const { useFetchCategoryTreeQuery } = extendedApi;

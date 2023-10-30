@@ -1,6 +1,6 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { FlatList, InteractionManager, Pressable, StyleSheet, View } from 'react-native';
-import { useFetchDefaultTrendingQuery, useFetchSuggestWordQuery } from '../service';
+import { useFetchDefaultTrendingQuery, useFetchSuggestWordQuery, useLazyFetchSuggestWordQuery } from '../service';
 import { TrendingUp, Search } from '@assets/svg';
 import { TextNormal } from '@components/text';
 import FastImage from 'react-native-fast-image';
@@ -11,34 +11,51 @@ import category from '@category/reducer';
 import { pushNavigate } from '@navigation/service';
 import { Icon } from '@rneui/base';
 
+interface SuggestResult {
+    suggest: { keyword: string }[];
+    suggestTrend: { keyword: string }[];
+}
 interface IProps {
     /**
      * Từ khoá search
      */
     searchTerm: string;
 
-    /**
-     * Hiển thị dữ liệu mặc định hay không
-     */
     showDefault: boolean;
-    setDefault: any;
 }
-const TrendingView = ({ searchTerm, showDefault, setDefault }: IProps) => {
+const TrendingView = ({ searchTerm, showDefault }: IProps) => {
     const dispatch = useAppDispatch();
 
     //default data
     const history = useAppSelector(state => state.category.searchHistory);
     const { data: trend } = useFetchDefaultTrendingQuery();
 
-    const { data: { suggest, suggestTrend } = {}, isSuccess } = useFetchSuggestWordQuery(searchTerm, {
+    const { data, isSuccess } = useFetchSuggestWordQuery(searchTerm, {
         skip: !searchTerm,
     });
+    const [recommend, setRecommend] = useState<SuggestResult>({
+        suggest: [],
+        suggestTrend: [],
+    });
     useEffect(() => {
-        if (isSuccess) setDefault(false);
-    }, [isSuccess]);
+        if (data?.suggest && data?.suggestTrend) {
+            setRecommend({
+                suggest: data.suggest,
+                suggestTrend: data.suggestTrend,
+            });
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (showDefault)
+            setRecommend({
+                suggest: [],
+                suggestTrend: [],
+            });
+    }, [showDefault]);
 
     const searchByKeyword = (textSearch: string) => {
-        pushNavigate('SearchResult', { title: `Result for ${textSearch}`, keyword: textSearch });
+        pushNavigate('SearchResult', { title: `Result for "${textSearch}"`, keyword: textSearch });
         InteractionManager.runAfterInteractions(() => {
             dispatch(category.actions.setHistory(textSearch));
         });
@@ -63,13 +80,14 @@ const TrendingView = ({ searchTerm, showDefault, setDefault }: IProps) => {
                         <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
                     </Pressable>
                 ))}
+                <SuggestCategory data={[1, 2, 3, 4, 5]} />
             </View>
         );
     }
 
     return (
         <View style={styles.container}>
-            {suggest?.map((item: any) => (
+            {recommend.suggest?.map(item => (
                 <Pressable
                     key={item.keyword}
                     style={styles.trendItem}
@@ -80,7 +98,7 @@ const TrendingView = ({ searchTerm, showDefault, setDefault }: IProps) => {
                     <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
                 </Pressable>
             ))}
-            {suggestTrend?.map((item: any) => (
+            {recommend.suggestTrend?.map(item => (
                 <Pressable
                     key={item.keyword}
                     style={styles.trendItem}
@@ -91,7 +109,6 @@ const TrendingView = ({ searchTerm, showDefault, setDefault }: IProps) => {
                     <TextNormal style={styles.normalText}>{item.keyword}</TextNormal>
                 </Pressable>
             ))}
-            <SuggestCategory data={[1, 2, 3, 4, 5]} />
         </View>
     );
 };
