@@ -11,6 +11,7 @@ import { ColorValue, StatusBar, StatusBarStyle } from 'react-native';
 import { SCREEN_WITH_COLOR } from '@constant/index';
 import FilterScreen from '@searchResult/filterScreen';
 import ProductCategory from '@searchResult/ProductCategory';
+import { useFirstOpen } from './hooks/useFirstOpen';
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
@@ -32,6 +33,8 @@ const Router = () => {
             setBarColor('light-content');
         } else setBarColor('dark-content');
     };
+
+    useFirstOpen();
     return (
         <NavigationContainer ref={navigationRef} onReady={onNavigationReady} onStateChange={onNavigationStateChange}>
             <StatusBar barStyle={barColor} backgroundColor={barBg} />
