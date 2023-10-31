@@ -1,17 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { User } from '@type/common';
 
-export interface User {
-    id: number;
-    username: string | null;
-    full_name: string;
-    phone: string;
-    image_url: string;
-    email: string;
-    api_token: string;
-    token: string;
-    gender: string;
-    status: string;
-}
 interface Auth {
     userInfo: User | null;
     logged: boolean;

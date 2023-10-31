@@ -1,35 +1,53 @@
 import { TextNormal } from '@components/text';
+import { Icon } from '@rneui/base';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
-import React, { memo } from 'react';
-import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import React, { memo, useState } from 'react';
+import { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 const RATIO = SCREEN_HEIGHT / 810;
 
-interface IProps {
+type InputProps = TextInputProps & {
     containerStyle?: StyleProp<ViewStyle>;
 
     errorStyle?: StyleProp<TextStyle>;
 
-    value: string;
-
-    onChangeText: (text: string) => void;
-
     error: string | undefined;
-
-    placeholder: string;
-}
-const InputDark = ({ containerStyle, errorStyle, value, onChangeText, error, placeholder }: IProps) => {
+};
+const InputDark = ({
+    containerStyle,
+    errorStyle,
+    value,
+    onChangeText,
+    error,
+    placeholder,
+    secureTextEntry = false,
+    ...rest
+}: InputProps) => {
+    const [hidePass, setHidePass] = useState(secureTextEntry);
     return (
         <View style={[styles.container, containerStyle]}>
-            <TextInput
-                style={[styles.inputStyle, !!error && { borderBottomColor: lightColor.error }]}
-                value={value}
-                onChangeText={onChangeText}
-                placeholder={placeholder}
-                placeholderTextColor={lightColor.grayout}
-            />
+            <View style={[styles.inputView, !!error && { borderBottomColor: lightColor.error }]}>
+                <TextInput
+                    style={styles.inputStyle}
+                    value={value}
+                    onChangeText={onChangeText}
+                    placeholder={placeholder}
+                    placeholderTextColor={lightColor.grayout}
+                    secureTextEntry={hidePass}
+                    {...rest}
+                />
+                {secureTextEntry && (
+                    <Icon
+                        type="ionicon"
+                        name={hidePass ? 'eye-outline' : 'eye-off-outline'}
+                        size={22}
+                        color="white"
+                        onPress={() => setHidePass(!hidePass)}
+                    />
+                )}
+            </View>
             {!!error && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
         </View>
     );
@@ -45,13 +63,23 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: 'white',
     },
+    inputView: {
+        flexDirection: 'row',
+        height: 36,
+        width: '100%',
+        borderBottomWidth: 1,
+        borderBottomColor: lightColor.grayout,
+        alignItems: 'center',
+        paddingRight: 4,
+    },
     inputStyle: {
         fontSize: 15,
         color: 'white',
         fontFamily: 'Poppins-Regular',
         height: 36,
-        borderBottomWidth: 1,
-        borderBottomColor: lightColor.grayout,
+        flex: 1,
+        // borderWidth: 1,
+        // borderColor: 'white',
         padding: 0,
     },
     error: {

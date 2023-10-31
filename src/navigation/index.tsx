@@ -1,48 +1,61 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useState } from 'react';
-import BottomTabs from './AppNavigator';
+import { TransitionPresets } from '@react-navigation/stack';
+import React, { useRef, useState } from 'react';
+import { ColorValue, StatusBar, StatusBarStyle } from 'react-native';
 import { navigationRef } from './service';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+
+import { SCREEN_WITH_COLOR } from '@constant/index';
+import { useFirstOpen } from './hooks/useFirstOpen';
+import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
+import qs from 'query-string';
+
+import BottomTabs from './AppNavigator';
 import DetailScreen from '../module/test/DetailScreen';
 import CartScreen from '../module/cart';
 import SearchResult from '../module/searchResult/index';
-import { TransitionPresets } from '@react-navigation/stack';
-import { ColorValue, StatusBar, StatusBarStyle } from 'react-native';
-import { SCREEN_WITH_COLOR } from '@constant/index';
 import FilterScreen from '@searchResult/filterScreen';
 import ProductCategory from '@searchResult/ProductCategory';
-import { useFirstOpen } from './hooks/useFirstOpen';
 import LoginScreen from '@auth/LoginScreen';
 import CreateAccount from '@auth/CreateAccount';
+import ForgotPass from '@auth/ForgotPass';
+import EnterNewPass from '@auth/EnterNewPass';
 
 const Stack = createSharedElementStackNavigator();
 
 const Router = () => {
     const [barColor, setBarColor] = useState<StatusBarStyle>('dark-content');
-    const [barBg, setBarBg] = useState<ColorValue>('white');
+    const routeNameRef = useRef<string>();
+
     const onNavigationReady = () => {
         const currentScreen = navigationRef?.getCurrentRoute()?.name ?? '';
+        routeNameRef.current = currentScreen;
 
         //thay đổi màu status bar khi navigate đến những màn có bg có màu
         if (SCREEN_WITH_COLOR.includes(currentScreen)) {
             setBarColor('light-content');
-            setBarBg('#000');
         } else {
             setBarColor('dark-content');
-            setBarBg('#fff');
         }
     };
 
-    const onNavigationStateChange = () => {
+    const onNavigationStateChange = async (state: any) => {
         const currentScreen = navigationRef?.getCurrentRoute()?.name ?? '';
+        const params = state?.routes[state?.index]?.params;
+        //config lại chỉ khi IS_PRODUCT = true
+        await analytics().logScreenView({
+            screen_name: currentScreen,
+            screen_class: currentScreen,
+        });
+        crashlytics().log(`${currentScreen}?${qs.stringify(params || {})}`);
 
-        console.log(currentScreen);
+        if (routeNameRef.current == currentScreen) return; // nếu navigate đến chính màn đó
+        routeNameRef.current = currentScreen;
         if (SCREEN_WITH_COLOR.includes(currentScreen)) {
             setBarColor('light-content');
-            setBarBg('#000');
         } else {
             setBarColor('dark-content');
-            setBarBg('#fff');
         }
     };
 
@@ -76,6 +89,8 @@ const Router = () => {
                 <Stack.Screen name="FilterScreen" component={FilterScreen} />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="CreateAccount" component={CreateAccount} />
+                <Stack.Screen name="ForgotPass" component={ForgotPass} />
+                <Stack.Screen name="EnterNewPass" component={EnterNewPass} />
             </Stack.Navigator>
         </NavigationContainer>
     );
