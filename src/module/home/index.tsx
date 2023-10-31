@@ -15,6 +15,7 @@ import HeaderBanner from './component/HeaderBanner';
 import BlogHome from './component/BlogHome';
 import PopularDesign from './component/PopularDesign';
 import { PrintervalLogo } from '@assets/svg';
+import { usePreventGoBack } from '@navigation/customHook';
 
 //testing commit
 const HomeScreen = () => {
@@ -23,6 +24,7 @@ const HomeScreen = () => {
     const { data: banner } = useFetchCategoryBannerQuery();
     const { data: explore } = useFetchExploreProdQuery();
 
+    usePreventGoBack();
     return (
         <View style={[styles.container, { paddingTop: 10 + insets.top / 1.25 }]}>
             <View style={{ width: '100%', paddingBottom: 10 }}>

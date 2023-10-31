@@ -8,7 +8,11 @@ const TextSemiBold = ({ children, style, ...rest }: TextProps) => (
 );
 
 const TextNormal = ({ children, style, ...rest }: TextProps) => (
-    <Text style={[{ fontFamily: 'Poppins-Regular', color: '#444' }, style]} allowFontScaling={false} {...rest}>
+    <Text
+        style={[{ fontFamily: 'Poppins-Regular', color: '#444', fontSize: 15 }, style]}
+        allowFontScaling={false}
+        {...rest}
+    >
         {children}
     </Text>
 );

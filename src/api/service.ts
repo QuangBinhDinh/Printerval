@@ -13,7 +13,7 @@ interface BaseQueryArgs {
 interface QueryArgs {
     url: string;
     method?: AxiosRequestConfig['method'];
-    data?: AxiosRequestConfig['data'];
+    body?: AxiosRequestConfig['data'];
     params?: AxiosRequestConfig['params'];
     header?: AxiosRequestConfig['headers'];
 }
@@ -21,7 +21,7 @@ const axiosBaseQuery =
     (args: BaseQueryArgs): BaseQueryFn<QueryArgs, any, unknown> =>
     async (queryArg, api) => {
         const { baseUrl, timeout, headers } = args;
-        const { url, method, data, params, header } = queryArg;
+        const { url, method, body, params, header } = queryArg;
         const { getState, endpoint } = api;
 
         var newHeader: AxiosRequestConfig['headers'] = headers ?? {};
@@ -35,6 +35,7 @@ const axiosBaseQuery =
                 url: baseUrl + url,
                 params,
                 header: newHeader,
+                body,
             });
             console.groupEnd();
         }
@@ -42,7 +43,7 @@ const axiosBaseQuery =
             const res = await axios({
                 url: baseUrl + url,
                 method: endpoint.includes('fetch') ? 'get' : method,
-                data,
+                data: body,
                 params,
                 headers: newHeader,
                 timeout,

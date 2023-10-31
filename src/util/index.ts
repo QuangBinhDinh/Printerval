@@ -4,6 +4,10 @@ import { Dimensions } from 'react-native';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 /**
+ * Scale theo  design trên figma
+ */
+const DESIGN_RATIO = SCREEN_HEIGHT / 810;
+/**
  * Tách 1 array thành 2 array có index chẵn lẻ
  */
 const splitColArray = (arr: any[]) => {
@@ -38,4 +42,4 @@ const formatPrice = (priceNum: string | number) => {
     if (isNumber(priceNum)) return formatter.format(priceNum);
     else return localePrefix + priceNum;
 };
-export { SCREEN_HEIGHT, SCREEN_WIDTH, splitColArray, randomizeColor, formatPrice };
+export { SCREEN_HEIGHT, SCREEN_WIDTH, DESIGN_RATIO, splitColArray, randomizeColor, formatPrice };

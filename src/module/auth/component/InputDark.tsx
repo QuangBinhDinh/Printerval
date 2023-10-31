@@ -40,8 +40,8 @@ const InputDark = ({
                 />
                 {secureTextEntry && (
                     <Icon
-                        type="ionicon"
-                        name={hidePass ? 'eye-outline' : 'eye-off-outline'}
+                        type="entypo"
+                        name={hidePass ? 'eye' : 'eye-with-line'}
                         size={22}
                         color="white"
                         onPress={() => setHidePass(!hidePass)}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ImageBackground, Keyboard, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { appleLogin, facebookLogin, googleLogin } from './loginSocial';
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,6 +12,8 @@ import InputDark from './component/InputDark';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
 import { AppleIcon, GoogleIcon } from '@svg/index';
+import { useLogin } from './component/useLogin';
+import LoadingSpinner from '@components/loading/LoadingSpinner';
 
 const RATIO = SCREEN_HEIGHT / 810;
 const initialValues = {
@@ -25,23 +27,31 @@ const validationSchema = yup.object().shape({
 });
 const LoginScreen = () => {
     const insets = useSafeAreaInsets();
+    const { doLogin, doLoginSocial, loginSuccess, loading } = useLogin();
 
     const onBack = () => {
         Keyboard.dismiss();
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue } = useFormik({
+    const { submitForm, errors, values, setFieldValue, resetForm } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
             Keyboard.dismiss();
-            console.log(input);
+
+            doLogin(input);
         },
         validateOnChange: false,
         validateOnBlur: false,
     });
 
+    useEffect(() => {
+        if (loginSuccess) {
+            resetForm();
+            navigate('HomeScreen');
+        }
+    }, [loginSuccess]);
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground style={{ flex: 1 }} source={require('@image/Login/login-bg-1.png')} resizeMode="cover">
@@ -80,12 +90,12 @@ const LoginScreen = () => {
                     </Pressable>
 
                     <TextNormal style={styles.orText}>OR</TextNormal>
-                    <Pressable style={styles.socialButton}>
+                    <Pressable style={styles.socialButton} onPress={doLoginSocial('google')}>
                         <GoogleIcon width={20} height={20} />
                         <TextNormal style={styles.socialText}>Continue with Google</TextNormal>
                     </Pressable>
                     {Platform.OS == 'ios' && (
-                        <Pressable style={styles.socialButton}>
+                        <Pressable style={styles.socialButton} onPress={doLoginSocial('apple')}>
                             <AppleIcon width={20} height={20} />
                             <TextNormal style={styles.socialText}>Continue with Apple</TextNormal>
                         </Pressable>
@@ -99,6 +109,7 @@ const LoginScreen = () => {
                     </TextNormal>
                 </LinearGradient>
             </ImageBackground>
+            <LoadingSpinner visible={loading} />
         </View>
     );
 };

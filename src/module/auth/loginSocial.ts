@@ -22,7 +22,6 @@ async function facebookLogin() {
 
     // Create a Firebase credential with the AccessToken
     const facebookCredential = authFir.FacebookAuthProvider.credential(data.accessToken);
-    Store.dispatch(auth.actions.setLogging(true));
 
     // Sign-in the user with the credential
     return authFir().signInWithCredential(facebookCredential);
@@ -34,7 +33,7 @@ async function googleLogin() {
 
     // Create a Google credential with the token
     const googleCredential = authFir.GoogleAuthProvider.credential(idToken);
-    Store.dispatch(auth.actions.setLogging(true));
+
     // // Sign-in the user with the credential
     return authFir().signInWithCredential(googleCredential);
 }
@@ -45,7 +44,7 @@ async function appleLogin() {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
     });
-    Store.dispatch(auth.actions.setLogging(true));
+
     // Ensure Apple returned a user identityToken
     if (!appleAuthRequestResponse.identityToken) {
         throw 'Apple Sign-In failed - no identify token returned';
