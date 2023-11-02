@@ -37,7 +37,6 @@ const LoginError = () => {
             animationOut={'fadeOut'}
             style={{
                 justifyContent: 'center',
-
                 alignItems: 'center',
             }}
         >

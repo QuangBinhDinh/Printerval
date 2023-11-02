@@ -127,7 +127,7 @@ const CreateAccount = () => {
 
                     <TextNormal style={[styles.bottomText, { bottom: 16 + insets.bottom / 1.5 }]}>
                         Already have an account?{' '}
-                        <TextSemiBold style={{ color: lightColor.secondary }} onPress={onBack}>
+                        <TextSemiBold style={{ color: lightColor.secondary }} onPress={() => navigate('LoginScreen')}>
                             Login
                         </TextSemiBold>
                     </TextNormal>
