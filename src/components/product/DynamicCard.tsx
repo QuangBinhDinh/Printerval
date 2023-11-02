@@ -9,6 +9,7 @@ import { cdnImage } from '@util/cdnImage';
 import StarRating from '@components/StarRating';
 import { Icon } from '@rneui/base';
 import { Favorite } from '@assets/svg';
+import { navigate, pushNavigate } from '@navigation/service';
 
 const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewStyle> }) => {
     const discountText = useMemo(() => {
@@ -21,7 +22,8 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
     }, [item]);
 
     const toDetail = () => {
-        console.log(item);
+        //console.log(item);
+        navigate('DetailProduct', { productId: item.id, productName: item.name }, item.id);
     };
     return (
         <Pressable style={[styles.container, style]} onPress={toDetail}>

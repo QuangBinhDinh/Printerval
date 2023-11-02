@@ -3,9 +3,9 @@ import { StackActions, CommonActions } from '@react-navigation/native';
 
 const navigationRef = createNavigationContainerRef();
 
-const navigate = (name, params) => {
+const navigate = (name, params, key) => {
     if (navigationRef.isReady()) {
-        navigationRef.navigate(name, params);
+        navigationRef.dispatch(CommonActions.navigate({ name, params, ...(!!key && { key: `${name} ${key}` }) }));
     }
 };
 

@@ -27,7 +27,7 @@ const SubCategory = ({ data }: { data: any }) => {
 
 const SubItem = memo(({ item }: { item: any }) => {
     const toSubCategory = () => {
-        pushNavigate('ProductCategory', { title: item.name, categoryId: item.id });
+        navigate('ProductCategory', { title: item.name, categoryId: item.id }, item.id);
     };
     return (
         <Pressable style={styles.item} hitSlop={5} onPress={toSubCategory}>
