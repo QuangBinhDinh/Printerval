@@ -29,7 +29,7 @@ const EXCLUDE_CDN_DOMAIN = [
 
 /**
  * Hàm chuyển đổi url ảnh để scale
- * @param {string} image_url url ảnh trả về
+ * @param {string | undefined} image_url url ảnh trả về
  * @param {number} width
  * @param {number} height
  * @param {fitIn} boolean

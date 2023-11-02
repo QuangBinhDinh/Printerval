@@ -1,12 +1,25 @@
 export interface Product {
     id: number;
+    sku: string;
     name: string;
     price: string;
     high_price: string;
     display_price: string;
     display_high_price: string;
     image_url: string;
-    sku: string;
+    rating_count: number;
+    rating_value: number;
+}
+
+export interface ProductReview {
+    id: number;
+    full_name: string;
+    email: string;
+    title: string;
+    content: string;
+    target_id: number;
+    status: string;
+    created_at: string;
 }
 
 export interface User {

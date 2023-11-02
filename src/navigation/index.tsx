@@ -22,6 +22,7 @@ import CreateAccount from '@auth/CreateAccount';
 import ForgotPass from '@auth/ForgotPass';
 import EnterNewPass from '@auth/EnterNewPass';
 import LoginError from '@auth/component/LoginError';
+import DetailProduct from '@product/index';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -90,10 +91,13 @@ const Router = () => {
                 <Stack.Screen name="SearchResult" component={SearchResult} />
                 <Stack.Screen name="ProductCategory" component={ProductCategory} />
                 <Stack.Screen name="FilterScreen" component={FilterScreen} />
+
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="CreateAccount" component={CreateAccount} />
                 <Stack.Screen name="ForgotPass" component={ForgotPass} />
                 <Stack.Screen name="EnterNewPass" component={EnterNewPass} />
+
+                <Stack.Screen name="DetailProduct" component={DetailProduct} />
             </Stack.Navigator>
         </NavigationContainer>
     );

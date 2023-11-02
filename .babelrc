@@ -39,7 +39,8 @@
             "@category": "./src/module/category",
             "@searchResult": "./src/module/searchResult",
             "@auth": "./src/module/auth",
-            "@user": "./src/module/user"
+            "@user": "./src/module/user",
+            "@product": "./src/module/product"
           }
         }
       ],

@@ -21,8 +21,13 @@ type RootStackParams = {
         };
         priceRange: { from: number; to: number }[];
     };
+    ProductScreen: {
+        productId: number;
+        productName: string;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
 export type SearchResultRouteProp = RouteProp<RootStackParams, 'SearchResult'>;
 export type FilterScreenRouteProp = RouteProp<RootStackParams, 'FilterScreen'>;
+export type ProductScreenRouteProp = RouteProp<RootStackParams, 'ProductScreen'>;

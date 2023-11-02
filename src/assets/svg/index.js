@@ -14,6 +14,8 @@ import FilterIcon from './filter.svg';
 import NoResult from './noresult.svg';
 import GoogleIcon from './google.svg';
 import AppleIcon from './apple.svg';
+import ShareIcon from './share.svg';
+
 export {
     User,
     UserFill,
@@ -31,4 +33,5 @@ export {
     NoResult,
     GoogleIcon,
     AppleIcon,
+    ShareIcon,
 };
