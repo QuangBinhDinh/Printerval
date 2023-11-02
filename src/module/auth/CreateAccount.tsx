@@ -34,7 +34,7 @@ const validationSchema = yup.object().shape({
 });
 const CreateAccount = () => {
     const insets = useSafeAreaInsets();
-    const { loginSuccess, loading, register } = useLogin();
+    const { loginState, loading, register } = useLogin();
     const onBack = () => {
         Keyboard.dismiss();
         goBack();
@@ -57,11 +57,11 @@ const CreateAccount = () => {
         validateOnBlur: false,
     });
     useEffect(() => {
-        if (loginSuccess) {
-            resetForm();
+        if (loginState == 'success') {
             navigate('HomeScreen');
+            resetForm();
         }
-    }, [loginSuccess]);
+    }, [loginState]);
 
     return (
         <View style={{ flex: 1 }}>

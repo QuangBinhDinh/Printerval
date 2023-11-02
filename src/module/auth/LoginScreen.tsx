@@ -27,7 +27,7 @@ const validationSchema = yup.object().shape({
 });
 const LoginScreen = () => {
     const insets = useSafeAreaInsets();
-    const { doLogin, doLoginSocial, loginSuccess, loading } = useLogin();
+    const { doLogin, doLoginSocial, loginState, loading } = useLogin();
 
     const onBack = () => {
         Keyboard.dismiss();
@@ -47,11 +47,13 @@ const LoginScreen = () => {
     });
 
     useEffect(() => {
-        if (loginSuccess) {
-            resetForm();
+        if (loginState == 'success') {
             navigate('HomeScreen');
+            resetForm();
+        } else if (loginState == 'fail') {
+            resetForm();
         }
-    }, [loginSuccess]);
+    }, [loginState]);
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground style={{ flex: 1 }} source={require('@image/Login/login-bg-1.png')} resizeMode="cover">

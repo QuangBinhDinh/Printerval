@@ -11,10 +11,11 @@ import { useAppDispatch } from '@store/hook';
 import React, { useState } from 'react';
 import { getDeviceId, getUniqueId } from 'react-native-device-info';
 import { googleLogin, facebookLogin, appleLogin } from '@auth/loginSocial';
+import { showLoginError } from './LoginError';
 
 export const useLogin = () => {
     const dispatch = useAppDispatch();
-    const [loginSuccess, setSuccess] = useState(false);
+    const [loginState, setState] = useState<'uninitialize' | 'success' | 'fail'>('uninitialize');
     const [loading, setLoading] = useState(false);
 
     const [loginAccount] = usePostLoginMutation();
@@ -22,7 +23,7 @@ export const useLogin = () => {
     const [createAccount] = useCreateAccountMutation();
 
     const doLogin = async ({ email, password }: { email: string; password: string }) => {
-        setSuccess(false);
+        setState('uninitialize');
         setLoading(true);
 
         const deviceId = await getUniqueId();
@@ -34,18 +35,20 @@ export const useLogin = () => {
         try {
             const { access_token, customer } = await loginAccount(dataSend).unwrap();
             if (access_token) {
-                setSuccess(true);
+                setState('success');
                 dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
             }
         } catch (e: any) {
             console.log('Error happened', e);
+            setState('fail');
+            if (e.status == 401) showLoginError('Username or password is incorrect');
         } finally {
             setLoading(false);
         }
     };
 
     const doLoginSocial = (type: string) => async () => {
-        setSuccess(false);
+        setState('uninitialize');
 
         let credential;
         const deviceId = await getUniqueId();
@@ -87,14 +90,15 @@ export const useLogin = () => {
             try {
                 var { access_token, customer, message } = await loginSocial(dataSend).unwrap();
                 if (access_token) {
-                    setSuccess(true);
+                    setState('success');
                     dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
                 } else {
                     console.log('login error', message);
                 }
             } catch (e: any) {
+                setState('fail');
                 var errMsg = e?.message?.type ?? e?.message ?? JSON.stringify(e);
-                console.log('Error happened', errMsg.slice(0, 50));
+                showLoginError(errMsg.slice(0, 50));
             } finally {
                 setLoading(false);
             }
@@ -106,7 +110,7 @@ export const useLogin = () => {
 
     const register = async (dataSend: RegisterArgs) => {
         try {
-            setSuccess(false);
+            setState('uninitialize');
             setLoading(true);
             const res = await createAccount(dataSend).unwrap();
 
@@ -115,11 +119,13 @@ export const useLogin = () => {
                 password: dataSend.password,
             });
         } catch (e: any) {
+            setState('fail');
             var err_msg = e.message?.email[0] ?? JSON.stringify(e);
+            showLoginError(err_msg.slice(0, 100));
         } finally {
             setLoading(false);
         }
     };
 
-    return { doLogin, doLoginSocial, register, loginSuccess, loading };
+    return { doLogin, doLoginSocial, register, loginState, loading };
 };
