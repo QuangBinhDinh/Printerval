@@ -1,7 +1,3 @@
-import Apps from './Apps.svg';
-import AppsFill from './AppsFill.svg';
-import Bell from './Bell.svg';
-import BellFill from './BellFill.svg';
 import Home from './home.svg';
 import HomeFill from './home-fill.svg';
 import User from './user.svg';
@@ -19,10 +15,6 @@ import NoResult from './noresult.svg';
 import GoogleIcon from './google.svg';
 import AppleIcon from './apple.svg';
 export {
-    Apps,
-    AppsFill,
-    Bell,
-    BellFill,
     User,
     UserFill,
     Home,

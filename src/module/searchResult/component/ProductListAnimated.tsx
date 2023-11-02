@@ -65,7 +65,7 @@ const ProductListAnimated = memo(
             if (currentFilter.type_variant_id) ++count;
             if (currentFilter.color_variant_id) ++count;
             if (currentFilter.size_variant_id) ++count;
-            if (currentFilter.minPrice && currentFilter.maxPrice) ++count;
+            if (currentFilter.minPrice !== undefined && currentFilter.maxPrice) ++count;
 
             return count;
         }, [currentFilter]);
