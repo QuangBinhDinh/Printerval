@@ -48,7 +48,7 @@ const UserScreen = () => {
                 <FastImage
                     style={{ height: 70, width: 70, borderRadius: 70 }}
                     resizeMode="cover"
-                    source={{ uri: userInfo.image_url }}
+                    source={userInfo.image_url ? { uri: userInfo.image_url } : require('@image/female-avatar.png')}
                 />
                 <View style={styles.contentHeader}>
                     <View>
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         //borderWidth: 1,
         alignItems: 'center',
+        paddingRight: 2,
     },
     contentHeader: {
         flexDirection: 'row',

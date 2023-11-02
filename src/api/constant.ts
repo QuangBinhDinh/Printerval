@@ -1,4 +1,4 @@
 /**
  * List các service logging trên console (nên hạn chế số lượng)
  */
-export const SERVICE_DEBUG: string[] = ['fetchProductResult', 'fetchProductSearch', 'postLogin', 'postLoginSocial'];
+export const SERVICE_DEBUG: string[] = ['fetchProductResult', 'createAccount', 'postLogin', 'postLoginSocial'];

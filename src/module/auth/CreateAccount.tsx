@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ImageBackground, Keyboard, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { appleLogin, facebookLogin, googleLogin } from './loginSocial';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@rneui/base';
 import { TextNormal, TextSemiBold } from '@components/text';
-import { goBack } from '@navigation/service';
+import { goBack, navigate } from '@navigation/service';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import InputDark from './component/InputDark';
@@ -13,7 +12,8 @@ import { lightColor } from '@styles/color';
 import FancyButton from '@components/FancyButton';
 import { SCREEN_HEIGHT } from '@util/index';
 import { AppleIcon, GoogleIcon } from '@svg/index';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { useLogin } from './component/useLogin';
+import LoadingSpinner from '@components/loading/LoadingSpinner';
 
 const RATIO = SCREEN_HEIGHT / 810;
 const initialValues = {
@@ -34,22 +34,34 @@ const validationSchema = yup.object().shape({
 });
 const CreateAccount = () => {
     const insets = useSafeAreaInsets();
-
+    const { loginSuccess, loading, register } = useLogin();
     const onBack = () => {
         Keyboard.dismiss();
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue } = useFormik({
+    const { submitForm, errors, values, setFieldValue, resetForm } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
             Keyboard.dismiss();
-            console.log(input);
+            //console.log(input);
+            register({
+                email: input.email,
+                full_name: input.name,
+                password: input.password,
+                password_confirmation: input.confirmPass,
+            });
         },
         validateOnChange: false,
         validateOnBlur: false,
     });
+    useEffect(() => {
+        if (loginSuccess) {
+            resetForm();
+            navigate('HomeScreen');
+        }
+    }, [loginSuccess]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -121,6 +133,7 @@ const CreateAccount = () => {
                     </TextNormal>
                 </LinearGradient>
             </ImageBackground>
+            <LoadingSpinner visible={loading} />
         </View>
     );
 };

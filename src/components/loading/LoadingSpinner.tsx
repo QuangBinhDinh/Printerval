@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Lottie from 'lottie-react-native';
 
 const LoadingSpinner = ({ visible }: { visible: boolean }) => {
     if (!visible) return null;
@@ -10,11 +11,13 @@ const LoadingSpinner = ({ visible }: { visible: boolean }) => {
                 {
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    backgroundColor: 'rgba(255,255,255,0.35)',
                     zIndex: 500,
                 },
             ]}
-        ></View>
+        >
+            <Lottie style={{ width: 200, height: 200 }} source={require('@animation/loading-v2.json')} autoPlay loop />
+        </View>
     );
 };
 
