@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { getDeviceId, getUniqueId } from 'react-native-device-info';
 import { googleLogin, facebookLogin, appleLogin } from '@auth/loginSocial';
 import { showLoginError } from './LoginError';
+import storage from '@util/storage';
 
 export const useLogin = () => {
     const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ export const useLogin = () => {
             const { access_token, customer } = await loginAccount(dataSend).unwrap();
             if (access_token) {
                 setState('success');
+                storage.save('AuthData', dataSend);
                 dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
             }
         } catch (e: any) {
@@ -91,6 +93,7 @@ export const useLogin = () => {
                 var { access_token, customer, message } = await loginSocial(dataSend).unwrap();
                 if (access_token) {
                     setState('success');
+                    storage.save('AuthSocialData', dataSend);
                     dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
                 } else {
                     console.log('login error', message);

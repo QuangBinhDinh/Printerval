@@ -29,10 +29,10 @@ const UserNotLogged = () => {
 
                 <View style={styles.buttonRow}>
                     <Pressable style={styles.buttonLogin} onPress={toLogin}>
-                        <TextSemiBold style={{ color: 'white' }}>Login</TextSemiBold>
+                        <TextSemiBold style={{ color: 'white', marginTop: 2 }}>Login</TextSemiBold>
                     </Pressable>
                     <Pressable style={styles.buttonSignup} onPress={toSignUp}>
-                        <TextSemiBold style={{ color: lightColor.secondary }}>Sign up</TextSemiBold>
+                        <TextSemiBold style={{ color: lightColor.secondary, marginTop: 2 }}>Sign up</TextSemiBold>
                     </Pressable>
                 </View>
             </View>
