@@ -1,6 +1,7 @@
 import { pastel } from '@styles/color';
 import { isNumber } from 'lodash';
 import { Dimensions } from 'react-native';
+import moment from 'moment';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 /**
@@ -42,4 +43,37 @@ const formatPrice = (priceNum: string | number) => {
     if (isNumber(priceNum)) return formatter.format(priceNum);
     else return localePrefix + priceNum;
 };
-export { SCREEN_HEIGHT, SCREEN_WIDTH, DESIGN_RATIO, splitColArray, randomizeColor, formatPrice };
+
+/**
+ * Convert date time của Printerval về dạng chuẩn
+ * @param time
+ */
+const normalizeDateTime = (time: string) => {
+    const arrTime = time.split(' ');
+    const dateArr = arrTime[0].split('-');
+
+    return `${dateArr[2]}-${dateArr[1]}-${dateArr[0]} ${arrTime[1]}`;
+};
+
+const timeBefore = (created_time: string) => {
+    let format = 'Vừa xong';
+    var mins = moment(new Date()).diff(created_time, 'minutes');
+    console.log(mins);
+    var duration = moment.duration(mins, 'minutes');
+    if (mins < 60 && mins >= 1) format = mins + ' min ago';
+    else if (mins >= 60 && mins < 60 * 24) format = Math.floor(duration.asHours()) + ' hours ago';
+    else if (mins >= 60 * 24 && mins < 60 * 24 * 31) format = Math.floor(duration.asDays()) + ' days ago';
+    else if (mins >= 60 * 24 * 31 && mins < 60 * 24 * 31 * 12) format = Math.floor(duration.asMonths()) + ' months ago';
+    else if (mins > 60 * 24 * 31 * 12) format = Math.floor(duration.asYears()) + ' years ago';
+    return format;
+};
+export {
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    DESIGN_RATIO,
+    splitColArray,
+    randomizeColor,
+    formatPrice,
+    timeBefore,
+    normalizeDateTime,
+};

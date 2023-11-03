@@ -1,5 +1,5 @@
 import { api, domainApi } from '@api/service';
-import { Product, ProductReview } from '@type/common';
+import { Product, ProductReview, ResponseMeta } from '@type/common';
 import { ProdInfoResponse, ShippingInfo, ProdShippingArgs } from './type';
 
 const extendedApi = api.injectEndpoints({
@@ -10,8 +10,8 @@ const extendedApi = api.injectEndpoints({
         }),
 
         fetchProductReview: build.query<
-            { status: string; result: ProductReview[] },
-            { targetId: number; pageId?: number }
+            { status: string; result: ProductReview[]; meta: ResponseMeta },
+            { targetId: number; pageId?: number; pageSize: number; dt?: number }
         >({
             query: args => {
                 var newArgs = Object.assign(
@@ -23,7 +23,6 @@ const extendedApi = api.injectEndpoints({
                         'order[is_pin]': 'desc',
                         'order[sort_id]': 'desc',
                         'order[created_at]': 'desc',
-                        dt: Date.now(),
                     },
                     args,
                 );
@@ -70,7 +69,7 @@ const extendedDomain = domainApi.injectEndpoints({
     }),
 });
 
-export const { useFetchProductInfoQuery, useLazyFetchProductReviewQuery } = extendedApi;
+export const { useFetchProductInfoQuery, useLazyFetchProductReviewQuery, useLazyFetchProductStarQuery } = extendedApi;
 
 export const { useLazyFetchBoughtTogetherQuery, useLazyFetchDesignAvailableQuery, useLazyFetchProductShippingQuery } =
     extendedDomain;

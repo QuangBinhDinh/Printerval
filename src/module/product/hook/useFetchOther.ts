@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import {
     useFetchProductInfoQuery,
     useLazyFetchBoughtTogetherQuery,
+    useLazyFetchProductReviewQuery,
     useLazyFetchProductShippingQuery,
+    useLazyFetchProductStarQuery,
 } from '@product/service';
 import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
@@ -15,16 +17,25 @@ export const useFetchOther = () => {
 
     const [fetchShipFee, { data: shipResult }] = useLazyFetchProductShippingQuery();
     const [fetchBoughtTogether, { data: res1 }] = useLazyFetchBoughtTogetherQuery();
+    const [fetchRating, { data: res2 }] = useLazyFetchProductStarQuery();
+    const [fetchReview, { data: res3 }] = useLazyFetchProductReviewQuery();
 
     useEffect(() => {
-        if (result)
+        if (result) {
             fetchShipFee({
                 id: productId,
                 sku: result.product.sku,
                 quantity: 1,
             });
 
-        fetchBoughtTogether(productId);
+            fetchBoughtTogether(productId);
+            fetchRating(productId);
+            fetchReview({
+                targetId: productId,
+                pageSize: 3,
+                dt: Date.now(),
+            });
+        }
     }, [result]);
 
     return {
@@ -33,5 +44,9 @@ export const useFetchOther = () => {
         shipResult,
         seller: result?.product?.user,
         boughtTogether: res1?.result,
+
+        ratingDashboard: res2?.result,
+
+        reviewRes: res3,
     };
 };

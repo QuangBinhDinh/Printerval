@@ -36,9 +36,9 @@ const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?:
             <View style={styles.addAllRow}>
                 <TextNormal>
                     Price:{'  '}
-                    <TextNormal style={{ color: lightColor.price }}>
+                    <TextSemiBold style={{ color: lightColor.price }}>
                         {formatPrice(sumBy(data, i => Number(i.price)))}
-                    </TextNormal>
+                    </TextSemiBold>
                 </TextNormal>
 
                 <FancyButton style={styles.addButton} backgroundColor={lightColor.secondary} onPress={addAllToCart}>

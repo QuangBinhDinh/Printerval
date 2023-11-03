@@ -21,17 +21,18 @@ import DeliverySection from './component/DeliverySection';
 import BoughtTogether from './component/BoughtTogether';
 import LoadingProduct from './component/LoadingProduct';
 import AnimatedHeader from './component/AnimatedHeader';
+import ReviewSection from './component/ReviewSection';
 
 const DetailProduct = () => {
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
     const insets = useSafeAreaInsets();
-    const { detail, category, shipResult, seller, boughtTogether } = useFetchOther();
+    const { detail, category, shipResult, seller, boughtTogether, ratingDashboard, reviewRes } = useFetchOther();
 
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
-        console.log(nativeEvent.contentOffset.y);
+        //console.log(nativeEvent.contentOffset.y);
         scrollY.value = nativeEvent.contentOffset.y;
     };
     return (
@@ -61,8 +62,18 @@ const DetailProduct = () => {
                     </View>
 
                     <SellerInfo seller={seller} />
+
                     <DeliverySection data={shipResult?.result} country={shipResult?.countryName || ''} />
+
                     <BoughtTogether data={boughtTogether} currentProd={detail} />
+
+                    <ReviewSection
+                        product={detail}
+                        dashboard={ratingDashboard}
+                        reviews={reviewRes?.result}
+                        meta={reviewRes?.meta}
+                    />
+
                     <View style={{ height: 60 }} />
                 </KeyboardAwareScrollView>
             ) : (

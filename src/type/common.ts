@@ -28,6 +28,8 @@ export interface ProductReview {
     target_id: number;
     status: string;
     created_at: string;
+    images: string;
+    rating: number;
 }
 
 export interface User {
@@ -41,4 +43,11 @@ export interface User {
     token: string;
     gender: string;
     status: string;
+}
+
+export interface ResponseMeta {
+    page_id: number;
+    page_size: number;
+    total_count: number;
+    has_next: true;
 }
