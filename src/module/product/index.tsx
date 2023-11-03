@@ -19,6 +19,8 @@ import SellerInfo from './component/SellerInfo';
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import DeliverySection from './component/DeliverySection';
 import BoughtTogether from './component/BoughtTogether';
+import LoadingProduct from './component/LoadingProduct';
+import AnimatedHeader from './component/AnimatedHeader';
 
 const DetailProduct = () => {
     const {
@@ -29,25 +31,14 @@ const DetailProduct = () => {
 
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
-        //console.log(nativeEvent.contentOffset.y);
+        console.log(nativeEvent.contentOffset.y);
         scrollY.value = nativeEvent.contentOffset.y;
     };
-    const animHeader = useAnimatedStyle(() => ({
-        backgroundColor: interpolateColor(scrollY.value, [0, 300], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
-    }));
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 6 + insets.top / 1.5 }}>
-            <Animated.View
-                style={[styles.header, { height: 54 + insets.top / 1.5, paddingTop: 6 + insets.top / 1.5 }, animHeader]}
-            >
-                <Pressable style={styles.button} onPress={goBack}>
-                    <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
-                </Pressable>
-                <Pressable style={styles.button}>
-                    <ShareIcon width={26} height={22} />
-                </Pressable>
-            </Animated.View>
-            {!!detail && (
+            <AnimatedHeader title={productName} scrollY={scrollY} />
+
+            {!!detail ? (
                 <KeyboardAwareScrollView style={{ flex: 1 }} onScroll={onScroll} scrollEventThrottle={6}>
                     <FastImage
                         style={{ width: '100%', aspectRatio: 1 }}
@@ -74,6 +65,8 @@ const DetailProduct = () => {
                     <BoughtTogether data={boughtTogether} currentProd={detail} />
                     <View style={{ height: 60 }} />
                 </KeyboardAwareScrollView>
+            ) : (
+                <LoadingProduct />
             )}
         </View>
     );
@@ -91,6 +84,8 @@ const styles = StyleSheet.create({
         zIndex: 200,
         position: 'absolute',
         top: 0,
+        paddingHorizontal: 6,
+        borderBottomWidth: 1,
     },
     button: {
         height: 48,
