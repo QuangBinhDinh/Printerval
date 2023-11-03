@@ -1,11 +1,10 @@
 import { Icon } from '@rneui/base';
-import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, NativeScrollEvent, Pressable, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import { ShareIcon } from '@assets/svg';
-import { useFetchProductInfoQuery } from './service';
 import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 import FastImage from 'react-native-fast-image';
@@ -15,35 +14,47 @@ import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
 import { SCREEN_WIDTH } from '@util/index';
 import { TextNormal, TextSemiBold } from '@components/text';
+import { useFetchOther } from './hook/useFetchOther';
+import SellerInfo from './component/SellerInfo';
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import DeliverySection from './component/DeliverySection';
+import BoughtTogether from './component/BoughtTogether';
 
 const DetailProduct = () => {
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
     const insets = useSafeAreaInsets();
-    const { data: { result } = {} } = useFetchProductInfoQuery(productId);
+    const { detail, category, shipResult, seller, boughtTogether } = useFetchOther();
 
+    const scrollY = useSharedValue(0);
+    const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
+        //console.log(nativeEvent.contentOffset.y);
+        scrollY.value = nativeEvent.contentOffset.y;
+    };
+    const animHeader = useAnimatedStyle(() => ({
+        backgroundColor: interpolateColor(scrollY.value, [0, 300], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
+    }));
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 6 + insets.top / 1.5 }}>
-            <View style={[styles.header, { height: 54 + insets.top / 1.5, paddingTop: 6 + insets.top / 1.5 }]}>
+            <Animated.View
+                style={[styles.header, { height: 54 + insets.top / 1.5, paddingTop: 6 + insets.top / 1.5 }, animHeader]}
+            >
                 <Pressable style={styles.button} onPress={goBack}>
                     <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
                 </Pressable>
                 <Pressable style={styles.button}>
                     <ShareIcon width={26} height={22} />
                 </Pressable>
-            </View>
-            {!!result && (
-                <KeyboardAwareScrollView
-                    style={{ flex: 1 }}
-                    // contentContainerStyle={{ paddingTop: 6 + insets.top / 1.5 }}
-                >
+            </Animated.View>
+            {!!detail && (
+                <KeyboardAwareScrollView style={{ flex: 1 }} onScroll={onScroll} scrollEventThrottle={6}>
                     <FastImage
                         style={{ width: '100%', aspectRatio: 1 }}
                         resizeMode="cover"
-                        source={{ uri: cdnImage(result?.product?.image_url, 630, 630) }}
+                        source={{ uri: cdnImage(detail?.image_url, 630, 630) }}
                     />
-                    <ProductTitle detail={result.product} category={result.category} title={productName} />
+                    <ProductTitle detail={detail} category={category} title={productName} />
                     <ProductFeature description={null} />
 
                     <View style={styles.guarantee}>
@@ -58,6 +69,9 @@ const DetailProduct = () => {
                         </View>
                     </View>
 
+                    <SellerInfo seller={seller} />
+                    <DeliverySection data={shipResult?.result} country={shipResult?.countryName || ''} />
+                    <BoughtTogether data={boughtTogether} currentProd={detail} />
                     <View style={{ height: 60 }} />
                 </KeyboardAwareScrollView>
             )}

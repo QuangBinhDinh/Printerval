@@ -15,6 +15,8 @@ import NoResult from './noresult.svg';
 import GoogleIcon from './google.svg';
 import AppleIcon from './apple.svg';
 import ShareIcon from './share.svg';
+import ExchangeLogo from './exchange.svg';
+import ReportFlag from './report.svg';
 
 export {
     User,
@@ -34,4 +36,6 @@ export {
     GoogleIcon,
     AppleIcon,
     ShareIcon,
+    ExchangeLogo,
+    ReportFlag,
 };

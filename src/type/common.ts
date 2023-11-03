@@ -9,6 +9,14 @@ export interface Product {
     image_url: string;
     rating_count: number;
     rating_value: number;
+    user: Seller;
+}
+
+export interface Seller {
+    id: number;
+    name: string;
+    email: string | null;
+    image_avatar: string | null;
 }
 
 export interface ProductReview {

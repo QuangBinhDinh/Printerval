@@ -1,13 +1,7 @@
-import { api } from '@api/service';
+import { api, domainApi } from '@api/service';
 import { Product, ProductReview } from '@type/common';
+import { ProdInfoResponse, ShippingInfo, ProdShippingArgs } from './type';
 
-interface ProdInfoResponse {
-    product: Product;
-    category: any;
-    related: any;
-    feature_tag: any;
-    tags: any;
-}
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
         fetchProductInfo: build.query<{ status: string; result: ProdInfoResponse }, number>({
@@ -53,12 +47,7 @@ const extendedApi = api.injectEndpoints({
     }),
 });
 
-interface ProdShippingArgs {
-    id: number;
-    sku: string;
-    quantity: number;
-}
-const extendedDomain = api.injectEndpoints({
+const extendedDomain = domainApi.injectEndpoints({
     endpoints: build => ({
         fetchBoughtTogether: build.query<{ status: string; result: Product[] }, number>({
             query: productId => ({
@@ -66,7 +55,7 @@ const extendedDomain = api.injectEndpoints({
                 params: {
                     dt: Date.now(),
                     product_id: productId,
-                    limit: 10,
+                    limit: 3,
                 },
             }),
         }),
@@ -75,7 +64,7 @@ const extendedDomain = api.injectEndpoints({
             query: product_id => ({ url: `pod/also-available/find?product_id=${product_id}&dt=${Date.now()}` }),
         }),
 
-        fetchProductShipping: build.query<any, ProdShippingArgs>({
+        fetchProductShipping: build.query<{ countryName: string; result: ShippingInfo }, ProdShippingArgs>({
             query: args => ({ url: 'shipping/info', params: { ...args, dt: Date.now() } }),
         }),
     }),
