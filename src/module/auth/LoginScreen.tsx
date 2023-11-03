@@ -34,7 +34,7 @@ const LoginScreen = () => {
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue, resetForm } = useFormik({
+    const { submitForm, errors, values, setFieldValue, resetForm, touched } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
@@ -42,8 +42,8 @@ const LoginScreen = () => {
 
             doLogin(input);
         },
-        validateOnChange: false,
-        validateOnBlur: false,
+        // validateOnChange: false,
+        // validateOnBlur: false,
     });
 
     useEffect(() => {
@@ -75,11 +75,13 @@ const LoginScreen = () => {
                         onChangeText={text => setFieldValue('email', text)}
                         error={errors.email}
                         placeholder="Your email"
+                        touched={touched.email}
                     />
                     <InputDark
                         value={values.password}
                         onChangeText={text => setFieldValue('password', text)}
                         error={errors.password}
+                        touched={touched.password}
                         placeholder="Password"
                         secureTextEntry
                     />

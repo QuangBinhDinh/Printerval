@@ -32,7 +32,7 @@ const EnterNewPass = () => {
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue } = useFormik({
+    const { submitForm, errors, values, setFieldValue, touched } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
@@ -63,6 +63,7 @@ const EnterNewPass = () => {
                         value={values.password}
                         onChangeText={text => setFieldValue('password', text)}
                         error={errors.password}
+                        touched={touched.password}
                         placeholder="Enter new password"
                         secureTextEntry
                     />
@@ -70,6 +71,7 @@ const EnterNewPass = () => {
                         value={values.confirmPass}
                         onChangeText={text => setFieldValue('confirmPass', text)}
                         error={errors.confirmPass}
+                        touched={touched.confirmPass}
                         placeholder="Confirm password"
                         secureTextEntry
                     />

@@ -27,7 +27,7 @@ const ForgotPass = () => {
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue } = useFormik({
+    const { submitForm, errors, values, setFieldValue, touched } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
@@ -60,6 +60,7 @@ const ForgotPass = () => {
                         value={values.email}
                         onChangeText={text => setFieldValue('email', text)}
                         error={errors.email}
+                        touched={touched.email}
                         placeholder="Enter your email"
                     />
 

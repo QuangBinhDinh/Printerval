@@ -14,6 +14,8 @@ type InputProps = TextInputProps & {
     errorStyle?: StyleProp<TextStyle>;
 
     error: string | undefined;
+
+    touched: boolean | undefined;
 };
 const InputDark = ({
     containerStyle,
@@ -21,6 +23,7 @@ const InputDark = ({
     value,
     onChangeText,
     error,
+    touched,
     placeholder,
     secureTextEntry = false,
     ...rest
@@ -28,7 +31,7 @@ const InputDark = ({
     const [hidePass, setHidePass] = useState(secureTextEntry);
     return (
         <View style={[styles.container, containerStyle]}>
-            <View style={[styles.inputView, !!error && { borderBottomColor: lightColor.error }]}>
+            <View style={[styles.inputView, !!error && touched && { borderBottomColor: lightColor.error }]}>
                 <TextInput
                     style={styles.inputStyle}
                     value={value}
@@ -48,7 +51,7 @@ const InputDark = ({
                     />
                 )}
             </View>
-            {!!error && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
+            {!!error && touched && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
         </View>
     );
 };

@@ -40,7 +40,7 @@ const CreateAccount = () => {
         goBack();
     };
 
-    const { submitForm, errors, values, setFieldValue, resetForm } = useFormik({
+    const { submitForm, errors, values, setFieldValue, resetForm, touched } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
@@ -82,6 +82,7 @@ const CreateAccount = () => {
                         value={values.name}
                         onChangeText={text => setFieldValue('name', text)}
                         error={errors.name}
+                        touched={touched.name}
                         placeholder="Your name"
                         containerStyle={{ marginTop: 8 }}
                     />
@@ -89,6 +90,7 @@ const CreateAccount = () => {
                         value={values.email}
                         onChangeText={text => setFieldValue('email', text)}
                         error={errors.email}
+                        touched={touched.email}
                         placeholder="Your email"
                         containerStyle={{ marginTop: 8 }}
                     />
@@ -96,6 +98,7 @@ const CreateAccount = () => {
                         value={values.password}
                         onChangeText={text => setFieldValue('password', text)}
                         error={errors.password}
+                        touched={touched.password}
                         placeholder="Password"
                         containerStyle={{ marginTop: 8 }}
                         secureTextEntry
@@ -105,6 +108,7 @@ const CreateAccount = () => {
                         onChangeText={text => setFieldValue('confirmPass', text)}
                         error={errors.confirmPass}
                         placeholder="Confirm password"
+                        touched={touched.confirmPass}
                         containerStyle={{ marginTop: 8 }}
                         secureTextEntry
                     />
