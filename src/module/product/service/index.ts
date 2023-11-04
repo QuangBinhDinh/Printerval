@@ -43,6 +43,10 @@ const extendedApi = api.injectEndpoints({
                 },
             }),
         }),
+
+        fetchAlsoLike: build.query<{ result: Product[] }, number>({
+            query: product_id => ({ url: 'mobile/related-product', params: { product_id, dt: Date.now() } }),
+        }),
     }),
 });
 
@@ -59,17 +63,22 @@ const extendedDomain = domainApi.injectEndpoints({
             }),
         }),
 
-        fetchDesignAvailable: build.query<{ status: string; result: Product[] }, number>({
-            query: product_id => ({ url: `pod/also-available/find?product_id=${product_id}&dt=${Date.now()}` }),
-        }),
-
         fetchProductShipping: build.query<{ countryName: string; result: ShippingInfo }, ProdShippingArgs>({
             query: args => ({ url: 'shipping/info', params: { ...args, dt: Date.now() } }),
+        }),
+
+        fetchDesignAvailable: build.query<{ status: string; result: Product[] }, number>({
+            query: product_id => ({ url: `pod/also-available/find?product_id=${product_id}&dt=${Date.now()}` }),
         }),
     }),
 });
 
-export const { useFetchProductInfoQuery, useLazyFetchProductReviewQuery, useLazyFetchProductStarQuery } = extendedApi;
+export const {
+    useFetchProductInfoQuery,
+    useLazyFetchProductReviewQuery,
+    useLazyFetchProductStarQuery,
+    useLazyFetchAlsoLikeQuery,
+} = extendedApi;
 
 export const { useLazyFetchBoughtTogetherQuery, useLazyFetchDesignAvailableQuery, useLazyFetchProductShippingQuery } =
     extendedDomain;

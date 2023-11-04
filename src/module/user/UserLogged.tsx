@@ -11,6 +11,7 @@ import { navigate } from '@navigation/service';
 import auth from '@auth/reducer';
 import FastImage from 'react-native-fast-image';
 import storage from '@util/storage';
+import { STORAGE_KEY } from '@constant/index';
 
 const UserLogged = () => {
     const userInfo = useAppSelector(state => state.auth.userInfo);
@@ -20,8 +21,8 @@ const UserLogged = () => {
         navigate('LoginScreen');
         InteractionManager.runAfterInteractions(() => {
             dispatch(auth.actions.logout());
-            storage.save('AuthData', null);
-            storage.save('AuthSocialData', null);
+            storage.save(STORAGE_KEY.AUTH_DATA, null);
+            storage.save(STORAGE_KEY.AUTH_SOCIAL_DATA, null);
         });
     };
     return (

@@ -6,6 +6,7 @@ export interface ProdInfoResponse {
     related: any;
     feature_tag: any;
     tags: any;
+    sameStore: Product[];
 }
 
 export interface ProdShippingArgs {

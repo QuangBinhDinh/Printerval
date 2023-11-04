@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 import { useRoute } from '@react-navigation/native';
@@ -14,6 +14,10 @@ import FancyButton from '@components/FancyButton';
 
 const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?: Product }) => {
     const [selected, setSelected] = useState<number[]>([]);
+
+    useEffect(() => {
+        if (data) setSelected(data.map(i => i.id));
+    }, [data]);
 
     const selectProduct = useCallback((id: number) => {
         setSelected(prev => {
@@ -37,7 +41,12 @@ const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?:
                 <TextNormal>
                     Price:{'  '}
                     <TextSemiBold style={{ color: lightColor.price }}>
-                        {formatPrice(sumBy(data, i => Number(i.price)))}
+                        {formatPrice(
+                            sumBy(
+                                data.filter(i => selected.includes(i.id)),
+                                i => Number(i.price),
+                            ) + Number(currentProd?.price),
+                        )}
                     </TextSemiBold>
                 </TextNormal>
 

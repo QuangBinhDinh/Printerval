@@ -22,13 +22,28 @@ import BoughtTogether from './component/BoughtTogether';
 import LoadingProduct from './component/LoadingProduct';
 import AnimatedHeader from './component/AnimatedHeader';
 import ReviewSection from './component/ReviewSection';
+import ProductRow from '@components/product/ProductRow';
+import ProductTwoRow from '@components/product/ProductTwoRow';
+import RelateTag from './component/RelateTag';
 
 const DetailProduct = () => {
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
     const insets = useSafeAreaInsets();
-    const { detail, category, shipResult, seller, boughtTogether, ratingDashboard, reviewRes } = useFetchOther();
+    const {
+        detail,
+        category,
+        shipResult,
+        seller,
+        boughtTogether,
+        ratingDashboard,
+        reviewRes,
+        designAvailable,
+        moreProducts,
+        alsoLikeProd,
+        relateTag,
+    } = useFetchOther();
 
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
@@ -74,6 +89,11 @@ const DetailProduct = () => {
                         meta={reviewRes?.meta}
                     />
 
+                    <ProductRow data={designAvailable} title="The design is also available on" />
+                    <ProductTwoRow data={alsoLikeProd} title="You may also like" />
+                    <ProductRow data={moreProducts} title={`More ${seller?.name}'s products`} />
+
+                    <RelateTag data={relateTag} />
                     <View style={{ height: 60 }} />
                 </KeyboardAwareScrollView>
             ) : (

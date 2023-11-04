@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import {
     useFetchProductInfoQuery,
+    useLazyFetchAlsoLikeQuery,
     useLazyFetchBoughtTogetherQuery,
+    useLazyFetchDesignAvailableQuery,
     useLazyFetchProductReviewQuery,
     useLazyFetchProductShippingQuery,
     useLazyFetchProductStarQuery,
@@ -19,6 +21,8 @@ export const useFetchOther = () => {
     const [fetchBoughtTogether, { data: res1 }] = useLazyFetchBoughtTogetherQuery();
     const [fetchRating, { data: res2 }] = useLazyFetchProductStarQuery();
     const [fetchReview, { data: res3 }] = useLazyFetchProductReviewQuery();
+    const [fetchAvailable, { data: res4 }] = useLazyFetchDesignAvailableQuery();
+    const [fetchAlsoLike, { data: res5 }] = useLazyFetchAlsoLikeQuery();
 
     useEffect(() => {
         if (result) {
@@ -35,6 +39,9 @@ export const useFetchOther = () => {
                 pageSize: 3,
                 dt: Date.now(),
             });
+
+            fetchAvailable(productId);
+            fetchAlsoLike(productId);
         }
     }, [result]);
 
@@ -44,9 +51,13 @@ export const useFetchOther = () => {
         shipResult,
         seller: result?.product?.user,
         boughtTogether: res1?.result,
-
         ratingDashboard: res2?.result,
-
         reviewRes: res3,
+
+        designAvailable: res4?.result,
+        alsoLikeProd: res5?.result,
+        moreProducts: result?.sameStore,
+
+        relateTag: result?.tags,
     };
 };

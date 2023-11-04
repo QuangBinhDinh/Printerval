@@ -43,3 +43,16 @@ export const RELEVANT = [
 ];
 
 export const MAX_SEARCH_HISTORY = 3;
+
+/**
+ * Key lưu trữ data của AsyncStorage
+ */
+export const STORAGE_KEY = {
+    AUTH_DATA: 'AuthData',
+    AUTH_SOCIAL_DATA: 'AuthSocialData',
+
+    /**
+     * Token dùng để add to cart, product history , etc
+     */
+    CUSTOMER_TOKEN: 'CustomerToken',
+};

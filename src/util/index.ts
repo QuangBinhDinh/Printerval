@@ -1,5 +1,5 @@
 import { pastel } from '@styles/color';
-import { isNumber } from 'lodash';
+import { cloneDeep, isNumber } from 'lodash';
 import { Dimensions } from 'react-native';
 import moment from 'moment';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -8,6 +8,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
  * Scale theo  design trên figma
  */
 const DESIGN_RATIO = SCREEN_HEIGHT / 810;
+
 /**
  * Tách 1 array thành 2 array có index chẵn lẻ
  */
@@ -17,6 +18,22 @@ const splitColArray = (arr: any[]) => {
     var secondCol = arr.filter((_, index) => index % 2 == 1);
     return [firstCol, secondCol];
 };
+
+const splitRowArray = (data?: any[]) => {
+    //hàm này không đúng với trường hợp lẻ item
+    let arrToPush: any[] = [];
+    if (!data) return [];
+    else
+        return data.reduce((prev, next) => {
+            arrToPush.push(next);
+            if (arrToPush.length == 2) {
+                prev.push(cloneDeep(arrToPush));
+                arrToPush = [];
+            }
+            return prev;
+        }, []);
+};
+
 /**
  * Trả về 1 mảng color ngẫu nhiên từ pastel color
  * @param numCol số lượng color cần lấy
@@ -58,7 +75,7 @@ const normalizeDateTime = (time: string) => {
 const timeBefore = (created_time: string) => {
     let format = 'Vừa xong';
     var mins = moment(new Date()).diff(created_time, 'minutes');
-    console.log(mins);
+    //console.log(mins);
     var duration = moment.duration(mins, 'minutes');
     if (mins < 60 && mins >= 1) format = mins + ' min ago';
     else if (mins >= 60 && mins < 60 * 24) format = Math.floor(duration.asHours()) + ' hours ago';
@@ -72,6 +89,7 @@ export {
     SCREEN_WIDTH,
     DESIGN_RATIO,
     splitColArray,
+    splitRowArray,
     randomizeColor,
     formatPrice,
     timeBefore,
