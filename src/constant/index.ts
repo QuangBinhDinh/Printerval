@@ -64,3 +64,5 @@ export const STORAGE_KEY = {
      */
     CUSTOMER_TOKEN: 'CustomerToken',
 };
+
+export const ORDER_SIZE = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
