@@ -42,7 +42,15 @@ export const RELEVANT = [
     },
 ];
 
+/**
+ * Số từ khoá đã tìm kiếm tối đa
+ */
 export const MAX_SEARCH_HISTORY = 3;
+
+/**
+ * Số sp vừa xem tối đa
+ */
+export const MAX_PROD_HISTORY = 10;
 
 /**
  * Key lưu trữ data của AsyncStorage

@@ -47,7 +47,7 @@ export const useFetchOther = () => {
 
     return {
         detail: result?.product,
-        category: result?.category,
+        prodCategory: result?.category,
         shipResult,
         seller: result?.product?.user,
         boughtTogether: res1?.result,

@@ -1,22 +1,19 @@
-import { Icon } from '@rneui/base';
 import React, { useEffect } from 'react';
-import { Image, NativeScrollEvent, Pressable, StyleSheet, View } from 'react-native';
+import { Image, NativeScrollEvent, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
-import { ShareIcon } from '@assets/svg';
 import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 import FastImage from 'react-native-fast-image';
 import { cdnImage } from '@util/cdnImage';
-import { goBack } from '@navigation/service';
 import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
 import { SCREEN_WIDTH } from '@util/index';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { useFetchOther } from './hook/useFetchOther';
 import SellerInfo from './component/SellerInfo';
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { useSharedValue } from 'react-native-reanimated';
 import DeliverySection from './component/DeliverySection';
 import BoughtTogether from './component/BoughtTogether';
 import LoadingProduct from './component/LoadingProduct';
@@ -25,15 +22,20 @@ import ReviewSection from './component/ReviewSection';
 import ProductRow from '@components/product/ProductRow';
 import ProductTwoRow from '@components/product/ProductTwoRow';
 import RelateTag from './component/RelateTag';
+import { useAppDispatch, useAppSelector } from '@store/hook';
+import category from '@category/reducer';
 
 const DetailProduct = () => {
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
     const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
+    const prodHistory = useAppSelector(state => state.category.productHistory);
+
     const {
         detail,
-        category,
+        prodCategory,
         shipResult,
         seller,
         boughtTogether,
@@ -50,6 +52,15 @@ const DetailProduct = () => {
         //console.log(nativeEvent.contentOffset.y);
         scrollY.value = nativeEvent.contentOffset.y;
     };
+
+    useEffect(() => {
+        if (detail) {
+            // lưu lại lịch sử sp đã xem
+            //chỉ lưu 1 số thông tin cơ bản (tránh dung lượng cache cao)
+            var { id, name, image_url, display_high_price, display_price } = detail;
+            dispatch(category.actions.setProdHistory({ id, name, image_url, display_high_price, display_price }));
+        }
+    }, [detail]);
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 6 + insets.top / 1.5 }}>
             <AnimatedHeader title={productName} scrollY={scrollY} />
@@ -61,7 +72,7 @@ const DetailProduct = () => {
                         resizeMode="cover"
                         source={{ uri: cdnImage(detail?.image_url, 630, 630) }}
                     />
-                    <ProductTitle detail={detail} category={category} title={productName} />
+                    <ProductTitle detail={detail} category={prodCategory} title={productName} />
                     <ProductFeature description={null} />
 
                     <View style={styles.guarantee}>
@@ -90,11 +101,15 @@ const DetailProduct = () => {
                     />
 
                     <ProductRow data={designAvailable} title="The design is also available on" />
+
                     <ProductTwoRow data={alsoLikeProd} title="You may also like" />
+
                     <ProductRow data={moreProducts} title={`More ${seller?.name}'s products`} />
 
                     <RelateTag data={relateTag} />
-                    <View style={{ height: 60 }} />
+
+                    <ProductRow data={prodHistory.filter(i => i.id != productId)} title="Recently viewed" />
+                    <View style={{ height: 30 }} />
                 </KeyboardAwareScrollView>
             ) : (
                 <LoadingProduct />

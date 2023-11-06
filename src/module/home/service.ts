@@ -20,9 +20,18 @@ const extendedDomain = domainApi.injectEndpoints({
         fetchExploreProd: build.query<any, void>({
             query: () => ({ url: 'product/recommendation' }),
         }),
+
+        //api bị lỗi , cần fix lại
+        browsingHistory: build.mutation<any, { product_id: number; token: string }>({
+            query: body => ({
+                url: 'browsing-history/asyn-get-history?ignore_localization=1',
+                method: 'post',
+                body: { url: 'https://printerval.com/', ...body },
+            }),
+        }),
     }),
 });
 
 export const { useFetchHomeBannerQuery, useFetchPopularDesignQuery, useFetchCategoryBannerQuery } = extendedApi;
 
-export const { useFetchExploreProdQuery } = extendedDomain;
+export const { useFetchExploreProdQuery, useBrowsingHistoryMutation } = extendedDomain;

@@ -39,5 +39,5 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         overflow: 'hidden',
     },
-    tagTitle: { fontSize: 15, color: '#fefefe', marginTop: 2 },
+    tagTitle: { fontSize: 15, color: 'rgba(248,248,248,1)', marginTop: 2 },
 });

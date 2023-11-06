@@ -35,8 +35,11 @@ const ReviewSection = ({ product, dashboard, reviews, meta }: IProps) => {
                         {item.rating}
                         {'  '}
                     </TextNormal>
+
                     <Icon type="font-awesome" name="star" color={lightColor.yellowstar} size={14} />
-                    <View style={styles.lineground}></View>
+                    <View style={styles.lineground}>
+                        <View style={[styles.progressLine, { width: `${item.percent ?? 0}%` }]} />
+                    </View>
                     <TextNormal style={{ fontSize: 13, width: 28, textAlign: 'right' }}>{item.percent}%</TextNormal>
                 </View>
             ))}
@@ -112,6 +115,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         height: 5,
         backgroundColor: '#EFF0F1',
+        borderRadius: 6,
+        overflow: 'hidden',
+        flexDirection: 'row',
+    },
+    progressLine: {
+        height: 5,
+        backgroundColor: lightColor.yellowstar,
         borderRadius: 6,
     },
 

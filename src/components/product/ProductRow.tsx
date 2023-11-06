@@ -6,7 +6,7 @@ import HorizonCard from './HorizonCard';
 
 interface IProps {
     title: string;
-    data?: Product[];
+    data?: Partial<Product>[];
 }
 
 const ProductRow = ({ title, data }: IProps) => {
