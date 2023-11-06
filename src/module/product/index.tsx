@@ -24,6 +24,8 @@ import ProductTwoRow from '@components/product/ProductTwoRow';
 import RelateTag from './component/RelateTag';
 import { useAppDispatch, useAppSelector } from '@store/hook';
 import category from '@category/reducer';
+import { useVariant } from './hook/useVariant';
+import VariantSection from './component/VariantSection';
 
 const DetailProduct = () => {
     const {
@@ -32,6 +34,20 @@ const DetailProduct = () => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
     const prodHistory = useAppSelector(state => state.category.productHistory);
+
+    const {
+        mappings,
+        selectedVariant,
+        displayOption,
+        setSelectedTuple,
+        variantPrice,
+        gallery,
+        variantReady,
+        detailSelectVar,
+        colIndex,
+        prodNoVariant,
+        description,
+    } = useVariant(productId, productName);
 
     const {
         detail,
@@ -45,7 +61,7 @@ const DetailProduct = () => {
         moreProducts,
         alsoLikeProd,
         relateTag,
-    } = useFetchOther();
+    } = useFetchOther(variantReady);
 
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
@@ -54,18 +70,19 @@ const DetailProduct = () => {
     };
 
     useEffect(() => {
-        if (detail) {
+        if (detail && variantReady) {
             // lưu lại lịch sử sp đã xem
             //chỉ lưu 1 số thông tin cơ bản (tránh dung lượng cache cao)
             var { id, name, image_url, display_high_price, display_price } = detail;
             dispatch(category.actions.setProdHistory({ id, name, image_url, display_high_price, display_price }));
         }
     }, [detail]);
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 6 + insets.top / 1.5 }}>
             <AnimatedHeader title={productName} scrollY={scrollY} />
 
-            {!!detail ? (
+            {!!detail && variantReady ? (
                 <KeyboardAwareScrollView style={{ flex: 1 }} onScroll={onScroll} scrollEventThrottle={6}>
                     <FastImage
                         style={{ width: '100%', aspectRatio: 1 }}
@@ -73,6 +90,19 @@ const DetailProduct = () => {
                         source={{ uri: cdnImage(detail?.image_url, 630, 630) }}
                     />
                     <ProductTitle detail={detail} category={prodCategory} title={productName} />
+
+                    <VariantSection
+                        detailVariant={detailSelectVar}
+                        changeValue={setSelectedTuple}
+                        showPrintBack={false}
+                        //changePrintBack={setPrintback}
+                        options={displayOption}
+                        selected={selectedVariant}
+                        variantPrice={variantPrice}
+                        mappings={mappings}
+                        colIndex={colIndex}
+                    />
+
                     <ProductFeature description={null} />
 
                     <View style={styles.guarantee}>

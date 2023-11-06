@@ -11,7 +11,7 @@ import {
 import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 
-export const useFetchOther = () => {
+export const useFetchOther = (variantReady: boolean) => {
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
@@ -25,7 +25,7 @@ export const useFetchOther = () => {
     const [fetchAlsoLike, { data: res5 }] = useLazyFetchAlsoLikeQuery();
 
     useEffect(() => {
-        if (result) {
+        if (result && variantReady) {
             fetchShipFee({
                 id: productId,
                 sku: result.product.sku,
@@ -43,7 +43,7 @@ export const useFetchOther = () => {
             fetchAvailable(productId);
             fetchAlsoLike(productId);
         }
-    }, [result]);
+    }, [result, variantReady]);
 
     return {
         detail: result?.product,
