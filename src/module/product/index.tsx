@@ -62,6 +62,7 @@ const DetailProduct = () => {
         moreProducts,
         alsoLikeProd,
         relateTag,
+        showPrintBack,
     } = useFetchOther(variantReady);
 
     const [quantity, setQuantity] = useState<string>('1');
@@ -106,14 +107,14 @@ const DetailProduct = () => {
                     />
 
                     <Quantity
-                        showPrintBack={false}
+                        showPrintBack={showPrintBack}
                         isPrintBack={printBack}
                         changePrintBack={setPrintback}
                         quantityText={quantity}
                         changeQuantity={setQuantity}
                     />
 
-                    <ProductFeature description={null} />
+                    <ProductFeature description={description} />
 
                     <View style={styles.guarantee}>
                         <Image style={{ height: 48, width: 48 }} source={require('@image/guarantee-logo.png')} />

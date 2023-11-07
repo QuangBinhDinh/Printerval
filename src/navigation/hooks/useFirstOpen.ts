@@ -1,14 +1,17 @@
 import { useLogin } from '@auth/component/useLogin';
 import auth from '@auth/reducer';
 import { STORAGE_KEY } from '@constant/index';
-import { useAppDispatch } from '@store/hook';
+import config from '@store/configReducer';
+import { useAppDispatch, useAppSelector } from '@store/hook';
 import storage from '@util/storage';
+import axios from 'axios';
 import { debounce } from 'lodash';
 import { useEffect } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import { getUniqueId } from 'react-native-device-info';
 
 export const useFirstOpen = () => {
+    const invalidConfig = useAppSelector(state => state.config.invalidPrintBack);
     const { doLogin, doLoginSocial, loginState } = useLogin();
     const dispatch = useAppDispatch();
 
@@ -36,6 +39,18 @@ export const useFirstOpen = () => {
         }
     };
 
+    const fetchAppConfig = async () => {
+        // fetch cấu hình app
+        // có thể fix lại sau này (thêm expire date)
+        if (!invalidConfig) {
+            var res = await axios.get('https://api.printerval.com/option?filters=key=invalid_print_back');
+            if (res.data.status == 'successful' && res.data.result) {
+                var invalid_print_back = res.data.result[0].value;
+                dispatch(config.actions.setInvalidPrintBack(invalid_print_back.split(',')));
+            }
+        }
+    };
+
     useEffect(() => {
         if (loginState !== 'uninitialize') {
             RNBootSplash.hide({ fade: true, duration: 1000 });
@@ -45,5 +60,6 @@ export const useFirstOpen = () => {
     useEffect(() => {
         generateCustomerToken();
         loginPrinterval();
+        fetchAppConfig();
     }, []);
 };

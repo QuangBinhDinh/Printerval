@@ -7,38 +7,14 @@ import { Icon } from '@rneui/base';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { debounce } from 'lodash';
 import he from 'he';
-
-const SAMPLE_TEXT = `You're searching for a one-of-a-kind product Don't Worry I've Had Both My Shots American Flag T-Shirt For belong theme American flag T-Shirts at Printerval:
-Key featuresSolid colors are 100% cotton
-Heather colors are 50% cotton, 50% polyester (Sport Grey is 90% cotton, 10% polyester)
-Antique colors are 60% cotton, 40% polyester`;
-
-interface ProdDescription {
-    result: string;
-    seoDescription: {
-        start: string;
-        end: string;
-        first_part_of_end: string;
-        last_part_of_end: string;
-    };
-    category: {
-        slug: string;
-        name: string;
-        url: string;
-    };
-}
+import { Nullable } from '@type/base';
 
 const MAX_HEIGHT = 700;
 const MIN_HEIGHT = 220;
-const ProductFeature = ({ description }: { description: ProdDescription | null }) => {
+const ProductFeature = ({ description }: { description: Nullable<string> }) => {
     const [isFull, setFull] = useState(false);
     const [maxHeight, setMax] = useState(MAX_HEIGHT);
     const height = useSharedValue(MIN_HEIGHT);
-
-    const desText = useMemo(
-        () => (description?.result ? he.decode(description.result.replace(/<[^>]*>/g, '')).trim() : ''),
-        [description?.result],
-    );
 
     const animatedHeight = useAnimatedStyle(() => ({
         height: height.value,
@@ -54,6 +30,19 @@ const ProductFeature = ({ description }: { description: ProdDescription | null }
         }
     };
 
+    const stripedString = useMemo(() => {
+        if (!description) return '';
+        let noPTags = description.replace(/<p>(.*?)<\/p>/g, '');
+
+        // Remove <a> tags and their contents
+        let noATags = noPTags.replace(/<a(.*?)<\/a>/g, '');
+
+        // Replace <br/> with \n
+        let finalString = noATags.replace(/<br\s*\/?>/g, '');
+
+        return finalString;
+    }, [description]);
+
     return (
         <>
             <Animated.View style={[styles.container, animatedHeight]}>
@@ -63,11 +52,9 @@ const ProductFeature = ({ description }: { description: ProdDescription | null }
                     onContentSizeChange={(w, h) => setMax(h)}
                     showsVerticalScrollIndicator={false}
                 >
-                    <TextSemiBold style={{ fontSize: 20, lineHeight: 24 }}>Product Features</TextSemiBold>
+                    <TextSemiBold style={{ fontSize: 20, lineHeight: 24 }}>Features</TextSemiBold>
 
-                    {/* <TextNormal style={styles.desText}>{description?.seoDescription?.start}</TextNormal> */}
-                    <TextNormal style={styles.desText}>{SAMPLE_TEXT}</TextNormal>
-                    {/* <TextNormal style={styles.desText}>{description?.seoDescription?.end}</TextNormal> */}
+                    <TextNormal style={styles.desText}>{stripedString}</TextNormal>
                 </ScrollView>
                 {!isFull && (
                     <LinearGradient

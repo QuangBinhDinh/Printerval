@@ -10,6 +10,11 @@ export interface Product {
     rating_count: number;
     rating_value: number;
     user: Seller;
+    attributes: {
+        multiple_design: any;
+        double_sided: any;
+        is_custom_design: any;
+    };
 }
 
 export interface Seller {

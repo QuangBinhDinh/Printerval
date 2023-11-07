@@ -8,7 +8,7 @@ import { logger } from './middleware';
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['category'],
+    whitelist: ['category', 'config'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

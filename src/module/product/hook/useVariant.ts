@@ -5,6 +5,7 @@ import { ORDER_SIZE } from '@constant/index';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { ProdVariants, Options, VariantPrice, VariantsTree, ProdDescription, NewVariants } from '@type/product';
+import he from 'he';
 
 /**
  * Hook dùng để lấy thông tin các variant của 1 sp bất kì trên Printerval, kèm theo 1 số thông tin khác
@@ -47,7 +48,7 @@ export const useVariant = (product_id: number, product_name: string, product_sku
     const isReady =
         Object.keys(options).length > 0 && !!productVariant && !!mappings && !!selectedVariant && !!variantPriceField;
 
-    const [description, setDescription] = useState<ProdDescription | null>(null);
+    const [description, setDescription] = useState<string | null>(null);
 
     /**
      * Tìm biến thể trong product variants dựa vào bộ id truyền vào
@@ -324,68 +325,14 @@ export const useVariant = (product_id: number, product_name: string, product_sku
         const fetchDescript = async () => {
             const styleId = trueVariant.find(id => mappings[id].variantName == 'style') ?? '';
             const typeId = trueVariant.find(id => mappings[id].variantName == 'type') ?? '';
-            const colorId = trueVariant.find(id => mappings[id].variantName == 'color') ?? '';
-            const sizeId = trueVariant.find(id => mappings[id].variantName.includes('size')) ?? '';
+            // const colorId = trueVariant.find(id => mappings[id].variantName == 'color') ?? '';
+            // const sizeId = trueVariant.find(id => mappings[id].variantName.includes('size')) ?? '';
             try {
-                const res: any = await axios.get(
-                    `https://printerval.com/module/get-description?product_id=${params?.productId}&type_id=${typeId}&style_id=${styleId}`,
+                const res = await axios.get(
+                    `https://printerval.com/module/get-description?product_id=${product_id}&type_id=${typeId}&style_id=${styleId}`,
                 );
-                //console.log(res);
-                const { status, ...rest } = res;
-                if (status == 'successful' && !isCancelled) {
-                    var descriptRes: ProdDescription = cloneDeep(rest);
-                    let styleName, typeName, colorName, sizeName;
-                    styleName = mappings[styleId]?.name ?? '';
-                    typeName = mappings[typeId]?.name ?? '';
-                    sizeName = mappings[sizeId]?.name ?? '';
-                    colorName = mappings[colorId]?.name ?? '';
-
-                    if (descriptRes?.seoDescription?.start) {
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace(
-                            '{Tag + Category}',
-                            descriptRes.category.name,
-                        );
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace(
-                            '{Name Production}',
-                            product_name,
-                        );
-
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace(
-                            '{Style}',
-                            styleName,
-                        );
-
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace('{Type}', typeName);
-
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace('{Size}', sizeName);
-
-                        descriptRes.seoDescription.start = descriptRes.seoDescription.start.replace(
-                            '{Color}',
-                            colorName,
-                        );
-                    }
-
-                    if (descriptRes?.seoDescription?.end) {
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace(
-                            '{Tag + Category}',
-                            descriptRes.category.name,
-                        );
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace(
-                            '{Name Production}',
-                            product_name,
-                        );
-
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace('{Style}', styleName);
-
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace('{Type}', typeName);
-
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace('{Size}', sizeName);
-
-                        descriptRes.seoDescription.end = descriptRes.seoDescription.end.replace('{Color}', colorName);
-                    }
-                    // console.log(descriptRes);
-                    setDescription(descriptRes);
-                }
+                var descript = res.data?.result ?? '';
+                setDescription(descript);
             } catch (e) {}
         };
         fetchDescript();

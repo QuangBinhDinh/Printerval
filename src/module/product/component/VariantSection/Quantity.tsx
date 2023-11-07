@@ -17,13 +17,13 @@ const Quantity = ({ showPrintBack, isPrintBack, changePrintBack, quantityText, c
         () => (
             <View style={styles.quantityContainer}>
                 <Pressable style={styles.quantityButton}>
-                    <Icon type="entypo" name="minus" size={20} color="#444" />
+                    <Icon type="antdesign" name="minus" size={18} color="#444" />
                 </Pressable>
                 <View style={styles.inputView}>
                     <TextInput style={styles.input} onChange={changeQuantity} value={quantityText} />
                 </View>
                 <Pressable style={styles.quantityButton}>
-                    <Icon type="entypo" name="plus" size={20} color="#444" />
+                    <Icon type="antdesign" name="plus" size={18} color="#444" />
                 </Pressable>
             </View>
         ),
