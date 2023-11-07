@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginRight: 10,
         borderWidth: 1,
-        borderColor: lightColor.grayout,
+        borderColor: lightColor.borderGray,
     },
     selected: {
         borderColor: lightColor.secondary,

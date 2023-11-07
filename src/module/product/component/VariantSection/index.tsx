@@ -1,16 +1,15 @@
 import React, { useState, useMemo, memo } from 'react';
 import { NewVariants, VariantPrice, ProdVariants, Options } from '@type/product';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { TextNormal, TextSemiBold } from '@components/text';
 import ColorView from './ColorView';
 import { formatPrice } from '@util/index';
 import SelectView from './SelectView';
+import { lightColor } from '@styles/color';
 
 interface IProps {
     changeValue: (field: string) => (id: number) => void;
-    showPrintBack: boolean;
-    changePrintBack: (value: any) => void;
     options: Options;
     mappings: NewVariants | null;
     selected: any[] | null;
@@ -20,8 +19,6 @@ interface IProps {
 }
 const VariantSection = ({
     changeValue,
-    showPrintBack,
-    changePrintBack,
     options,
     mappings,
     selected,
@@ -29,7 +26,6 @@ const VariantSection = ({
     detailVariant,
     colIndex,
 }: IProps) => {
-    const [selectedBack, setSelectedBack] = useState(false);
     const curPrice = ` (${formatPrice(detailVariant?.price ?? '')})`; // hiển thị giá biến thể đang được chọn
 
     const fieldList = Object.keys(options);
@@ -76,7 +72,7 @@ const VariantSection = ({
                 if (priceList) {
                     var priceOptions = varDetails.map((i, j) => ({
                         ...i,
-                        name: i.name + ` (${formatPrice(priceList[j])})`,
+                        nameWithPrice: i.name + ` (${formatPrice(priceList[j])})`,
                     }));
                     return (
                         <View key={title} style={{ marginTop: 16 }}>
@@ -144,4 +140,47 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     optionTitle: { fontSize: 15, color: 'black', marginLeft: 18 },
+
+    row2: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 18,
+        marginTop: 24,
+    },
+    printContainer: {
+        height: 40,
+        width: 150,
+        flexDirection: 'row',
+    },
+    optionFront: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6,
+
+        borderColor: lightColor.grayout,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+    },
+    optionBack: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
+
+        borderColor: lightColor.grayout,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
+    },
+    text: {
+        fontSize: 15,
+        marginTop: 2,
+    },
+    textSelected: { color: lightColor.secondary },
 });

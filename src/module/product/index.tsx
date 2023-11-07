@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, NativeScrollEvent, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -26,6 +26,7 @@ import { useAppDispatch, useAppSelector } from '@store/hook';
 import category from '@category/reducer';
 import { useVariant } from './hook/useVariant';
 import VariantSection from './component/VariantSection';
+import Quantity from './component/VariantSection/Quantity';
 
 const DetailProduct = () => {
     const {
@@ -63,6 +64,9 @@ const DetailProduct = () => {
         relateTag,
     } = useFetchOther(variantReady);
 
+    const [quantity, setQuantity] = useState<string>('1');
+    const [printBack, setPrintback] = useState<boolean>(false);
+
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
         //console.log(nativeEvent.contentOffset.y);
@@ -94,13 +98,19 @@ const DetailProduct = () => {
                     <VariantSection
                         detailVariant={detailSelectVar}
                         changeValue={setSelectedTuple}
-                        showPrintBack={false}
-                        //changePrintBack={setPrintback}
                         options={displayOption}
                         selected={selectedVariant}
                         variantPrice={variantPrice}
                         mappings={mappings}
                         colIndex={colIndex}
+                    />
+
+                    <Quantity
+                        showPrintBack={false}
+                        isPrintBack={printBack}
+                        changePrintBack={setPrintback}
+                        quantityText={quantity}
+                        changeQuantity={setQuantity}
                     />
 
                     <ProductFeature description={null} />
