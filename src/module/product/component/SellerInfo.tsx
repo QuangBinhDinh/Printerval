@@ -11,7 +11,7 @@ const SellerInfo = ({ seller }: { seller?: Seller }) => {
     return (
         <View style={styles.container}>
             <View style={[styles.avatar, { backgroundColor: random_bg }]}>
-                <FastImage style={{ width: 60, height: 60 }} source={{ uri: seller?.image_avatar ?? '' }} />
+                <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: seller?.image_avatar ?? '' }} />
             </View>
             <View style={[styles.content]}>
                 <TextSemiBold style={{ fontSize: 15, marginTop: 0 }}>Designed and sold by</TextSemiBold>

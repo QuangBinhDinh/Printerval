@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useState } from 'react';
+import React, { forwardRef, memo, useEffect, useMemo, useState } from 'react';
 import FancyButton from '@components/FancyButton';
 import { TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
@@ -13,6 +13,7 @@ import { AddToCartBody, useAddToCartMutation } from '../../cart/service';
 import { useAppSelector } from '@store/hook';
 import { navigate } from '@navigation/service';
 import { alertSuccess } from '@components/PopupSuccess';
+import { debounce } from 'lodash';
 
 interface IProps {
     detail: Nullable<Product>;
@@ -167,7 +168,7 @@ const AddToCartView = forwardRef<any, IProps>(
             var params: AddToCartBody = {
                 productId: detail?.id ?? '',
                 customerToken: token,
-                customerId: userInfo?.id,
+                customerId,
                 quantity,
             };
             let configObject: { [key: string]: any } = {};
@@ -201,7 +202,39 @@ const AddToCartView = forwardRef<any, IProps>(
             }
         };
 
-        if (!detail && !detailVariant) return null;
+        useEffect(() => {
+            // auto add to cart nếu đã hiện wanring select size trước đó
+            // không auto add to cart nếu sp có custom text
+
+            if (!inputs?.includes(null) && sizeSelected == 'first' && !hasCustomText) {
+                // console.log('AUTO ADD TO CART HERE');
+                setSizeSelected('second');
+                if (!userInfo) {
+                    debounce(
+                        () =>
+                            navigate('Login', {
+                                prevScreen: 'Product',
+                                onLogin: handleAddToCart,
+                            }),
+                        300,
+                    )();
+                } else handleAddToCart({ token, customerId: userInfo.id });
+            }
+        }, [sizeSelected, handleAddToCart, inputs, token, userInfo, hasCustomText]);
+
+        /**
+         * Show thanh add to cart ở dưới khi data sẵn sàng
+         */
+        const visible = useMemo(() => {
+            var isVisible = false;
+            if (!prodNoVariant) {
+                isVisible = !!detail && !!detailVariant;
+            } else {
+                isVisible = !!detail;
+            }
+            return isVisible;
+        }, [detail, detailVariant, prodNoVariant]);
+        if (!visible) return null;
         return (
             <View
                 style={[

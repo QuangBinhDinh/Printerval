@@ -96,7 +96,7 @@ const DetailProduct = () => {
         var sizeOffset = 0;
         var textInputOffset = 0;
         var quantityOffset = 0;
-        if (customConfig?.custom_design_text && customConfig.custom_design_text.length > 0 && !!displayOption) {
+        if (displayOption) {
             var offset = SCREEN_WIDTH + 110;
             for (const key of Object.keys(displayOption)) {
                 offset = offset + 88;
@@ -226,7 +226,7 @@ const DetailProduct = () => {
                 configuration={configuration}
                 printBack={showPrintBack}
                 quantity={quantity}
-                hasCustomText={!!customConfig}
+                hasCustomText={Object.keys(customConfig || {}).length > 0}
                 errors={errors}
                 setError={setError}
                 inputs={selectedVariant}

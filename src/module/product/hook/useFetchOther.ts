@@ -12,7 +12,8 @@ import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 import { useAppSelector } from '@store/hook';
 import { Product } from '@type/common';
-import { DynamicObject } from '@type/base';
+import { DynamicObject, Nullable } from '@type/base';
+import { CustomAttribute } from '@type/product';
 
 export const useFetchOther = (variantReady: boolean) => {
     const {
@@ -61,39 +62,44 @@ export const useFetchOther = (variantReady: boolean) => {
         return pass;
     }, [result, invalidPrintBack]);
 
-    const initialConfig = useMemo(() => {
+    const customConfig = useMemo(() => {
         if (!result?.product) return null;
 
-        let data: DynamicObject = {};
+        let data: Partial<CustomAttribute> = {};
         var custom_design_image = result.product.attributes.custom_design_image;
+        if (custom_design_image) data.custom_design_image = custom_design_image;
+
+        var custom_design_option = result.product.attributes.custom_design_option;
+        if (custom_design_option) data.custom_design_option = custom_design_option;
+
+        var custom_design_text = result.product.attributes.custom_design_text;
+        if (custom_design_text) data.custom_design_text = custom_design_text;
+
+        return data;
+    }, [result]);
+
+    const initialConfig = useMemo(() => {
+        if (!customConfig) return null;
+
+        const { custom_design_image, custom_design_option, custom_design_text } = customConfig;
+        let data: DynamicObject = {};
+
         custom_design_image?.forEach(obj => {
             var imageKey = obj.name;
             data[imageKey] = '';
         });
 
-        var custom_design_option = result.product.attributes.custom_design_option;
         custom_design_option?.forEach(opt => {
             var optKey = opt.title;
             data[optKey] = opt.values[0] || ''; // lấy phần tử đầu tiên option , có thể gây crash !!
         });
 
-        var custom_design_text = result.product.attributes.custom_design_text;
         custom_design_text?.forEach((text: any) => {
             data[text] = '';
         });
 
         return data;
-    }, [result]);
-
-    const customConfig = useMemo(() => {
-        if (!result?.product) return null;
-
-        return {
-            custom_design_image: result.product.attributes.custom_design_image,
-            custom_design_text: result.product.attributes.custom_design_text,
-            custom_design_option: result.product.attributes.custom_design_option,
-        };
-    }, [result]);
+    }, [customConfig]);
 
     useEffect(() => {
         if (result && variantReady) {
