@@ -9,6 +9,7 @@ interface IProps {
     backgroundColor: string;
     onPress: any;
     children: JSX.Element;
+    disabled?: boolean;
 }
 /**
  *  Animated button with scale animation
@@ -16,7 +17,7 @@ interface IProps {
  *  Note: Styling button này không nên để padding
  *  @author binhchili
  */
-const FancyButton = ({ style, backgroundColor, onPress, children }: IProps) => {
+const FancyButton = ({ style, backgroundColor, onPress, children, disabled }: IProps) => {
     const buttonScale = useSharedValue(1);
     const animStyle = useAnimatedStyle(() => ({
         transform: [{ scale: buttonScale.value }],
@@ -35,6 +36,7 @@ const FancyButton = ({ style, backgroundColor, onPress, children }: IProps) => {
             onPressIn={pressIn}
             onPressOut={pressOut}
             underlayColor={backgroundColor}
+            disabled={disabled}
         >
             {children}
         </AnimatedHightlight>

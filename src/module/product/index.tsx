@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Image, NativeScrollEvent, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Image, NativeScrollEvent, ScrollView, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
@@ -9,7 +9,7 @@ import FastImage from 'react-native-fast-image';
 import { cdnImage } from '@util/cdnImage';
 import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
-import { SCREEN_WIDTH } from '@util/index';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@util/index';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { useFetchOther } from './hook/useFetchOther';
 import SellerInfo from './component/SellerInfo';
@@ -27,6 +27,11 @@ import category from '@category/reducer';
 import { useVariant } from './hook/useVariant';
 import VariantSection from './component/VariantSection';
 import Quantity from './component/VariantSection/Quantity';
+import AddToCartView from './component/AddToCartView';
+import { DynamicObject } from '@type/base';
+import CustomizeSection from './component/CustomizeSection';
+import { ErrorField } from '@type/product';
+import EventEmitter from '../../EventEmitter';
 
 const DetailProduct = () => {
     const {
@@ -34,6 +39,8 @@ const DetailProduct = () => {
     } = useRoute<ProductScreenRouteProp>();
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
+    const scrollRef = useRef<KeyboardAwareScrollView>(null);
+
     const prodHistory = useAppSelector(state => state.category.productHistory);
 
     const {
@@ -63,16 +70,55 @@ const DetailProduct = () => {
         alsoLikeProd,
         relateTag,
         showPrintBack,
+        customConfig,
+        initialConfig,
     } = useFetchOther(variantReady);
 
     const [quantity, setQuantity] = useState<string>('1');
     const [printBack, setPrintback] = useState<boolean>(false);
+
+    const [configuration, setConfiguration] = useState<DynamicObject | null>(null);
+    useEffect(() => {
+        if (initialConfig) setConfiguration(initialConfig);
+    }, [initialConfig]);
+
+    const [errors, setError] = useState<ErrorField | null>(null); //Hiển thị lỗi khi user chưa chọn variant require
 
     const scrollY = useSharedValue(0);
     const onScroll = ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
         //console.log(nativeEvent.contentOffset.y);
         scrollY.value = nativeEvent.contentOffset.y;
     };
+    /**
+     * Hàm tính postion của customize input để scroll đến
+     */
+    const calculateOffset = useMemo(() => {
+        var sizeOffset = 0;
+        var textInputOffset = 0;
+        var quantityOffset = 0;
+        if (customConfig?.custom_design_text && customConfig.custom_design_text.length > 0 && !!displayOption) {
+            var offset = SCREEN_WIDTH + 110;
+            for (const key of Object.keys(displayOption)) {
+                offset = offset + 88;
+            }
+            sizeOffset = offset - 300;
+
+            if (customConfig?.custom_design_option) {
+                offset = offset + 88;
+            }
+            if (customConfig?.custom_design_image) {
+                offset = offset + 170 * customConfig.custom_design_image.length;
+            }
+            offset = offset + 72;
+            textInputOffset = offset - 300;
+            quantityOffset = offset + 120 - 300;
+        }
+        return {
+            sizeOffset,
+            textInputOffset,
+            quantityOffset,
+        };
+    }, [customConfig, displayOption, errors]);
 
     useEffect(() => {
         if (detail && variantReady) {
@@ -88,7 +134,14 @@ const DetailProduct = () => {
             <AnimatedHeader title={productName} scrollY={scrollY} />
 
             {!!detail && variantReady ? (
-                <KeyboardAwareScrollView style={{ flex: 1 }} onScroll={onScroll} scrollEventThrottle={6}>
+                <KeyboardAwareScrollView
+                    style={{ flex: 1 }}
+                    onScroll={onScroll}
+                    scrollEventThrottle={6}
+                    ref={scrollRef}
+                    enableOnAndroid
+                    enableResetScrollToCoords={false}
+                >
                     <FastImage
                         style={{ width: '100%', aspectRatio: 1 }}
                         resizeMode="cover"
@@ -104,7 +157,17 @@ const DetailProduct = () => {
                         variantPrice={variantPrice}
                         mappings={mappings}
                         colIndex={colIndex}
+                        errors={errors}
                     />
+
+                    {!!customConfig && !!configuration && (
+                        <CustomizeSection
+                            currentConfig={configuration}
+                            setConfig={setConfiguration}
+                            customConfig={customConfig}
+                            errors={errors}
+                        />
+                    )}
 
                     <Quantity
                         showPrintBack={showPrintBack}
@@ -150,11 +213,26 @@ const DetailProduct = () => {
                     <RelateTag data={relateTag} />
 
                     <ProductRow data={prodHistory.filter(i => i.id != productId)} title="Recently viewed" />
-                    <View style={{ height: 30 }} />
+                    <View style={{ height: 90 }} />
                 </KeyboardAwareScrollView>
             ) : (
                 <LoadingProduct />
             )}
+
+            <AddToCartView
+                ref={scrollRef}
+                detail={detail}
+                detailVariant={detailSelectVar}
+                configuration={configuration}
+                printBack={showPrintBack}
+                quantity={quantity}
+                hasCustomText={!!customConfig}
+                errors={errors}
+                setError={setError}
+                inputs={selectedVariant}
+                offset={calculateOffset}
+                prodNoVariant={prodNoVariant}
+            />
         </View>
     );
 };

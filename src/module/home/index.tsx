@@ -16,10 +16,13 @@ import BlogHome from './component/BlogHome';
 import PopularDesign from './component/PopularDesign';
 import { PrintervalLogo } from '@assets/svg';
 import { usePreventGoBack } from '@navigation/customHook';
+import { useAppSelector } from '@store/hook';
+import ProductRow from '@components/product/ProductRow';
 
 //testing commit
 const HomeScreen = () => {
     const insets = useSafeAreaInsets();
+    const prodHistory = useAppSelector(state => state.category.productHistory);
 
     const { data: banner } = useFetchCategoryBannerQuery();
     const { data: explore } = useFetchExploreProdQuery();
@@ -41,6 +44,7 @@ const HomeScreen = () => {
                 <Guarantee />
                 <ReferFriend />
                 <BlogHome />
+                <ProductRow data={prodHistory} title="Recently viewed" />
                 <View style={{ height: 20 }} />
             </ScrollView>
         </View>

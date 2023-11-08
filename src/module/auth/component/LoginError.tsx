@@ -4,7 +4,7 @@ import { lightColor } from '@styles/color';
 import React, { memo, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
-import EventEmiiter from '../../../EventEmiiter';
+import EventEmitter from '../../../EventEmitter';
 
 const LoginError = () => {
     const [msg, setMsg] = useState('');
@@ -19,9 +19,9 @@ const LoginError = () => {
     };
 
     useEffect(() => {
-        EventEmiiter.addListener('showLoginError', showError);
+        EventEmitter.addListener('showLoginError', showError);
         return () => {
-            EventEmiiter.removeListener('showLoginError', showError);
+            EventEmitter.removeListener('showLoginError', showError);
         };
     }, []);
 
@@ -55,7 +55,7 @@ const LoginError = () => {
 export default memo(LoginError);
 
 export const showLoginError = (err: string) => {
-    EventEmiiter.dispatch('showLoginError', err);
+    EventEmitter.dispatch('showLoginError', err);
 };
 
 const styles = StyleSheet.create({

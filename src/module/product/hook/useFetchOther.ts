@@ -12,6 +12,7 @@ import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 import { useAppSelector } from '@store/hook';
 import { Product } from '@type/common';
+import { DynamicObject } from '@type/base';
 
 export const useFetchOther = (variantReady: boolean) => {
     const {
@@ -60,6 +61,40 @@ export const useFetchOther = (variantReady: boolean) => {
         return pass;
     }, [result, invalidPrintBack]);
 
+    const initialConfig = useMemo(() => {
+        if (!result?.product) return null;
+
+        let data: DynamicObject = {};
+        var custom_design_image = result.product.attributes.custom_design_image;
+        custom_design_image?.forEach(obj => {
+            var imageKey = obj.name;
+            data[imageKey] = '';
+        });
+
+        var custom_design_option = result.product.attributes.custom_design_option;
+        custom_design_option?.forEach(opt => {
+            var optKey = opt.title;
+            data[optKey] = opt.values[0] || ''; // lấy phần tử đầu tiên option , có thể gây crash !!
+        });
+
+        var custom_design_text = result.product.attributes.custom_design_text;
+        custom_design_text?.forEach((text: any) => {
+            data[text] = '';
+        });
+
+        return data;
+    }, [result]);
+
+    const customConfig = useMemo(() => {
+        if (!result?.product) return null;
+
+        return {
+            custom_design_image: result.product.attributes.custom_design_image,
+            custom_design_text: result.product.attributes.custom_design_text,
+            custom_design_option: result.product.attributes.custom_design_option,
+        };
+    }, [result]);
+
     useEffect(() => {
         if (result && variantReady) {
             fetchShipFee({
@@ -97,5 +132,15 @@ export const useFetchOther = (variantReady: boolean) => {
         relateTag: result?.tags,
 
         showPrintBack: showPrintBack,
+
+        /**
+         * Thông tin các field custom + option custom
+         */
+        customConfig,
+
+        /**
+         * Config ban đầu, cũng là data gửi lên khi add to cart
+         */
+        initialConfig,
     };
 };

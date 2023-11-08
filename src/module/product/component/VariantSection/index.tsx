@@ -1,5 +1,5 @@
 import React, { useState, useMemo, memo } from 'react';
-import { NewVariants, VariantPrice, ProdVariants, Options } from '@type/product';
+import { NewVariants, VariantPrice, ProdVariants, Options, ErrorField } from '@type/product';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { TextNormal, TextSemiBold } from '@components/text';
@@ -16,6 +16,7 @@ interface IProps {
     variantPrice: VariantPrice;
     detailVariant: ProdVariants | null;
     colIndex: number;
+    errors: ErrorField | null;
 }
 const VariantSection = ({
     changeValue,
@@ -25,6 +26,7 @@ const VariantSection = ({
     variantPrice,
     detailVariant,
     colIndex,
+    errors,
 }: IProps) => {
     const curPrice = ` (${formatPrice(detailVariant?.price ?? '')})`; // hiển thị giá biến thể đang được chọn
 
@@ -39,6 +41,8 @@ const VariantSection = ({
         var colorId = selected[colIndex];
         return [colorId, ...selected.filter(id => id !== colorId)];
     }, [selected, colIndex]);
+
+    //console.log('Display selected', displaySelected);
 
     return (
         <View style={{ width: '100%', marginTop: 24 }}>
@@ -74,6 +78,7 @@ const VariantSection = ({
                         ...i,
                         nameWithPrice: i.name + ` (${formatPrice(priceList[j])})`,
                     }));
+
                     return (
                         <View key={title} style={{ marginTop: 16 }}>
                             <TextSemiBold style={styles.optionTitle}>{capitalize(title)}</TextSemiBold>
@@ -92,6 +97,9 @@ const VariantSection = ({
                                     />
                                 ))}
                             </ScrollView>
+                            {!displaySelected[index] && errors?.type == 'size' && (
+                                <TextNormal style={styles.errorText}>Please select a size</TextNormal>
+                            )}
                         </View>
                     );
                 }
@@ -183,4 +191,11 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
     textSelected: { color: lightColor.secondary },
+    errorText: {
+        fontSize: 13,
+        color: lightColor.error,
+        marginLeft: 22,
+        marginTop: 8,
+        lineHeight: 15,
+    },
 });

@@ -1,3 +1,5 @@
+import { Nullable } from './base';
+
 export interface ProdVariants {
     id: number;
     is_default: 0 | 1;
@@ -53,4 +55,18 @@ export interface ProdDescription {
         name: string;
         url: string;
     };
+}
+
+export interface CustomAttribute {
+    custom_design_image: Nullable<{ name: string }[]>;
+
+    custom_design_text: Nullable<string[]>;
+
+    custom_design_option: Nullable<{ title: string; values: string[] }[]>;
+}
+
+export interface ErrorField {
+    timestamp: number;
+
+    type: 'custom_text' | 'size' | 'custom_image';
 }

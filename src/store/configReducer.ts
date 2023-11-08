@@ -29,7 +29,6 @@ const config = createSlice({
     reducers: {
         //define cac action
         setInvalidPrintBack: (state, action) => {
-            console.log(action.payload);
             state.invalidPrintBack = action.payload;
         },
         // setNetworkError: (state, action) => {

@@ -24,7 +24,11 @@ interface IProps {
 const SelectView = ({ item, setVariant, input }: IProps) => {
     const selected = input.includes(item.id);
     return (
-        <Pressable style={[styles.container, selected && styles.selected]} onPress={() => setVariant(item.id)}>
+        <Pressable
+            style={[styles.container, selected && styles.selected]}
+            onPress={() => setVariant(item.id)}
+            hitSlop={8}
+        >
             <TextNormal style={[styles.text, selected && styles.textSelected]}>{item.name}</TextNormal>
         </Pressable>
     );

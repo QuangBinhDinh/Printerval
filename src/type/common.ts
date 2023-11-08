@@ -1,3 +1,5 @@
+import { Nullable } from './base';
+
 export interface Product {
     id: number;
     sku: string;
@@ -14,6 +16,21 @@ export interface Product {
         multiple_design: any;
         double_sided: any;
         is_custom_design: any;
+
+        /**
+         * Input nhập ảnh custom
+         */
+        custom_design_image: Nullable<{ name: string }[]>;
+
+        /**
+         * Input nhập text option
+         */
+        custom_design_text: Nullable<string[]>;
+
+        /**
+         * Option chọn design
+         */
+        custom_design_option: Nullable<{ title: string; values: string[] }[]>;
     };
 }
 
@@ -45,6 +62,7 @@ export interface User {
     image_url: string;
     email: string;
     api_token: string;
+    customerId: string;
     token: string;
     gender: string;
     status: string;

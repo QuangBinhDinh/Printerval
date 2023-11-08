@@ -37,7 +37,7 @@ const EnterNewPass = () => {
         validationSchema,
         onSubmit: input => {
             Keyboard.dismiss();
-            console.log(input);
+            //console.log(input);
         },
         validateOnChange: false,
         validateOnBlur: false,

@@ -43,6 +43,7 @@ const ProductFeature = ({ description }: { description: Nullable<string> }) => {
         return finalString;
     }, [description]);
 
+    if (!stripedString.trim()) return null;
     return (
         <>
             <Animated.View style={[styles.container, animatedHeight]}>

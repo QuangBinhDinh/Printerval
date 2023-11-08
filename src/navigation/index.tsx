@@ -23,6 +23,7 @@ import ForgotPass from '@auth/ForgotPass';
 import EnterNewPass from '@auth/EnterNewPass';
 import LoginError from '@auth/component/LoginError';
 import DetailProduct from '@product/index';
+import PopupSuccess from '@components/PopupSuccess';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -66,7 +67,7 @@ const Router = () => {
         <NavigationContainer ref={navigationRef} onReady={onNavigationReady} onStateChange={onNavigationStateChange}>
             <StatusBar barStyle={barColor} translucent backgroundColor={'transparent'} />
             <LoginError />
-
+            <PopupSuccess />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

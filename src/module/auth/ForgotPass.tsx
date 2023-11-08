@@ -32,7 +32,7 @@ const ForgotPass = () => {
         validationSchema,
         onSubmit: input => {
             Keyboard.dismiss();
-            console.log(input);
+            // console.log(input);
             navigate('EnterNewPass');
         },
         validateOnChange: false,

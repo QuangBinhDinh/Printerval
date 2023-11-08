@@ -17,6 +17,7 @@ import AppleIcon from './apple.svg';
 import ShareIcon from './share.svg';
 import ExchangeLogo from './exchange.svg';
 import ReportFlag from './report.svg';
+import SuccessIcon from './success.svg';
 
 export {
     User,
@@ -38,4 +39,5 @@ export {
     ShareIcon,
     ExchangeLogo,
     ReportFlag,
+    SuccessIcon,
 };

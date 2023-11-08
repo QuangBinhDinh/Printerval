@@ -17,7 +17,7 @@ export const useScrollReachEnd = () => {
     ) => {
         const endOfScroll = layoutMeasurement.height + contentOffset.y >= contentSize.height - THRESHOLD;
         if (endOfScroll && !reachEnd) {
-            console.log('End reached');
+            // console.log('End reached');
             callback();
             setEnd(true);
         } else if (!endOfScroll) {
