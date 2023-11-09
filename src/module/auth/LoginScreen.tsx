@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { ImageBackground, Keyboard, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { appleLogin, facebookLogin, googleLogin } from './loginSocial';
+import { ImageBackground, Keyboard, Platform, Pressable, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@rneui/base';
@@ -14,8 +13,6 @@ import { SCREEN_HEIGHT } from '@util/index';
 import { AppleIcon, GoogleIcon } from '@svg/index';
 import { useLogin } from './hook/useLogin';
 import LoadingSpinner from '@components/loading/LoadingSpinner';
-import { useRoute } from '@react-navigation/native';
-import { LoginScreenRouteProp } from '@navigation/navigationRoute';
 
 const RATIO = SCREEN_HEIGHT / 810;
 const initialValues = {

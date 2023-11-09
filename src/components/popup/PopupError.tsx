@@ -1,12 +1,12 @@
 import React, { memo, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-import EventEmitter from '../EventEmitter';
+import EventEmitter from '../../EventEmitter';
 import { StyleSheet, View } from 'react-native';
-import { TextNormal, TextSemiBold } from './text';
+import { TextNormal, TextSemiBold } from '../text';
 import { lightColor } from '@styles/color';
-import { SuccessIcon } from '@assets/svg';
+import { Icon } from '@rneui/base';
 
-const EVENT_NAME = 'open_pop_up_success';
+const EVENT_NAME = 'open_pop_up_error';
 const PopupSuccess = () => {
     const [visible, setVisible] = useState(false);
     const [title, setTitle] = useState('Some text here');
@@ -39,8 +39,14 @@ const PopupSuccess = () => {
             }}
         >
             <View style={styles.container}>
-                <SuccessIcon width={40} height={40} style={{ marginTop: 38 }} />
-                <TextSemiBold style={styles.title}>Success!</TextSemiBold>
+                <Icon
+                    type="material-icon"
+                    name="error-outline"
+                    size={40}
+                    color={lightColor.secondary}
+                    style={{ marginTop: 38 }}
+                />
+                <TextSemiBold style={styles.title}>Error!</TextSemiBold>
                 <TextNormal style={styles.content}>{title}</TextNormal>
             </View>
         </Modal>
@@ -49,7 +55,7 @@ const PopupSuccess = () => {
 
 export default memo(PopupSuccess);
 
-export const alertSuccess = (content: string) => {
+export const alertError = (content: string) => {
     EventEmitter.dispatch(EVENT_NAME, content);
 };
 

@@ -23,8 +23,11 @@ import ForgotPass from '@auth/ForgotPass';
 import EnterNewPass from '@auth/EnterNewPass';
 import LoginError from '@auth/component/LoginError';
 import DetailProduct from '@product/index';
-import PopupSuccess from '@components/PopupSuccess';
+import PopupSuccess from '@components/popup/PopupSuccess';
 import StyleGuide from '@product/screen/StyleGuide';
+import CreateReview from '@product/screen/CreateReview';
+import PopupError from '@components/popup/PopupError';
+import AllReview from '@product/screen/AllReview';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -69,6 +72,7 @@ const Router = () => {
             <StatusBar barStyle={barColor} translucent backgroundColor={'transparent'} />
             <LoginError />
             <PopupSuccess />
+            <PopupError />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
@@ -101,6 +105,8 @@ const Router = () => {
 
                 <Stack.Screen name="DetailProduct" component={DetailProduct} />
                 <Stack.Screen name="StyleGuide" component={StyleGuide} />
+                <Stack.Screen name="CreateReview" component={CreateReview} />
+                <Stack.Screen name="AllReview" component={AllReview} />
             </Stack.Navigator>
         </NavigationContainer>
     );

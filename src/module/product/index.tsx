@@ -135,7 +135,7 @@ const DetailProduct = () => {
     }, [customConfig, displayOption, errors]);
 
     useEffect(() => {
-        if (detail && variantReady) {
+        if (detail) {
             // lưu lại lịch sử sp đã xem
             //chỉ lưu 1 số thông tin cơ bản (tránh dung lượng cache cao)
             var { id, name, image_url, display_high_price, display_price } = detail;

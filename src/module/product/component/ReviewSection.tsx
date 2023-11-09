@@ -7,7 +7,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon } from '@rneui/base';
 import FastImage from 'react-native-fast-image';
 import { RANDOM_IMAGE_URL } from '@constant/index';
-import { normalizeDateTime, timeBefore } from '@util/index';
+import { timeBefore } from '@util/index';
+import { navigate } from '@navigation/service';
+import ReviewCard from './ReviewCard';
+import { useRoute } from '@react-navigation/native';
+import { ProductScreenRouteProp } from '@navigation/navigationRoute';
 
 interface IProps {
     product?: Product;
@@ -16,7 +20,6 @@ interface IProps {
     meta?: ResponseMeta;
 }
 const ReviewSection = ({ product, dashboard, reviews, meta }: IProps) => {
-    console;
     if (!dashboard) return null;
     return (
         <View style={styles.container}>
@@ -52,9 +55,16 @@ const ReviewSection = ({ product, dashboard, reviews, meta }: IProps) => {
 export default memo(ReviewSection);
 
 const ReviewList = memo(({ reviews, meta }: { reviews: ProductReview[]; meta: ResponseMeta }) => {
-    const seeAll = () => {};
+    const {
+        params: { productId, productName },
+    } = useRoute<ProductScreenRouteProp>();
+    const seeAll = () => {
+        navigate('AllReview', { productId, productName });
+    };
 
-    const writeReview = () => {};
+    const writeReview = () => {
+        navigate('CreateReview', { product_id: productId });
+    };
     return (
         <View style={{ marginTop: 30 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -73,23 +83,7 @@ const ReviewList = memo(({ reviews, meta }: { reviews: ProductReview[]; meta: Re
             </View>
 
             {reviews.map(item => (
-                <View style={styles.reviewItem} key={item.id}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <FastImage style={styles.reviewAvatar} source={{ uri: RANDOM_IMAGE_URL }} />
-                            <View style={{ height: 40, marginLeft: 10, justifyContent: 'space-around' }}>
-                                <TextNormal>{item.full_name.trim()}</TextNormal>
-                                <StarRating width={84} rating={item.rating} />
-                            </View>
-                        </View>
-
-                        <TextNormal style={{ fontSize: 13, color: '#999' }}>{timeBefore(item.created_at)}</TextNormal>
-                    </View>
-
-                    <TextNormal style={{ marginTop: 16, lineHeight: 20 }} numberOfLines={3}>
-                        {item.content}
-                    </TextNormal>
-                </View>
+                <ReviewCard item={item} key={item.id} />
             ))}
         </View>
     );

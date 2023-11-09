@@ -26,3 +26,20 @@ export interface ShippingInfo {
         name_shipping: string;
     };
 }
+
+export interface ProductReviewArgs {
+    content: string;
+    email: string;
+    full_name: string;
+    rating: string | number;
+    status: string;
+    /**
+     * Id sản phẩm
+     */
+    target_id: number;
+    title: string;
+    /**
+     * List url ảnh
+     */
+    images?: string;
+}

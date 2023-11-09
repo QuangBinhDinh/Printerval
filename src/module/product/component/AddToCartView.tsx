@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AddToCartBody, useAddToCartMutation } from '../../cart/service';
 import { useAppSelector } from '@store/hook';
 import { navigate } from '@navigation/service';
-import { alertSuccess } from '@components/PopupSuccess';
+import { alertSuccess } from '@components/popup/PopupSuccess';
 import { debounce } from 'lodash';
 
 interface IProps {

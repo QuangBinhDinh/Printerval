@@ -1,6 +1,8 @@
 import { api, domainApi } from '@api/service';
 import { Product, ProductReview, ResponseMeta } from '@type/common';
-import { ProdInfoResponse, ShippingInfo, ProdShippingArgs } from './type';
+import { ProdInfoResponse, ShippingInfo, ProdShippingArgs, ProductReviewArgs } from './type';
+import qs from 'query-string';
+import { isEqual } from 'lodash';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -27,6 +29,21 @@ const extendedApi = api.injectEndpoints({
                     args,
                 );
                 return { url: `comment`, params: newArgs };
+            },
+            serializeQueryArgs: ({ queryArgs }) => {
+                const { targetId, pageSize, dt } = queryArgs;
+                return `fetchProductReview${qs.stringify({ targetId, pageSize, dt })}`;
+            },
+            merge: (curCache, newData) => {
+                // chỉ merge data trả về khi load more (page_id >=1)
+                if (newData.result?.length > 0) {
+                    var merged = curCache.result.concat(newData.result);
+                    curCache.result = merged;
+                    curCache.meta = newData.meta;
+                }
+            },
+            forceRefetch({ currentArg, previousArg }) {
+                return !isEqual(currentArg, previousArg);
             },
         }),
 
@@ -76,12 +93,17 @@ const extendedDomain = domainApi.injectEndpoints({
         >({
             query: args => ({ url: 'module/get-style-info', params: args }),
         }),
+
+        postProductReview: build.mutation<{ status: string }, ProductReviewArgs>({
+            query: body => ({ url: 'reviews/store-comments', method: 'post', body: { comments: [body] } }),
+        }),
     }),
 });
 
 export const {
     useFetchProductInfoQuery,
     useLazyFetchProductReviewQuery,
+    useFetchProductReviewQuery,
     useLazyFetchProductStarQuery,
     useLazyFetchAlsoLikeQuery,
 } = extendedApi;
@@ -91,4 +113,5 @@ export const {
     useLazyFetchDesignAvailableQuery,
     useLazyFetchProductShippingQuery,
     useFetchStyleGuideQuery,
+    usePostProductReviewMutation,
 } = extendedDomain;

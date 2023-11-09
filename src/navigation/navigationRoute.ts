@@ -34,6 +34,9 @@ type RootStackParams = {
         style_id: number;
         type_id: number;
     };
+    CreateReview: {
+        product_id: number;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -42,3 +45,4 @@ export type FilterScreenRouteProp = RouteProp<RootStackParams, 'FilterScreen'>;
 export type ProductScreenRouteProp = RouteProp<RootStackParams, 'ProductScreen'>;
 export type LoginScreenRouteProp = RouteProp<RootStackParams, 'LoginScreen'>;
 export type StyleGuideRouteProp = RouteProp<RootStackParams, 'StyleGuide'>;
+export type CreateReviewRouteProp = RouteProp<RootStackParams, 'CreateReview'>;
