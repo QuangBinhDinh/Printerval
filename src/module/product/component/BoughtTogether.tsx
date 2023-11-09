@@ -11,9 +11,11 @@ import FastImage from 'react-native-fast-image';
 import { SCREEN_WIDTH, formatPrice } from '@util/index';
 import { sumBy } from 'lodash';
 import FancyButton from '@components/FancyButton';
+import { useAddToCartMutation } from '../../cart/service';
 
 const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?: Product }) => {
     const [selected, setSelected] = useState<number[]>([]);
+    const [pushCart] = useAddToCartMutation();
 
     useEffect(() => {
         if (data) setSelected(data.map(i => i.id));
@@ -26,7 +28,9 @@ const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?:
         });
     }, []);
 
-    const addAllToCart = () => {};
+    const addAllToCart = async () => {
+        console.log(selected);
+    };
 
     if (!data || data.length == 0) return null;
     return (
@@ -51,7 +55,7 @@ const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?:
                 </TextNormal>
 
                 <FancyButton style={styles.addButton} backgroundColor={lightColor.secondary} onPress={addAllToCart}>
-                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Add add to cart</TextSemiBold>
+                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Add all to cart</TextSemiBold>
                 </FancyButton>
             </View>
         </View>
@@ -61,7 +65,7 @@ const BoughtTogether = ({ data, currentProd }: { data?: Product[]; currentProd?:
 export default memo(BoughtTogether);
 
 interface ItemProps {
-    item?: Product;
+    item: Product;
 
     disable?: boolean;
 

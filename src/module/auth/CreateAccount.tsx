@@ -53,8 +53,8 @@ const CreateAccount = () => {
                 password_confirmation: input.confirmPass,
             });
         },
-        validateOnChange: false,
-        validateOnBlur: false,
+        // validateOnChange: false,
+        // validateOnBlur: false,
     });
     useEffect(() => {
         if (loginState == 'success') {

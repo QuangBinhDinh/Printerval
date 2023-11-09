@@ -78,7 +78,7 @@ const ReviewList = memo(({ reviews, meta }: { reviews: ProductReview[]; meta: Re
                         <View style={{ flexDirection: 'row' }}>
                             <FastImage style={styles.reviewAvatar} source={{ uri: RANDOM_IMAGE_URL }} />
                             <View style={{ height: 40, marginLeft: 10, justifyContent: 'space-around' }}>
-                                <TextNormal>{item.full_name}</TextNormal>
+                                <TextNormal>{item.full_name.trim()}</TextNormal>
                                 <StarRating width={84} rating={item.rating} />
                             </View>
                         </View>

@@ -36,6 +36,7 @@ import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import { QueryStatus } from '@reduxjs/toolkit/query';
+import { api } from '@api/service';
 
 const addCartQuerySelector = createSelector(
     (state: RootState) => state.api.mutations,
