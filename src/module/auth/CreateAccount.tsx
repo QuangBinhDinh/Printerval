@@ -12,7 +12,7 @@ import { lightColor } from '@styles/color';
 import FancyButton from '@components/FancyButton';
 import { SCREEN_HEIGHT } from '@util/index';
 import { AppleIcon, GoogleIcon } from '@svg/index';
-import { useLogin } from './component/useLogin';
+import { useLogin } from './hook/useLogin';
 import LoadingSpinner from '@components/loading/LoadingSpinner';
 
 const RATIO = SCREEN_HEIGHT / 810;

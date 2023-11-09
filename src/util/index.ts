@@ -2,6 +2,7 @@ import { pastel } from '@styles/color';
 import { cloneDeep, isNumber } from 'lodash';
 import { Dimensions } from 'react-native';
 import moment from 'moment';
+import Store from '@store/store';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 /**
@@ -84,6 +85,16 @@ const timeBefore = (created_time: string) => {
     else if (mins > 60 * 24 * 31 * 12) format = Math.floor(duration.asYears()) + ' years ago';
     return format;
 };
+
+/**
+ * Lấy query status của 1 query bất kì
+ * @note Có thể ảnh hưởng tới performance nếu sử dụng nhiều
+ */
+const getQueryStatusByName = (queryName: string) => {
+    const mutationState = Store.getState().api.mutations;
+    return Object.values(mutationState).find(query => query?.endpointName == queryName)?.status;
+};
+
 export {
     SCREEN_HEIGHT,
     SCREEN_WIDTH,

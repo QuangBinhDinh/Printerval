@@ -5,13 +5,12 @@ import { lightColor } from '@styles/color';
 import { DESIGN_RATIO } from '@util/index';
 import React from 'react';
 import { Image, Pressable, StyleSheet, View, InteractionManager } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import UserHeader from './UserHeader';
 import { navigate } from '@navigation/service';
 import auth from '@auth/reducer';
 import FastImage from 'react-native-fast-image';
 import storage from '@util/storage';
 import { STORAGE_KEY } from '@constant/index';
+import { getUniqueId } from 'react-native-device-info';
 
 const UserLogged = () => {
     const userInfo = useAppSelector(state => state.auth.userInfo);
@@ -19,10 +18,14 @@ const UserLogged = () => {
 
     const toLogout = () => {
         navigate('LoginScreen');
-        InteractionManager.runAfterInteractions(() => {
+        InteractionManager.runAfterInteractions(async () => {
             dispatch(auth.actions.logout());
+            const id = await getUniqueId();
+            dispatch(auth.actions.setCustomerToken(`${id}-${Date.now()}`));
+
             storage.save(STORAGE_KEY.AUTH_DATA, null);
             storage.save(STORAGE_KEY.AUTH_SOCIAL_DATA, null);
+            storage.save(STORAGE_KEY.CUSTOMER_TOKEN, null);
         });
     };
     return (

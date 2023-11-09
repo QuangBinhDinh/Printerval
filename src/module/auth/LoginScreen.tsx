@@ -12,8 +12,10 @@ import InputDark from './component/InputDark';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
 import { AppleIcon, GoogleIcon } from '@svg/index';
-import { useLogin } from './component/useLogin';
+import { useLogin } from './hook/useLogin';
 import LoadingSpinner from '@components/loading/LoadingSpinner';
+import { useRoute } from '@react-navigation/native';
+import { LoginScreenRouteProp } from '@navigation/navigationRoute';
 
 const RATIO = SCREEN_HEIGHT / 810;
 const initialValues = {
@@ -48,7 +50,7 @@ const LoginScreen = () => {
 
     useEffect(() => {
         if (loginState == 'success') {
-            navigate('HomeScreen');
+            // navigate('HomeScreen');
             resetForm();
         } else if (loginState == 'fail') {
             resetForm();

@@ -40,11 +40,12 @@ const auth = createSlice({
         setLogging: (state, action) => {
             state.logging = action.payload;
         },
-        setNewUser: (state, action: PayloadAction<{ user: User; accessToken: string }>) => {
+        setNewUser: (state, action: PayloadAction<{ user: User; accessToken: string; token?: string }>) => {
             state.accessToken = action.payload.accessToken;
             state.userInfo = action.payload.user;
             state.logged = true;
             state.logging = false;
+            if (action.payload.token) state.token = action.payload.token;
         },
         logout: () => initialState,
     },

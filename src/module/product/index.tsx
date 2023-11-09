@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Image, NativeScrollEvent, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Image, NativeScrollEvent, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
@@ -9,7 +9,7 @@ import FastImage from 'react-native-fast-image';
 import { cdnImage } from '@util/cdnImage';
 import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@util/index';
+import { SCREEN_WIDTH } from '@util/index';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { useFetchOther } from './hook/useFetchOther';
 import SellerInfo from './component/SellerInfo';
@@ -31,9 +31,22 @@ import AddToCartView from './component/AddToCartView';
 import { DynamicObject } from '@type/base';
 import CustomizeSection from './component/CustomizeSection';
 import { ErrorField } from '@type/product';
-import EventEmitter from '../../EventEmitter';
+import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '@store/store';
+import { useSelector } from 'react-redux';
+import InvisibleLoad from '@components/loading/InvisibleLoad';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 
+const addCartQuerySelector = createSelector(
+    (state: RootState) => state.api.mutations,
+    post => {
+        var addToCart = Object.values(post).find(query => query?.endpointName == 'addToCart');
+        return addToCart?.status || 'unknown';
+    },
+);
 const DetailProduct = () => {
+    const addingToCart = useSelector(addCartQuerySelector);
+
     const {
         params: { productId, productName },
     } = useRoute<ProductScreenRouteProp>();
@@ -131,6 +144,7 @@ const DetailProduct = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 6 + insets.top / 1.5 }}>
+            <InvisibleLoad visible={addingToCart == QueryStatus.pending} />
             <AnimatedHeader title={productName} scrollY={scrollY} />
 
             {!!detail && variantReady ? (

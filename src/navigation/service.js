@@ -21,10 +21,16 @@ const pushNavigate = (name, params, key) => {
     }
 };
 
+const pop = (numberPop = 1) => {
+    if (navigationRef.isReady) {
+        navigationRef.dispatch(StackActions.pop(numberPop));
+    }
+};
+
 const goBack = () => {
     if (navigationRef.isReady()) {
         navigationRef.goBack();
     }
 };
 
-export { navigationRef, navigate, goBack, replace, pushNavigate };
+export { navigationRef, navigate, goBack, replace, pushNavigate, pop };

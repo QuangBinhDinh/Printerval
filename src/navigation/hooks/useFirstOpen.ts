@@ -1,4 +1,5 @@
-import { useLogin } from '@auth/component/useLogin';
+import { useLogin } from '@auth/hook/useLogin';
+import { useLoginFirstOpen } from '@auth/hook/useLoginFirstOpen';
 import auth from '@auth/reducer';
 import { STORAGE_KEY } from '@constant/index';
 import config from '@store/configReducer';
@@ -12,20 +13,22 @@ import { getUniqueId } from 'react-native-device-info';
 
 export const useFirstOpen = () => {
     const invalidConfig = useAppSelector(state => state.config.invalidPrintBack);
-    const { doLogin, doLoginSocial, loginState } = useLogin();
+    const { doLogin, doLoginSocial, loginState } = useLoginFirstOpen();
     const dispatch = useAppDispatch();
 
-    const generateCustomerToken = async () => {
+    const loginAsGuest = async () => {
         var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
-        if (token) {
-            dispatch(auth.actions.setCustomerToken(token));
-        } else {
-            var did = await getUniqueId();
-            dispatch(auth.actions.setCustomerToken(`${did}-${Date.now()}`));
+        if (!token) {
+            const did = await getUniqueId();
+            token = `${did}-${Date.now()}`;
         }
+        storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
+        dispatch(auth.actions.setCustomerToken(token));
     };
 
     const loginPrinterval = async () => {
+        //Lấy username/password nếu có từ storage để login
+        //không có thì gen token để login = guest
         var socialData = await storage.get(STORAGE_KEY.AUTH_SOCIAL_DATA);
         if (socialData) {
             doLoginSocial(socialData);
@@ -34,6 +37,7 @@ export const useFirstOpen = () => {
             if (emailData) {
                 doLogin(emailData);
             } else {
+                await loginAsGuest();
                 RNBootSplash.hide({ fade: true, duration: 1000 });
             }
         }
@@ -58,7 +62,6 @@ export const useFirstOpen = () => {
     }, [loginState]);
 
     useEffect(() => {
-        generateCustomerToken();
         loginPrinterval();
         fetchAppConfig();
     }, []);

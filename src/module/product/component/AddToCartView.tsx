@@ -93,7 +93,7 @@ const AddToCartView = forwardRef<any, IProps>(
             } else {
                 //phải login mới addToCart
                 if (!userInfo) {
-                    navigate('LoginScreen', { prevScreen: 'Product', onLogin: '' });
+                    navigate('LoginScreen', { prevScreen: 'Product', onLogin: handleAddToCart });
                 } else handleAddToCart({ token, customerId: userInfo.id });
             }
         };
@@ -160,7 +160,7 @@ const AddToCartView = forwardRef<any, IProps>(
                 ref?.current?.scrollToPosition(0, offset.textInputOffset);
             } else {
                 if (!userInfo) {
-                    navigate('LoginScreen', { prevScreen: 'Product', onLogin: '' });
+                    navigate('LoginScreen', { prevScreen: 'Product', onLogin: handleAddNoVariant });
                 } else handleAddNoVariant({ token, customerId: userInfo.id });
             }
         };
@@ -204,21 +204,11 @@ const AddToCartView = forwardRef<any, IProps>(
 
         useEffect(() => {
             // auto add to cart nếu đã hiện wanring select size trước đó
-            // không auto add to cart nếu sp có custom text
-
-            if (!inputs?.includes(null) && sizeSelected == 'first' && !hasCustomText) {
+            // không auto add to cart nếu sp có custom text hay chưa login
+            if (!inputs?.includes(null) && sizeSelected == 'first' && !hasCustomText && !!userInfo) {
                 // console.log('AUTO ADD TO CART HERE');
                 setSizeSelected('second');
-                if (!userInfo) {
-                    debounce(
-                        () =>
-                            navigate('Login', {
-                                prevScreen: 'Product',
-                                onLogin: handleAddToCart,
-                            }),
-                        300,
-                    )();
-                } else handleAddToCart({ token, customerId: userInfo.id });
+                handleAddToCart({ token, customerId: userInfo.id });
             }
         }, [sizeSelected, handleAddToCart, inputs, token, userInfo, hasCustomText]);
 

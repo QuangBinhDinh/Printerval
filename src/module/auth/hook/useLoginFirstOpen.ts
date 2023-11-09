@@ -1,28 +1,34 @@
 import auth from '@auth/reducer';
-import {
-    LoginArgs,
-    LoginSocialArgs,
-    RegisterArgs,
-    useCreateAccountMutation,
-    usePostLoginMutation,
-    usePostLoginSocialMutation,
-} from '@auth/service';
+import { LoginArgs, LoginSocialArgs, usePostLoginMutation, usePostLoginSocialMutation } from '@auth/service';
 import { useAppDispatch } from '@store/hook';
-import React, { useState } from 'react';
-import { getDeviceId, getUniqueId } from 'react-native-device-info';
+import { useState } from 'react';
+import { getUniqueId } from 'react-native-device-info';
 import { googleLogin, facebookLogin, appleLogin } from '@auth/loginSocial';
-import { showLoginError } from './LoginError';
+import { showLoginError } from '../component/LoginError';
 import storage from '@util/storage';
 import { STORAGE_KEY } from '@constant/index';
 
-export const useLogin = () => {
+// dùng khi mới mở app
+export const useLoginFirstOpen = () => {
     const dispatch = useAppDispatch();
+
     const [loginState, setState] = useState<'uninitialize' | 'success' | 'fail'>('uninitialize');
     const [loading, setLoading] = useState(false);
 
     const [loginAccount] = usePostLoginMutation();
     const [loginSocial] = usePostLoginSocialMutation();
-    const [createAccount] = useCreateAccountMutation();
+
+    const handleSuccess = async (newUser: any) => {
+        setState('success');
+        var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
+        // không nhất thiết phải gen token mới (giữ phiên)
+        if (!token) {
+            const id = await getUniqueId();
+            token = id + '-' + Date.now();
+        }
+        storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
+        dispatch(auth.actions.setNewUser({ ...newUser, token }));
+    };
 
     const doLogin = async ({ email, password }: { email: string; password: string }) => {
         setState('uninitialize');
@@ -37,9 +43,8 @@ export const useLogin = () => {
         try {
             const { access_token, customer } = await loginAccount(dataSend).unwrap();
             if (access_token) {
-                setState('success');
                 storage.save(STORAGE_KEY.AUTH_DATA, dataSend);
-                dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
+                handleSuccess({ user: customer, accessToken: access_token });
             }
         } catch (e: any) {
             console.log('Error happened', e);
@@ -93,9 +98,8 @@ export const useLogin = () => {
             try {
                 var { access_token, customer, message } = await loginSocial(dataSend).unwrap();
                 if (access_token) {
-                    setState('success');
                     storage.save(STORAGE_KEY.AUTH_SOCIAL_DATA, dataSend);
-                    dispatch(auth.actions.setNewUser({ user: customer, accessToken: access_token }));
+                    handleSuccess({ user: customer, accessToken: access_token });
                 } else {
                     console.log('login error', message);
                 }
@@ -112,24 +116,5 @@ export const useLogin = () => {
         }
     };
 
-    const register = async (dataSend: RegisterArgs) => {
-        try {
-            setState('uninitialize');
-            setLoading(true);
-            const res = await createAccount(dataSend).unwrap();
-
-            await doLogin({
-                email: dataSend.email,
-                password: dataSend.password,
-            });
-        } catch (e: any) {
-            setState('fail');
-            var err_msg = e.message?.email[0] ?? JSON.stringify(e);
-            showLoginError(err_msg.slice(0, 100));
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return { doLogin, doLoginSocial, register, loginState, loading };
+    return { doLogin, doLoginSocial, loginState, loading };
 };
