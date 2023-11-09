@@ -3,6 +3,7 @@ import { cloneDeep, isNumber } from 'lodash';
 import { Dimensions } from 'react-native';
 import moment from 'moment';
 import Store from '@store/store';
+import { Stringifiable } from 'query-string';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 /**
@@ -95,6 +96,24 @@ const getQueryStatusByName = (queryName: string) => {
     return Object.values(mutationState).find(query => query?.endpointName == queryName)?.status;
 };
 
+/**
+ * Xoá toàn bộ HTML tag khỏi string
+ * @param description
+ * @returns
+ */
+const stripHTMLTags = (description: string | null | undefined) => {
+    if (!description) return '';
+    let noPTags = description.replace(/<\/?[^>]+(>|$)/g, '');
+
+    // Remove <a> tags and their contents
+    let noATags = noPTags.replace(/<a(.*?)<\/a>/g, '');
+
+    // Replace <br/> with \n
+    let finalString = noATags.replace(/<br\s*\/?>/g, '');
+
+    return finalString;
+};
+
 export {
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
@@ -105,4 +124,5 @@ export {
     formatPrice,
     timeBefore,
     normalizeDateTime,
+    stripHTMLTags,
 };

@@ -24,6 +24,7 @@ import EnterNewPass from '@auth/EnterNewPass';
 import LoginError from '@auth/component/LoginError';
 import DetailProduct from '@product/index';
 import PopupSuccess from '@components/PopupSuccess';
+import StyleGuide from '@product/screen/StyleGuide';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -99,6 +100,7 @@ const Router = () => {
                 <Stack.Screen name="EnterNewPass" component={EnterNewPass} />
 
                 <Stack.Screen name="DetailProduct" component={DetailProduct} />
+                <Stack.Screen name="StyleGuide" component={StyleGuide} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -70,6 +70,12 @@ const extendedDomain = domainApi.injectEndpoints({
         fetchDesignAvailable: build.query<{ status: string; result: Product[] }, number>({
             query: product_id => ({ url: `pod/also-available/find?product_id=${product_id}&dt=${Date.now()}` }),
         }),
+        fetchStyleGuide: build.query<
+            { status: string; result: string },
+            { product_id: number; style_id: number; type_id: number }
+        >({
+            query: args => ({ url: 'module/get-style-info', params: args }),
+        }),
     }),
 });
 
@@ -80,5 +86,9 @@ export const {
     useLazyFetchAlsoLikeQuery,
 } = extendedApi;
 
-export const { useLazyFetchBoughtTogetherQuery, useLazyFetchDesignAvailableQuery, useLazyFetchProductShippingQuery } =
-    extendedDomain;
+export const {
+    useLazyFetchBoughtTogetherQuery,
+    useLazyFetchDesignAvailableQuery,
+    useLazyFetchProductShippingQuery,
+    useFetchStyleGuideQuery,
+} = extendedDomain;

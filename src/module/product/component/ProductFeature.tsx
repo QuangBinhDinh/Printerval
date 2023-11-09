@@ -8,6 +8,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { debounce } from 'lodash';
 import he from 'he';
 import { Nullable } from '@type/base';
+import { stripHTMLTags } from '@util/index';
 
 const MAX_HEIGHT = 700;
 const MIN_HEIGHT = 220;
@@ -30,18 +31,7 @@ const ProductFeature = ({ description }: { description: Nullable<string> }) => {
         }
     };
 
-    const stripedString = useMemo(() => {
-        if (!description) return '';
-        let noPTags = description.replace(/<p>(.*?)<\/p>/g, '');
-
-        // Remove <a> tags and their contents
-        let noATags = noPTags.replace(/<a(.*?)<\/a>/g, '');
-
-        // Replace <br/> with \n
-        let finalString = noATags.replace(/<br\s*\/?>/g, '');
-
-        return finalString;
-    }, [description]);
+    const stripedString = stripHTMLTags(description);
 
     if (!stripedString.trim()) return null;
     return (

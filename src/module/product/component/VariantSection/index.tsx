@@ -1,12 +1,13 @@
-import React, { useState, useMemo, memo } from 'react';
+import React, { useState, useMemo, memo, useCallback } from 'react';
 import { NewVariants, VariantPrice, ProdVariants, Options, ErrorField } from '@type/product';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { capitalize } from 'lodash';
 import { TextNormal, TextSemiBold } from '@components/text';
 import ColorView from './ColorView';
 import { formatPrice } from '@util/index';
 import SelectView from './SelectView';
 import { lightColor } from '@styles/color';
+import { navigate } from '@navigation/service';
 
 interface IProps {
     changeValue: (field: string) => (id: number) => void;
@@ -42,8 +43,13 @@ const VariantSection = ({
         return [colorId, ...selected.filter(id => id !== colorId)];
     }, [selected, colIndex]);
 
-    //console.log('Display selected', displaySelected);
+    const toStyleGuide = useCallback(() => {
+        const arr = displaySelected.filter(id => !!id).map(id => mappings[id]);
+        const style_id = arr.find(i => i?.variantName == 'style')?.id;
+        const type_id = arr.find(i => i?.variantName == 'type')?.id;
 
+        navigate('StyleGuide', { product_id: detailVariant.product_id, style_id, type_id });
+    }, [displaySelected, mappings]);
     return (
         <View style={{ width: '100%', marginTop: 24 }}>
             {Object.entries(options).map(([title, ids], index) => {
@@ -81,7 +87,20 @@ const VariantSection = ({
 
                     return (
                         <View key={title} style={{ marginTop: 16 }}>
-                            <TextSemiBold style={styles.optionTitle}>{capitalize(title)}</TextSemiBold>
+                            <View style={styles.titleRow}>
+                                <TextSemiBold style={styles.optionTitle}>{capitalize(title)}</TextSemiBold>
+                                {title == 'style' ? (
+                                    <Pressable style={{ flexDirection: 'row' }} hitSlop={8} onPress={toStyleGuide}>
+                                        <Image style={styles.optionIcon} source={require('@image/style-guide.png')} />
+                                        <TextNormal style={{ fontSize: 13 }}>Style guide</TextNormal>
+                                    </Pressable>
+                                ) : (
+                                    <Pressable style={{ flexDirection: 'row' }} hitSlop={8}>
+                                        <Image style={styles.optionIcon} source={require('@image/size-guide.png')} />
+                                        <TextNormal style={{ fontSize: 13 }}>Size guide</TextNormal>
+                                    </Pressable>
+                                )}
+                            </View>
                             <ScrollView
                                 style={styles.optionRow}
                                 contentContainerStyle={styles.optionScroll}
@@ -147,6 +166,13 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         marginRight: 12,
     },
+    titleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 16,
+    },
+    optionIcon: { width: 17, height: 17, marginRight: 4 },
     optionTitle: { fontSize: 15, color: 'black', marginLeft: 18 },
 
     row2: {
