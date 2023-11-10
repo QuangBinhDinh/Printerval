@@ -7,7 +7,6 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 const RelateTag = ({ data }: { data?: any[] }) => {
     if (!data || data.length == 0) return null;
 
-    console.log('Tag', data);
     const random_bg = randomizeColor(data.length);
 
     const searchTagByID = (item: any) => {

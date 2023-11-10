@@ -103,13 +103,15 @@ const getQueryStatusByName = (queryName: string) => {
  */
 const stripHTMLTags = (description: string | null | undefined) => {
     if (!description) return '';
-    let noPTags = description.replace(/<\/?[^>]+(>|$)/g, '');
 
-    // Remove <a> tags and their contents
-    let noATags = noPTags.replace(/<a(.*?)<\/a>/g, '');
+    var noTable = description.slice(description.indexOf('</table>') + 9);
+    let noPTags = noTable.replace(/<\/?[^>]+(>|$)/g, '');
+
+    // Remove <a>, <table> tags and their contents
+    let noTags = noPTags.replace(/<a(.*?)<\/a>/g, '');
 
     // Replace <br/> with \n
-    let finalString = noATags.replace(/<br\s*\/?>/g, '');
+    let finalString = noTags.replace(/<br\s*\/?>/g, '');
 
     return finalString;
 };

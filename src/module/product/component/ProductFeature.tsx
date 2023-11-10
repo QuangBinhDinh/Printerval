@@ -32,7 +32,7 @@ const ProductFeature = ({ description }: { description: Nullable<string> }) => {
     };
 
     const stripedString = stripHTMLTags(description);
-
+    // console.log(description);
     if (!stripedString.trim()) return null;
     return (
         <>

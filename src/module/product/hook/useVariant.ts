@@ -320,17 +320,15 @@ export const useVariant = (product_id: number, product_name: string, product_sku
     useEffect(() => {
         let isCancelled = false;
         // điều kiện này có thể thay đổi (trường hợp sp k có variant )
-        if (!mappings || trueVariant.length == 0) return;
+        if (!detailSelectVar) return;
 
         const fetchDescript = async () => {
-            const styleId = trueVariant.find(id => mappings[id].variantName == 'style') ?? '';
-            const typeId = trueVariant.find(id => mappings[id].variantName == 'type') ?? '';
-            // const colorId = trueVariant.find(id => mappings[id].variantName == 'color') ?? '';
-            // const sizeId = trueVariant.find(id => mappings[id].variantName.includes('size')) ?? '';
+            const { product_id, id, sku } = detailSelectVar;
             try {
                 const res = await axios.get(
-                    `https://printerval.com/module/get-description?product_id=${product_id}&type_id=${typeId}&style_id=${styleId}`,
+                    `https://printerval.com/module/get-description?product_id=${product_id}&spid=${id}&variant_default_sku=${sku}`,
                 );
+                console.log(res);
                 var descript = res.data?.result ?? '';
                 setDescription(descript);
             } catch (e) {}
@@ -339,7 +337,7 @@ export const useVariant = (product_id: number, product_name: string, product_sku
         return () => {
             isCancelled = true;
         };
-    }, [trueVariant, mappings]);
+    }, [detailSelectVar]);
 
     return {
         mappings,

@@ -11,6 +11,7 @@ export interface ProdVariants {
     name: string;
     image_url: string;
     content: string;
+    sku: string;
 }
 
 export interface VariantsTree {
