@@ -90,10 +90,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 200,
-        position: 'absolute',
-        top: 0,
         paddingHorizontal: 6,
-        overflow: 'hidden',
     },
     button: {
         height: 48,

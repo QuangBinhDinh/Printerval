@@ -21,6 +21,7 @@ import { alertSuccess } from '@components/popup/PopupSuccess';
 import { goBack } from '@navigation/service';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import { alertError } from '@components/popup/PopupError';
+import ImageReview from '@product/component/ImageReview';
 
 const initialValues = {
     name: '',
@@ -45,6 +46,8 @@ const CreateReview = () => {
     const [postReview, { isLoading }] = usePostProductReviewMutation();
 
     const [rating, setRating] = useState(5);
+    const [imageUrl, setImageUrl] = useState<string[]>([]);
+
     const { submitForm, errors, values, setFieldValue, resetForm, touched } = useFormik({
         initialValues,
         validationSchema,
@@ -59,6 +62,7 @@ const CreateReview = () => {
                 status: 'PENDING',
                 target_id: product_id,
             };
+            if (imageUrl.length > 0) body.images = JSON.stringify(imageUrl);
             try {
                 const res = await postReview(body).unwrap();
                 if (res.status == 'successful') {
@@ -133,7 +137,10 @@ const CreateReview = () => {
                     onChangeText={text => setFieldValue('content', text)}
                     error={errors.content}
                     touched={touched.content}
+                    textArea
                 />
+                <ImageReview imageUrl={imageUrl} setImageUrl={setImageUrl} />
+                <View style={{ height: 80 }} />
             </KeyboardAwareScrollView>
 
             <View

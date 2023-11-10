@@ -18,6 +18,16 @@ type InputProps = TextInputProps & {
     touched: boolean | undefined;
 
     title: string;
+
+    /**
+     * Có phải text area không
+     */
+    textArea?: boolean;
+
+    /**
+     * Chiều cao text area
+     */
+    areaHeight?: number;
 };
 const InputBold = ({
     containerStyle,
@@ -28,19 +38,28 @@ const InputBold = ({
     touched,
     title,
     secureTextEntry = false,
+    textArea,
+    areaHeight = 120,
     ...rest
 }: InputProps) => {
     const [hidePass, setHidePass] = useState(secureTextEntry);
     return (
         <View style={[styles.container, containerStyle]}>
-            <View style={[styles.inputView, !!error && touched && { borderColor: lightColor.error }]}>
+            <View
+                style={[
+                    styles.inputView,
+                    !!error && touched && { borderColor: lightColor.error },
+                    textArea && { height: areaHeight },
+                ]}
+            >
                 <TextInput
-                    style={styles.inputStyle}
+                    style={[styles.inputStyle, textArea && { textAlignVertical: 'top', paddingTop: 10 }]}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={title}
                     placeholderTextColor={!!error && touched ? lightColor.error : lightColor.grayout}
                     secureTextEntry={hidePass}
+                    multiline={textArea}
                     {...rest}
                 />
                 {secureTextEntry && (
@@ -53,7 +72,9 @@ const InputBold = ({
                     />
                 )}
             </View>
-            {!!error && touched && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
+            <View style={{ height: 18 }}>
+                {!!error && touched && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
+            </View>
         </View>
     );
 };
@@ -62,7 +83,6 @@ export default memo(InputBold);
 
 const styles = StyleSheet.create({
     container: {
-        height: 70,
         width: '100%',
         marginTop: 8,
     },
@@ -81,12 +101,11 @@ const styles = StyleSheet.create({
     inputStyle: {
         fontSize: 15,
         fontFamily: 'Poppins-Regular',
-        height: 36,
         flex: 1,
+        height: '100%',
         color: '#444',
-        // borderWidth: 1,
-        // borderColor: 'white',
         padding: 0,
+        // borderWidth: 1,
     },
     error: {
         fontSize: 11,

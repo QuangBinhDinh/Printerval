@@ -93,5 +93,24 @@ export const domainApi = createApi({
             'User-Agent': `printervalApp/${getVersion()}`,
         },
     }),
-    endpoints: build => ({}),
+    endpoints: build => ({
+        postImage: build.mutation<{ status: string; upload: string[] }, any>({
+            query: args => {
+                var body = new FormData();
+                body.append('upload', args);
+                body.append('type', 'default');
+
+                return {
+                    url: 'printerval-central/upload',
+                    method: 'post',
+                    header: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    body,
+                };
+            },
+        }),
+    }),
 });
+
+export const { usePostImageMutation } = domainApi;
