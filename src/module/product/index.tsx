@@ -208,7 +208,11 @@ const DetailProduct = () => {
 
                     <SellerInfo seller={seller} />
 
-                    <DeliverySection data={shipResult?.result} country={shipResult?.countryName || ''} />
+                    <DeliverySection
+                        data={shipResult?.result}
+                        country={shipResult?.countryName || ''}
+                        product={detail}
+                    />
 
                     <BoughtTogether data={boughtTogether} currentProd={detail} />
 

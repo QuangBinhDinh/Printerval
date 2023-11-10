@@ -6,18 +6,24 @@ import React, { memo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import moment from 'moment';
 import { formatPrice } from '@util/index';
+import { Product } from '@type/common';
+import { navigate } from '@navigation/service';
 
 interface IProps {
     country: string;
     data?: ShippingInfo;
+    product: Product;
 }
-const DeliverySection = ({ data, country }: IProps) => {
+const DeliverySection = ({ data, country, product }: IProps) => {
     const renderTimeShipping = (defaultMinTime: number, defaultMaxTime: number) => {
         const minTime = moment().add(defaultMinTime, 'days').format('ll');
         const maxTime = moment().add(defaultMaxTime, 'days').format('ll');
         return minTime.split(',')[0] + ' - ' + maxTime.split(',')[0];
     };
 
+    const toReportProduct = () => {
+        navigate('ReportProduct', { product });
+    };
     return (
         <View style={styles.container}>
             {!!data && (
@@ -61,7 +67,9 @@ const DeliverySection = ({ data, country }: IProps) => {
                         <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>Submit a ticket</TextNormal>
                         {` and we will get back to you!\n`}
                         If you want to report this product,{' '}
-                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>click here</TextNormal>
+                        <TextNormal onPress={toReportProduct} style={{ color: lightColor.secondary, fontSize: 13 }}>
+                            click here
+                        </TextNormal>
                     </TextNormal>
                 </View>
             </View>

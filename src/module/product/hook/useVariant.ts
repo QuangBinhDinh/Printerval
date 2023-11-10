@@ -5,7 +5,7 @@ import { ORDER_SIZE } from '@constant/index';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { ProdVariants, Options, VariantPrice, VariantsTree, ProdDescription, NewVariants } from '@type/product';
-import he from 'he';
+import { getVersion } from 'react-native-device-info';
 
 /**
  * Hook dùng để lấy thông tin các variant của 1 sp bất kì trên Printerval, kèm theo 1 số thông tin khác
@@ -327,8 +327,13 @@ export const useVariant = (product_id: number, product_name: string, product_sku
             try {
                 const res = await axios.get(
                     `https://printerval.com/module/get-description?product_id=${product_id}&spid=${id}&variant_default_sku=${sku}`,
+                    {
+                        headers: {
+                            'User-Agent': `printervalApp/${getVersion()}`,
+                        },
+                    },
                 );
-                console.log(res);
+                //console.log(res);
                 var descript = res.data?.result ?? '';
                 setDescription(descript);
             } catch (e) {}

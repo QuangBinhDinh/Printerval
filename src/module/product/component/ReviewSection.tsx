@@ -43,7 +43,7 @@ const ReviewSection = ({ product, dashboard, reviews, meta }: IProps) => {
                     <View style={styles.lineground}>
                         <View style={[styles.progressLine, { width: `${item.percent ?? 0}%` }]} />
                     </View>
-                    <TextNormal style={{ fontSize: 13, width: 28, textAlign: 'right' }}>{item.percent}%</TextNormal>
+                    <TextNormal style={{ fontSize: 13, width: 31, textAlign: 'right' }}>{item.percent}%</TextNormal>
                 </View>
             ))}
 

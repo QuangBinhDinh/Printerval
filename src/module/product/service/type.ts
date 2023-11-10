@@ -43,3 +43,11 @@ export interface ProductReviewArgs {
      */
     images?: string;
 }
+
+export interface ProductReportArgs {
+    product_id: number;
+    content: string;
+    email: string;
+    report: string;
+    name: string;
+}

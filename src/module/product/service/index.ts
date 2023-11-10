@@ -1,6 +1,6 @@
 import { api, domainApi } from '@api/service';
 import { Product, ProductReview, ResponseMeta } from '@type/common';
-import { ProdInfoResponse, ShippingInfo, ProdShippingArgs, ProductReviewArgs } from './type';
+import { ProdInfoResponse, ShippingInfo, ProdShippingArgs, ProductReviewArgs, ProductReportArgs } from './type';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
 
@@ -97,6 +97,10 @@ const extendedDomain = domainApi.injectEndpoints({
         postProductReview: build.mutation<{ status: string }, ProductReviewArgs>({
             query: body => ({ url: 'reviews/store-comments', method: 'post', body: { comments: [body] } }),
         }),
+
+        postProductReport: build.mutation<{ status: string }, ProductReportArgs>({
+            query: body => ({ url: 'report/content', method: 'post', body }),
+        }),
     }),
 });
 
@@ -114,4 +118,5 @@ export const {
     useLazyFetchProductShippingQuery,
     useFetchStyleGuideQuery,
     usePostProductReviewMutation,
+    usePostProductReportMutation,
 } = extendedDomain;

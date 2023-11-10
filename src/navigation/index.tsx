@@ -28,6 +28,7 @@ import StyleGuide from '@product/screen/StyleGuide';
 import CreateReview from '@product/screen/CreateReview';
 import PopupError from '@components/popup/PopupError';
 import AllReview from '@product/screen/AllReview';
+import ReportProduct from '@product/screen/ReportProduct';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -107,6 +108,7 @@ const Router = () => {
                 <Stack.Screen name="StyleGuide" component={StyleGuide} />
                 <Stack.Screen name="CreateReview" component={CreateReview} />
                 <Stack.Screen name="AllReview" component={AllReview} />
+                <Stack.Screen name="ReportProduct" component={ReportProduct} />
             </Stack.Navigator>
         </NavigationContainer>
     );
