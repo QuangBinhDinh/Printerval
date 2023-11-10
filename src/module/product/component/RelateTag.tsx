@@ -1,4 +1,5 @@
 import { TextSemiBold } from '@components/text';
+import { navigate } from '@navigation/service';
 import { randomizeColor } from '@util/index';
 import React, { memo } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -6,7 +7,12 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 const RelateTag = ({ data }: { data?: any[] }) => {
     if (!data || data.length == 0) return null;
 
+    console.log('Tag', data);
     const random_bg = randomizeColor(data.length);
+
+    const searchTagByID = (item: any) => {
+        navigate('SearchResult', { title: item.title, tag_id: item.id }, `tag-${item.id}`);
+    };
     return (
         <View style={styles.container}>
             <TextSemiBold style={{ fontSize: 20, lineHeight: 24, marginLeft: 18 }}>Related Tags</TextSemiBold>
@@ -17,7 +23,11 @@ const RelateTag = ({ data }: { data?: any[] }) => {
                 horizontal
             >
                 {data.map((item, index) => (
-                    <TouchableOpacity style={[styles.tagButton, { backgroundColor: random_bg[index] }]} key={item.id}>
+                    <TouchableOpacity
+                        style={[styles.tagButton, { backgroundColor: random_bg[index] }]}
+                        key={item.id}
+                        onPress={() => searchTagByID(item)}
+                    >
                         <TextSemiBold style={styles.tagTitle}>{item.title}</TextSemiBold>
                     </TouchableOpacity>
                 ))}

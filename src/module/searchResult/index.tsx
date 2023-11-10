@@ -10,12 +10,13 @@ import ProductListAnimated from './component/ProductListAnimated'; // cần tron
 
 const SearchResult = () => {
     const {
-        params: { keyword, title },
+        params: { keyword, title, tag_id },
     } = useRoute<SearchResultRouteProp>();
 
     const [searchFilter, setFilter] = useState<Partial<ProductFilterArgs>>({
         q: keyword,
         dt: Date.now(),
+        tag_id,
     });
     //nest destructing with possible undefined value
     const {

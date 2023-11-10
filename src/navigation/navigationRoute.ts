@@ -10,6 +10,7 @@ type RootStackParams = {
         categoryId: number;
         keyword: string;
         title: string;
+        tag_id: number;
     };
     FilterScreen: {
         currentFilter: Partial<ProductFilterArgs>;

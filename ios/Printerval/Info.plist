@@ -65,11 +65,13 @@
 	<key>FacebookDisplayName</key>
 	<string>Printerval</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to access your library</string>
-	<string/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allows $(PRODUCT_NAME) to save downloaded images to your photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

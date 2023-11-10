@@ -9,6 +9,7 @@ export interface ProductFilterArgs {
     category_id: string | number;
     category_slug: string;
     q: string;
+    tag_id: number;
     page_size: number;
     page_id: number;
     minPrice: string | number;
@@ -70,10 +71,11 @@ const extendedDomain = domainApi.injectEndpoints({
                 return { url: 'search/api', method: 'get', params: newArgs };
             },
             serializeQueryArgs: ({ queryArgs, endpointName, endpointDefinition }) => {
-                const { id, q, minPrice, maxPrice, order, color_variant_id, size_variant_id, type_variant_id, dt } =
+                const { tag_id, q, minPrice, maxPrice, order, color_variant_id, size_variant_id, type_variant_id, dt } =
                     queryArgs;
                 return `fetchProductSearch?${qs.stringify({
                     q,
+                    tag_id,
                     minPrice,
                     maxPrice,
                     order,
