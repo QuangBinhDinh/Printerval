@@ -37,6 +37,7 @@ import { useSelector } from 'react-redux';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { api } from '@api/service';
+import Gallery from './component/Gallery';
 
 const addCartQuerySelector = createSelector(
     (state: RootState) => state.api.mutations,
@@ -86,7 +87,35 @@ const DetailProduct = () => {
         showPrintBack,
         customConfig,
         initialConfig,
+        isShirt,
+        colorObj,
     } = useFetchOther(variantReady);
+
+    /**
+     * Trả về ảnh color guide dựa vào biến thể đang được chọn
+     */
+    const selectedColorGuide = useMemo(() => {
+        let image_url = '';
+        if (
+            selectedVariant &&
+            colorObj &&
+            !gallery &&
+            colIndex >= 0 &&
+            mappings &&
+            Object.keys(displayOption).length > 0
+        ) {
+            //chỉ hiện color guide khi biến thể sp k có ảnh
+            const color_guide_ids = Object.keys(colorObj); //list key bộ ID của color guide
+
+            const filter = selectedVariant.slice(0, colIndex + 1); // chọn các variant trước color để lọc (type, style ,...)
+
+            const selected_id = color_guide_ids.find(tuple => checkGuideTuple(tuple, filter)) ?? '0';
+            image_url = colorObj[selected_id];
+        }
+        return image_url;
+    }, [selectedVariant, colorObj, gallery, mappings, displayOption]);
+
+    const prodGallery = gallery || (detail ? [detail.image_url] : []); // hiển thị list ảnh
 
     const [quantity, setQuantity] = useState<string>('1');
     const [printBack, setPrintback] = useState<boolean>(false);
@@ -157,11 +186,18 @@ const DetailProduct = () => {
                     enableOnAndroid
                     enableResetScrollToCoords={false}
                 >
-                    <FastImage
+                    {/* <FastImage
                         style={{ width: '100%', aspectRatio: 1 }}
                         resizeMode="cover"
                         source={{ uri: cdnImage(detail?.image_url, 630, 630) }}
+                    /> */}
+                    <Gallery
+                        isShirt={isShirt}
+                        colIndex={colIndex}
+                        gallery={prodGallery}
+                        selectedColorGuide={selectedColorGuide}
                     />
+
                     <ProductTitle detail={detail} category={prodCategory} title={productName} />
 
                     <VariantSection
@@ -232,6 +268,7 @@ const DetailProduct = () => {
                     <RelateTag data={relateTag} />
 
                     <ProductRow data={prodHistory.filter(i => i.id != productId)} title="Recently viewed" />
+
                     <View style={{ height: 90 }} />
                 </KeyboardAwareScrollView>
             ) : (
@@ -289,3 +326,11 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
 });
+
+/**
+ * Kiểm tra xem bộ ID của color guide trùng với bộ ID đang được chọn không
+ */
+const checkGuideTuple = (tuple: string, input: any[]) => {
+    const tupleArr = tuple.split('-');
+    return input.every(id => tupleArr.includes(id.toString()));
+};

@@ -24,14 +24,14 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const insets = useSafeAreaInsets();
 
     const animHeader = useAnimatedStyle(() => ({
-        backgroundColor: interpolateColor(scrollY.value, [0, 300], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
-        borderBottomColor: interpolateColor(scrollY.value, [0, 300], ['rgba(225,225,225,0)', 'rgba(225,225,225,1)']),
+        backgroundColor: interpolateColor(scrollY.value, [0, 150], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
+        borderBottomColor: interpolateColor(scrollY.value, [0, 150], ['rgba(225,225,225,0)', 'rgba(225,225,225,1)']),
     }));
 
     const animTitle = useAnimatedStyle(() => ({
         transform: [
             {
-                translateY: interpolate(scrollY.value, [400, 480], [50, 0], {
+                translateY: interpolate(scrollY.value, [200, 250], [50, 0], {
                     extrapolateLeft: Extrapolation.CLAMP,
                     extrapolateRight: Extrapolation.CLAMP,
                 }),

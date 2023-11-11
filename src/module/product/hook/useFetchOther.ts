@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import {
+    useFetchColorGuideQuery,
     useFetchProductInfoQuery,
     useLazyFetchAlsoLikeQuery,
     useLazyFetchBoughtTogetherQuery,
@@ -29,6 +30,14 @@ export const useFetchOther = (variantReady: boolean) => {
     const [fetchReview, { data: res3 }] = useLazyFetchProductReviewQuery();
     const [fetchAvailable, { data: res4 }] = useLazyFetchDesignAvailableQuery();
     const [fetchAlsoLike, { data: res5 }] = useLazyFetchAlsoLikeQuery();
+
+    const { data: { result: colorObj } = {} } = useFetchColorGuideQuery(productId);
+
+    const isShirt = useMemo(() => {
+        if (!result) return false;
+        var breadcrumb = JSON.parse(result.category.breadcrumb);
+        return breadcrumb.filter((item: any) => item.id == 6).length > 0;
+    }, [result]);
 
     const showPrintBack = useMemo(() => {
         if (!result || !invalidPrintBack) return false;
@@ -148,5 +157,15 @@ export const useFetchOther = (variantReady: boolean) => {
          * Config ban đầu, cũng là data gửi lên khi add to cart
          */
         initialConfig,
+
+        /**
+         * Product này có phải là T-Shirt không
+         */
+        isShirt,
+
+        /**
+         * Object của color guide, mỗi property có dạng sizeId-typeID-colorId, value là image_url của color guide ứng với bộ 3 ID đó
+         */
+        colorObj,
     };
 };

@@ -3,6 +3,7 @@ import { Product, ProductReview, ResponseMeta } from '@type/common';
 import { ProdInfoResponse, ShippingInfo, ProdShippingArgs, ProductReviewArgs, ProductReportArgs } from './type';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
+import { DynamicObject } from '@type/base';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -93,6 +94,9 @@ const extendedDomain = domainApi.injectEndpoints({
         >({
             query: args => ({ url: 'module/get-style-info', params: args }),
         }),
+        fetchColorGuide: build.query<{ status: string; result: { [x: string]: string } }, number>({
+            query: product_id => ({ url: 'service/pod/color-guide-url', params: { product_id, dt: Date.now() } }),
+        }),
 
         postProductReview: build.mutation<{ status: string }, ProductReviewArgs>({
             query: body => ({ url: 'reviews/store-comments', method: 'post', body: { comments: [body] } }),
@@ -113,6 +117,7 @@ export const {
 } = extendedApi;
 
 export const {
+    useFetchColorGuideQuery,
     useLazyFetchBoughtTogetherQuery,
     useLazyFetchDesignAvailableQuery,
     useLazyFetchProductShippingQuery,
