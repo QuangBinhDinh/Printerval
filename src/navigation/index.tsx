@@ -29,6 +29,7 @@ import CreateReview from '@product/screen/CreateReview';
 import PopupError from '@components/popup/PopupError';
 import AllReview from '@product/screen/AllReview';
 import ReportProduct from '@product/screen/ReportProduct';
+import BottomMessage from '@components/popup/BottomMessage';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -74,6 +75,7 @@ const Router = () => {
             <LoginError />
             <PopupSuccess />
             <PopupError />
+            <BottomMessage />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

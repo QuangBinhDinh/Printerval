@@ -22,6 +22,7 @@ import { alertSuccess } from '@components/popup/PopupSuccess';
 import { alertError } from '@components/popup/PopupError';
 import { goBack } from '@navigation/service';
 import { useAppSelector } from '@store/hook';
+import { showMessage } from '@components/popup/BottomMessage';
 
 const OPTION = [
     { id: 'violates_trademark', name: 'It violates a trademark' },
@@ -74,7 +75,7 @@ const ReportProduct = () => {
                     goBack();
                 }
             } catch (e) {
-                alertError('Unknown error occur');
+                showMessage('Something went wrong');
             }
         },
     });

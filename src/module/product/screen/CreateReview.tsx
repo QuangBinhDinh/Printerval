@@ -22,6 +22,7 @@ import { goBack } from '@navigation/service';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import { alertError } from '@components/popup/PopupError';
 import ImageReview from '@product/component/ImageReview';
+import { showMessage } from '@components/popup/BottomMessage';
 
 const initialValues = {
     name: '',
@@ -71,7 +72,7 @@ const CreateReview = () => {
                 }
             } catch (e) {
                 console.log(e);
-                alertError('Unknown error occured');
+                showMessage('Something went wrong');
             }
         },
     });

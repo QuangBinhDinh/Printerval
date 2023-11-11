@@ -5,8 +5,11 @@ import { StyleSheet, View } from 'react-native';
 import { TextNormal, TextSemiBold } from '../text';
 import { lightColor } from '@styles/color';
 import { SuccessIcon } from '@assets/svg';
+import { debounce } from 'lodash';
 
 const EVENT_NAME = 'open_pop_up_success';
+const DURATION = 1500;
+
 const PopupSuccess = () => {
     const [visible, setVisible] = useState(false);
     const [title, setTitle] = useState('Some text here');
@@ -14,6 +17,8 @@ const PopupSuccess = () => {
     const open = (text: string) => {
         setVisible(true);
         setTitle(text);
+
+        debounce(() => setVisible(false), DURATION)();
     };
 
     useEffect(() => {
@@ -49,6 +54,10 @@ const PopupSuccess = () => {
 
 export default memo(PopupSuccess);
 
+/**
+ * Alert chung khi call api success
+ * @param content
+ */
 export const alertSuccess = (content: string) => {
     EventEmitter.dispatch(EVENT_NAME, content);
 };
