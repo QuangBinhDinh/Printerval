@@ -32,7 +32,7 @@ const ImageReview = ({ imageUrl, setImageUrl }: IProps) => {
             maxFiles: MAX_IMAGES - imageUrl.length,
         });
 
-        const newImage = imageRes.map(image => {
+        const newImage = imageRes.slice(0, MAX_IMAGES - imageUrl.length).map(image => {
             const paths = image.path.split('/') || [];
             const name = image.filename || paths[paths.length - 1] || 'image.png';
             return {
