@@ -23,12 +23,12 @@ interface IProps {
 const PaginationDots = ({ curPos, data }: IProps) => {
     const length = (data.length - 1) * (DOT_SIZE + 10) + (DOT_SIZE * MULTIPLIER + 10);
 
-    useAnimatedReaction(
-        () => curPos.value,
-        data => {
-            console.log('Position: ' + data);
-        },
-    );
+    // useAnimatedReaction(
+    //     () => curPos.value,
+    //     data => {
+    //         console.log('Position: ' + data);
+    //     },
+    // );
     return (
         <View style={[styles.container, { width: length }]}>
             {data.map((item, index) => (

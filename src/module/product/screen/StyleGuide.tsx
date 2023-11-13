@@ -13,6 +13,8 @@ const StyleGuide = () => {
     } = useRoute<StyleGuideRouteProp>();
 
     const { data: { result } = {} } = useFetchStyleGuideQuery({ product_id, style_id, type_id });
+
+    console.log(result);
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Style guide" />
@@ -21,7 +23,7 @@ const StyleGuide = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 18 }}
             >
-                <TextNormal style={{ lineHeight: 21, marginTop: 30 }}>{stripHTMLTags(result)}</TextNormal>
+                <TextNormal style={{ lineHeight: 21, marginTop: 30 }}>{stripHTMLTags(result, true)}</TextNormal>
             </ScrollView>
         </View>
     );

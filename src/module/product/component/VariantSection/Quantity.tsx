@@ -1,9 +1,8 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { TextSemiBold, TextNormal } from '@components/text';
 import { lightColor } from '@styles/color';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/base';
-import { StringSchema } from 'yup';
 
 interface IProps {
     showPrintBack: boolean;

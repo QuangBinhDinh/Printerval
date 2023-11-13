@@ -15,7 +15,7 @@ const SwiperImage = ({ images }: { images: string[] }) => {
         scrollPos.value = x;
     });
 
-    const newImages = images.map(i => cdnImage(i, 630, 630));
+    //const newImages = images.map(i => cdnImage(i, 630, 630));
 
     useEffect(() => {
         if (images) refFlatList.current?.scrollTo({ x: 0, animated: false });
@@ -33,7 +33,7 @@ const SwiperImage = ({ images }: { images: string[] }) => {
                 onScroll={scrollHandler}
                 showsHorizontalScrollIndicator={false}
             >
-                {newImages.map(item => (
+                {images.map(item => (
                     <FastImage
                         source={{ uri: item }}
                         style={{ width: SCREEN_WIDTH, aspectRatio: 1, backgroundColor: lightColor.graybg }}
@@ -42,7 +42,7 @@ const SwiperImage = ({ images }: { images: string[] }) => {
                     />
                 ))}
             </Animated.ScrollView>
-            {newImages.length > 1 && <PaginationDots data={images} curPos={scrollPos} />}
+            {images.length > 1 && <PaginationDots data={images} curPos={scrollPos} />}
         </>
     );
 };

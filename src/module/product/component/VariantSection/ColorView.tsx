@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     innerView: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: '86%',
-        height: '86%',
+        width: '90%',
+        height: '90%',
         borderRadius: 60,
         backgroundColor: 'white',
     },

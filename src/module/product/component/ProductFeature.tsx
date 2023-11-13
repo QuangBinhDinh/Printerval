@@ -5,7 +5,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Icon } from '@rneui/base';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { debounce } from 'lodash';
+import { debounce, startCase } from 'lodash';
 import he from 'he';
 import { Nullable } from '@type/base';
 import { stripHTMLTags } from '@util/index';
@@ -32,7 +32,7 @@ const ProductFeature = ({ description }: { description: Nullable<string> }) => {
     };
 
     const stripedString = stripHTMLTags(description);
-    // console.log(description);
+    // console.log(stripedString);
     if (!stripedString.trim()) return null;
     return (
         <>

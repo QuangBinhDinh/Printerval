@@ -99,21 +99,28 @@ const getQueryStatusByName = (queryName: string) => {
 /**
  * Xoá toàn bộ HTML tag khỏi string
  * @param description
+ * @param keepBr có để lại tag xuống dòng không, mặc định là không
  * @returns
  */
-const stripHTMLTags = (description: string | null | undefined) => {
+const stripHTMLTags = (description: string | null | undefined, keepBr = false) => {
     if (!description) return '';
 
-    var noTable = description.slice(description.indexOf('</table>') + 9);
-    let noPTags = noTable.replace(/<\/?[^>]+(>|$)/g, '');
+    var temp = description;
+    //remove table tag and its content
+    temp = temp.slice(description.indexOf('</table>') + 9);
+
+    //xuống dòng khi kểt thúc 1 đoạn <p/>
+    temp = temp.replace(/<\/p>/g, '\n');
+
+    //loaị bỏ toàn bộ tag
+    temp = temp.replace(/<\/?[^>]+(>|$)/g, '');
 
     // Remove <a>, <table> tags and their contents
-    let noTags = noPTags.replace(/<a(.*?)<\/a>/g, '');
+    temp = temp.replace(/<a(.*?)<\/a>/g, '');
 
-    // Replace <br/> with \n
-    let finalString = noTags.replace(/<br\s*\/?>/g, '');
+    temp = temp.replace(/<br\s*\/?>/g, '');
 
-    return finalString;
+    return temp;
 };
 
 export {

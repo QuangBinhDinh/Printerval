@@ -10,6 +10,7 @@ import StarRating from '@components/StarRating';
 import { Icon } from '@rneui/base';
 import { Favorite } from '@assets/svg';
 import { navigate, pushNavigate } from '@navigation/service';
+import { cdnImageV2 } from '@util/cdnV2';
 
 interface IProps {
     item: Product;
@@ -41,7 +42,7 @@ const HorizonCard = ({ item, containerStyle }: IProps) => {
                 <Favorite width={13} height={13} />
             </Pressable>
 
-            <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 630, 630) }} resizeMode="cover" />
+            <FastImage style={styles.image} source={{ uri: cdnImageV2(item.image_url) }} resizeMode="cover" />
 
             <TextSemiBold style={styles.title} numberOfLines={1}>
                 {he.decode(item.name)}

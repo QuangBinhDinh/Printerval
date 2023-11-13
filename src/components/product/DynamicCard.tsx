@@ -10,6 +10,7 @@ import StarRating from '@components/StarRating';
 import { Icon } from '@rneui/base';
 import { Favorite } from '@assets/svg';
 import { navigate, pushNavigate } from '@navigation/service';
+import { cdnImageV2 } from '@util/cdnV2';
 
 const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewStyle> }) => {
     const discountText = useMemo(() => {
@@ -22,7 +23,8 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
     }, [item]);
 
     const toDetail = () => {
-        //console.log(item);
+        // console.log(item.image_url);
+        // console.log(cdnImageV2(item.image_url));
         navigate('DetailProduct', { productId: item.id, productName: item.name }, item.id);
     };
     return (
@@ -37,7 +39,7 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
                 <Favorite width={15} height={15} />
             </Pressable>
 
-            <FastImage style={styles.image} source={{ uri: cdnImage(item.image_url, 630, 630) }} resizeMode="cover" />
+            <FastImage style={styles.image} source={{ uri: cdnImageV2(item.image_url) }} resizeMode="cover" />
             <View style={styles.rating}>
                 <StarRating rating={5} width={80} />
                 <TextNormal style={styles.ratingText}>{`(${20})`}</TextNormal>
