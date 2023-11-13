@@ -84,6 +84,12 @@ const extendedDomain = domainApi.injectEndpoints({
         fetchProductShipping: build.query<{ countryName: string; result: ShippingInfo }, ProdShippingArgs>({
             query: args => ({ url: 'shipping/info', params: { ...args, dt: Date.now() } }),
         }),
+        fetchProductBySeller: build.query<
+            { countryName: string; result: Product[] },
+            { product_id: number; user_id: number }
+        >({
+            query: args => ({ url: 'product/product-by-user', params: args }),
+        }),
 
         fetchDesignAvailable: build.query<{ status: string; result: Product[] }, number>({
             query: product_id => ({ url: `pod/also-available/find?product_id=${product_id}&dt=${Date.now()}` }),
@@ -124,4 +130,5 @@ export const {
     useFetchStyleGuideQuery,
     usePostProductReviewMutation,
     usePostProductReportMutation,
+    useLazyFetchProductBySellerQuery,
 } = extendedDomain;

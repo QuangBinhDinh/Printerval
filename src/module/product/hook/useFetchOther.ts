@@ -5,6 +5,7 @@ import {
     useLazyFetchAlsoLikeQuery,
     useLazyFetchBoughtTogetherQuery,
     useLazyFetchDesignAvailableQuery,
+    useLazyFetchProductBySellerQuery,
     useLazyFetchProductReviewQuery,
     useLazyFetchProductShippingQuery,
     useLazyFetchProductStarQuery,
@@ -30,6 +31,7 @@ export const useFetchOther = (variantReady: boolean) => {
     const [fetchReview, { data: res3 }] = useLazyFetchProductReviewQuery();
     const [fetchAvailable, { data: res4 }] = useLazyFetchDesignAvailableQuery();
     const [fetchAlsoLike, { data: res5 }] = useLazyFetchAlsoLikeQuery();
+    const [fetchProductBySeller, { data: res6 }] = useLazyFetchProductBySellerQuery();
 
     const { data: { result: colorObj } = {} } = useFetchColorGuideQuery(productId);
 
@@ -128,6 +130,7 @@ export const useFetchOther = (variantReady: boolean) => {
 
             fetchAvailable(productId);
             fetchAlsoLike(productId);
+            fetchProductBySeller({ product_id: productId, user_id: result.product?.user?.id || -1 });
         }
     }, [result, variantReady]);
 
@@ -142,10 +145,17 @@ export const useFetchOther = (variantReady: boolean) => {
 
         designAvailable: res4?.result,
         alsoLikeProd: res5?.result,
-        moreProducts: result?.sameStore,
+
+        /**
+         * Sp thuộc cùng gian hàng seller này
+         */
+        moreProducts: res6?.result,
 
         relateTag: result?.tags,
 
+        /**
+         * Sp này có show option chọn print back hay không
+         */
         showPrintBack: showPrintBack,
 
         /**
