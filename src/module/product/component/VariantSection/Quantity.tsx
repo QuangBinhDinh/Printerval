@@ -1,8 +1,9 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { TextSemiBold, TextNormal } from '@components/text';
 import { lightColor } from '@styles/color';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/base';
+import { StringSchema } from 'yup';
 
 interface IProps {
     showPrintBack: boolean;
@@ -13,23 +14,6 @@ interface IProps {
     quantityText: string;
 }
 const Quantity = ({ showPrintBack, isPrintBack, changePrintBack, quantityText, changeQuantity }: IProps) => {
-    const renderInput = useMemo(
-        () => (
-            <View style={styles.quantityContainer}>
-                <Pressable style={styles.quantityButton}>
-                    <Icon type="antdesign" name="minus" size={18} color="#444" />
-                </Pressable>
-                <View style={styles.inputView}>
-                    <TextInput style={styles.input} onChange={changeQuantity} value={quantityText} />
-                </View>
-                <Pressable style={styles.quantityButton}>
-                    <Icon type="antdesign" name="plus" size={18} color="#444" />
-                </Pressable>
-            </View>
-        ),
-        [quantityText],
-    );
-
     if (showPrintBack)
         return (
             <View style={styles.container}>
@@ -56,7 +40,7 @@ const Quantity = ({ showPrintBack, isPrintBack, changePrintBack, quantityText, c
                 <View>
                     <TextSemiBold style={styles.title}>Quantity</TextSemiBold>
                     <View style={{ height: 4 }}></View>
-                    {renderInput}
+                    <InputQuantity changeQty={changeQuantity} />
                 </View>
             </View>
         );
@@ -64,12 +48,69 @@ const Quantity = ({ showPrintBack, isPrintBack, changePrintBack, quantityText, c
     return (
         <View style={[styles.container, { marginTop: 24 }]}>
             <TextSemiBold style={styles.title}>Quantity</TextSemiBold>
-            {renderInput}
+            <InputQuantity changeQty={changeQuantity} />
         </View>
     );
 };
 
 export default memo(Quantity);
+
+const InputQuantity = memo(({ changeQty }: { changeQty: any }) => {
+    const [text, setText] = useState('1');
+    const numQty = Number(text);
+
+    const increase = () => {
+        if (numQty < 50) {
+            var newQty = numQty + 1;
+            setText(newQty.toString());
+            changeQty(newQty.toString());
+        }
+    };
+
+    const decrease = () => {
+        if (numQty > 1) {
+            var newQty = numQty - 1;
+            setText(newQty.toString());
+            changeQty(newQty.toString());
+        }
+    };
+    const handleBlur = () => {
+        var intValue = Number(text);
+        console.log(intValue);
+
+        if (isNaN(intValue)) {
+            setText('1');
+            changeQty('1');
+        } else if (intValue < 1) {
+            setText('1');
+            changeQty('1');
+        } else if (intValue > 50) {
+            setText('50');
+            changeQty('50');
+        } else {
+            changeQty(text);
+        }
+    };
+    return (
+        <View style={styles.quantityContainer}>
+            <Pressable style={styles.quantityButton} onPress={decrease}>
+                <Icon type="antdesign" name="minus" size={18} color="#444" />
+            </Pressable>
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setText}
+                    value={text}
+                    keyboardType={'numeric'}
+                    onBlur={handleBlur}
+                />
+            </View>
+            <Pressable style={styles.quantityButton} onPress={increase}>
+                <Icon type="antdesign" name="plus" size={18} color="#444" />
+            </Pressable>
+        </View>
+    );
+});
 
 const styles = StyleSheet.create({
     container: {

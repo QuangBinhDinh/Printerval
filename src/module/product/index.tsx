@@ -280,7 +280,7 @@ const DetailProduct = () => {
                 detail={detail}
                 detailVariant={detailSelectVar}
                 configuration={configuration}
-                printBack={showPrintBack}
+                printBack={printBack}
                 quantity={quantity}
                 hasCustomText={Object.keys(customConfig || {}).length > 0}
                 errors={errors}
