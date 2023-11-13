@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import TrendExplore from './component/TrendExplore';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MainCategory from './component/MainCategory';
 
-import { useFetchCategoryBannerQuery, useFetchExploreProdQuery } from './service';
+import {
+    useFetchCategoryBannerQuery,
+    useFetchExploreProdQuery,
+    useFetchExploreTrendQuery,
+    useFetchHomeBannerQuery,
+} from './service';
 import ExploreProd from './component/ExploreProd';
 import SpiceUpView from './component/SpiceUpView';
 import SupportArtist from './component/SupportArtist';
@@ -24,6 +29,9 @@ const HomeScreen = () => {
     const insets = useSafeAreaInsets();
     const prodHistory = useAppSelector(state => state.category.productHistory);
 
+    const { data: banner0 } = useFetchHomeBannerQuery();
+    const { data: trendExplore } = useFetchExploreTrendQuery();
+
     const { data: banner } = useFetchCategoryBannerQuery();
     const { data: explore } = useFetchExploreProdQuery();
 
@@ -34,8 +42,8 @@ const HomeScreen = () => {
                 <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} />
             </View>
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} removeClippedSubviews>
-                <HeaderBanner />
-                <TrendExplore />
+                <HeaderBanner data={banner0} />
+                <TrendExplore data={trendExplore ?? []} />
                 <MainCategory data={banner?.result} />
                 <ExploreProd data={explore?.result} />
                 <SpiceUpView />

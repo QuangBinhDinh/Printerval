@@ -3,7 +3,12 @@ export const RANDOM_IMAGE_URL = 'https://picsum.photos/400';
 /**
  * Số ngày hết hạn để fetch lại cây danh mục
  */
-export const CATEGORY_EXPIRE_DAY = 7;
+export const CATEGORY_EXPIRE_DAY = 14;
+
+/**
+ * Số ngày hết hạn để fetch lại posts
+ */
+export const POST_EXPIRE_DAY = 14;
 
 /**
  * Thời gian (giây) lưu trữ cache của 1 fetch query
@@ -66,3 +71,8 @@ export const STORAGE_KEY = {
 };
 
 export const ORDER_SIZE = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
+
+/**
+ * ID của các post được coi là policy (để phân biệt với các post tips cho người dùng)
+ */
+export const POLICY_POST_ID = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];

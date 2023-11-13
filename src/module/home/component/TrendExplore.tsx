@@ -5,15 +5,16 @@ import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
 import { RANDOM_IMAGE_URL } from '../../../constant';
+import { ExploreTag } from '@home/service';
 
-const TrendExplore = () => {
-    const renderItem = ({ item }: { item: any }) => <TrendItem item={item} />;
+const TrendExplore = ({ data }: { data: ExploreTag[] }) => {
+    const renderItem = ({ item }: { item: ExploreTag }) => <TrendItem item={item} />;
     return (
         <View style={styles.container}>
             <TextSemiBold style={{ fontSize: 20, marginLeft: 16, lineHeight: 26 }}>Explore by trends</TextSemiBold>
             <FlatList
                 style={styles.list}
-                data={[1, 2, 3, 4, 5]}
+                data={data}
                 contentContainerStyle={{ paddingLeft: 4, paddingRight: 16 }}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
@@ -23,10 +24,10 @@ const TrendExplore = () => {
     );
 };
 
-const TrendItem = ({ item }: { item: any }) => (
+const TrendItem = ({ item }: { item: ExploreTag }) => (
     <View style={styles.item}>
-        <FastImage style={styles.image} source={{ uri: RANDOM_IMAGE_URL }} />
-        <TextNormal style={styles.itemTitle}>Sample Test </TextNormal>
+        <FastImage style={styles.image} source={{ uri: item.image_url }} />
+        <TextNormal style={styles.itemTitle}>{item.tag_name}</TextNormal>
     </View>
 );
 

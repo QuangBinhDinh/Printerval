@@ -5,6 +5,8 @@ import { RootState } from '@store/store';
 import { getVersion, isPinOrFingerprintSet } from 'react-native-device-info';
 import { SERVICE_DEBUG } from './constant';
 
+const GLOBAL_URL = 'https://glob.api.printerval.com/';
+
 interface BaseQueryArgs {
     baseUrl: string;
     timeout?: number;
@@ -111,6 +113,18 @@ export const domainApi = createApi({
             },
         }),
     }),
+});
+
+export const globalApi = createApi({
+    reducerPath: 'globalApi',
+    baseQuery: axiosBaseQuery({
+        baseUrl: GLOBAL_URL,
+        timeout: 15000,
+        headers: {
+            'User-Agent': `printervalApp/${getVersion()}`,
+        },
+    }),
+    endpoints: build => ({}),
 });
 
 export const { usePostImageMutation } = domainApi;

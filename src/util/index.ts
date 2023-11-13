@@ -56,6 +56,22 @@ const randomizeColor = (numCol = 4) => {
     return arr.slice(0, numCol);
 };
 
+const shuffleArray = <T>(oldArr: T[]): T[] => {
+    const arr = oldArr.slice();
+    let curIndex = arr.length - 1,
+        randIndex;
+
+    while (curIndex > 0) {
+        randIndex = Math.floor(Math.random() * (curIndex + 1));
+
+        //swap array element
+        [arr[curIndex], arr[randIndex]] = [arr[randIndex], arr[curIndex]];
+        curIndex--;
+    }
+
+    return arr;
+};
+
 const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const formatPrice = (priceNum: string | number) => {
     let localePrefix = '$';
@@ -134,4 +150,5 @@ export {
     timeBefore,
     normalizeDateTime,
     stripHTMLTags,
+    shuffleArray,
 };

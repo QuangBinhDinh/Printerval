@@ -74,3 +74,14 @@ export interface ResponseMeta {
     total_count: number;
     has_next: true;
 }
+
+export interface Post {
+    id: number;
+    name: string;
+    description: string;
+    content: string;
+    image_url: string;
+    updated_at: string;
+    created_at: string;
+    url: string;
+}

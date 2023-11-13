@@ -5,13 +5,18 @@ import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { RANDOM_IMAGE_URL } from '../../../constant';
+import { useAppSelector } from '@store/hook';
+import { Post } from '@type/common';
 
 const BlogHome = () => {
+    const blog = useAppSelector(state => state.posts.blogPost);
+
+    if (!blog || blog.length == 0) return null;
     return (
         <View style={styles.container}>
             <TextSemiBold style={{ fontSize: 20, marginBottom: 18, lineHeight: 26 }}>Printerval Blog</TextSemiBold>
-            {[1, 2, 3].map(item => (
-                <BlogItem key={item} item={item} />
+            {blog.slice(0, 3).map(item => (
+                <BlogItem key={item.id} item={item} />
             ))}
         </View>
     );
@@ -19,18 +24,20 @@ const BlogHome = () => {
 
 export default memo(BlogHome);
 
-const BlogItem = ({ item }: { item: any }) => {
+const BlogItem = ({ item }: { item: Post }) => {
     return (
         <Pressable style={styles.item}>
-            <FastImage style={{ width: 112, height: 112, borderRadius: 5 }} source={{ uri: RANDOM_IMAGE_URL }} />
+            <FastImage
+                style={{ width: 112, height: 112, borderRadius: 5, backgroundColor: lightColor.graybg }}
+                source={{ uri: item.image_url }}
+            />
             <View style={styles.itemContent}>
                 <View>
                     <TextNormal style={styles.itemTitle} numberOfLines={2}>
-                        Sample title for blog
+                        {item.name}
                     </TextNormal>
                     <TextNormal style={styles.itemSubtitle} numberOfLines={2}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqu
+                        {item.description}
                     </TextNormal>
                 </View>
                 <View style={styles.bottom}>

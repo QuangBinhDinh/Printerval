@@ -3,15 +3,14 @@ import { SCREEN_WIDTH } from '@util/index';
 import React, { memo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { RANDOM_IMAGE_URL } from '../../../constant';
 
-const HeaderBanner = () => {
+const HeaderBanner = ({ data }: { data: any[] }) => {
     const renderItem = ({ item }: { item: any }) => <Banner item={item} />;
     return (
         <View style={{ width: '100%', marginTop: 18 }}>
             {/* <PrintervalLogo width={144} height={36} style={{ marginLeft: 20 }} /> */}
             <FlatList
-                data={[1, 2, 3, 4, 5]}
+                data={data}
                 style={styles.list}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -27,7 +26,7 @@ export default memo(HeaderBanner);
 const Banner = ({ item }: { item: any }) => {
     return (
         <Pressable style={styles.item}>
-            <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: RANDOM_IMAGE_URL }} />
+            <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: item.image_url }} />
         </Pressable>
     );
 };
