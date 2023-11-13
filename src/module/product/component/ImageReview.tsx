@@ -6,6 +6,8 @@ import React, { memo, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
+import { Icon } from '@rneui/base';
+
 const MAX_IMAGES = 5;
 
 interface IProps {
@@ -16,6 +18,10 @@ interface IProps {
 const ImageReview = ({ imageUrl, setImageUrl }: IProps) => {
     const [postImage] = usePostImageMutation();
     const [loading, setLoading] = useState(false);
+
+    const deleteImage = (url: string) => {
+        setImageUrl((prev: string[]) => prev.filter(item => item != url));
+    };
 
     const openImagePicker = async () => {
         if (MAX_IMAGES == imageUrl.length) return;
@@ -58,19 +64,25 @@ const ImageReview = ({ imageUrl, setImageUrl }: IProps) => {
                 {imageUrl.map((item, index) => (
                     <View style={[styles.imageView, index % 3 == 2 && { marginRight: 0 }]} key={item + index}>
                         <FastImage
-                            style={{ width: '100%', height: '100%' }}
+                            style={{ width: '100%', height: '100%', backgroundColor: lightColor.lightbg }}
                             source={{ uri: item }}
                             resizeMode="contain"
                         />
+                        <Pressable hitSlop={16} style={styles.iconClose} onPress={() => deleteImage(item)}>
+                            <Icon type="material-community" name="close-circle" color={'black'} size={20} />
+                        </Pressable>
                     </View>
                 ))}
                 {imageUrl.length < MAX_IMAGES && (
-                    <Pressable style={styles.imagePlaceholder} onPress={openImagePicker}>
+                    <Pressable
+                        style={[styles.imagePlaceholder, imageUrl.length % 3 == 2 && { marginRight: 0 }]}
+                        onPress={openImagePicker}
+                    >
                         {loading ? (
                             <ActivityIndicator size={'small'} color={lightColor.secondary} />
                         ) : (
                             <FastImage
-                                style={{ width: '100%', height: '100%' }}
+                                style={styles.image1}
                                 source={require('@image/add-image.png')}
                                 resizeMode="contain"
                             />
@@ -97,7 +109,7 @@ const styles = StyleSheet.create({
         width: (SCREEN_WIDTH - 62) / 3,
         aspectRatio: 1,
         borderRadius: 6,
-        overflow: 'hidden',
+        //overflow: 'hidden',
         borderWidth: 1,
         borderColor: '#e1e1e1',
     },
@@ -105,10 +117,19 @@ const styles = StyleSheet.create({
         marginTop: 12,
         marginRight: 12,
         width: (SCREEN_WIDTH - 62) / 3,
-        aspectRatio: 1,
+        height: (SCREEN_WIDTH - 62) / 3,
         borderRadius: 6,
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
     },
+    image1: {
+        width: 60,
+        height: 60,
+        zIndex: 200,
+        //position: 'absolute',
+        // top: 0,
+        // left: 0,
+    },
+    iconClose: { position: 'absolute', right: -10, top: -10 },
 });
