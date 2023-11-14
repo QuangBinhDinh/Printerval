@@ -85,7 +85,7 @@ const CreateReview = () => {
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <InvisibleLoad visible={isLoading} />
-            <HeaderScreen title="Write review" />
+            <HeaderScreen title=" Write a customer review" />
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}

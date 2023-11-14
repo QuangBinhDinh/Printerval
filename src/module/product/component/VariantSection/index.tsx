@@ -50,6 +50,7 @@ const VariantSection = ({
 
         navigate('StyleGuide', { product_id: detailVariant.product_id, style_id, type_id });
     }, [displaySelected, mappings]);
+
     return (
         <View style={{ width: '100%', marginTop: 24 }}>
             {Object.entries(options).map(([title, ids], index) => {

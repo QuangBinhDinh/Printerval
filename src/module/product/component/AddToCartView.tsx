@@ -111,8 +111,8 @@ const AddToCartView = forwardRef<any, IProps>(
 
             let configObject: DynamicObject = {};
             if (printBack) {
-                configObject['is_print_back'] = 1;
-            } else if (printBack == false) configObject['is_print_front'] = 1;
+                configObject['print_location'] = 'back';
+            } else if (printBack == false) configObject['print_location'] = 'front';
 
             if (configuration) {
                 // add param còn lại (chỉ add khi value không rỗng)

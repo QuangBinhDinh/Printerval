@@ -283,7 +283,7 @@ export const useVariant = (product_id: number, product_name: string, product_sku
             var newArr = Array.from(sets[i]).sort((a, b) => {
                 // if (!sorted) return 0;
                 if (sorted[keys[i]].indexOf(a) < sorted[keys[i]].indexOf(b)) return -1;
-                else return 0;
+                else return 1;
             });
             newOption[keys[i]] = newArr; // sort lại từng option dựa vào danh sách có sẵn
         }
