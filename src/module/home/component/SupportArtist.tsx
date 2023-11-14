@@ -3,7 +3,7 @@ import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { SCREEN_WIDTH } from '@util/index';
 import React, { memo } from 'react';
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
+import { Image, StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -57,30 +57,24 @@ const CardSlider = () => {
     };
     return (
         <View style={styles.slider}>
-            <AnimPressable
-                style={[styles.card, { backgroundColor: lightColor.primary }, animStyle(0)]}
-                onPress={moveCard(0)}
-            />
-            <AnimPressable
-                style={[styles.card, { backgroundColor: lightColor.secondary }, animStyle(1)]}
-                onPress={moveCard(1)}
-            />
+            <AnimPressable style={[styles.card, animStyle(0)]} onPress={moveCard(0)}>
+                <Image style={{ width: '100%', height: '100%' }} source={require('@image/design-seller0.png')} />
+            </AnimPressable>
+            <AnimPressable style={[styles.card, animStyle(1)]} onPress={moveCard(1)}>
+                <Image style={{ width: '100%', height: '100%' }} source={require('@image/design-seller1.png')} />
+            </AnimPressable>
             <AnimPressable
                 onPress={moveCard(2)}
-                style={[
-                    styles.card,
-                    { backgroundColor: lightColor.yellowstar, marginLeft: (-CARD_WIDTH / 3) * 2 },
-                    animStyle(2),
-                ]}
-            />
+                style={[styles.card, { marginLeft: (-CARD_WIDTH / 3) * 2 }, animStyle(2)]}
+            >
+                <Image style={{ width: '100%', height: '100%' }} source={require('@image/design-seller2.png')} />
+            </AnimPressable>
             <AnimPressable
                 onPress={moveCard(3)}
-                style={[
-                    styles.card,
-                    { backgroundColor: lightColor.grayout, marginLeft: (-CARD_WIDTH / 3) * 2 },
-                    animStyle(3),
-                ]}
-            />
+                style={[styles.card, { marginLeft: (-CARD_WIDTH / 3) * 2 }, animStyle(3)]}
+            >
+                <Image style={{ width: '100%', height: '100%' }} source={require('@image/design-seller3.png')} />
+            </AnimPressable>
         </View>
     );
 };
@@ -99,7 +93,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         overflow: 'hidden',
     },
-    card: { width: CARD_WIDTH, aspectRatio: 1, borderRadius: 5 },
+    card: { width: CARD_WIDTH, aspectRatio: 1, borderRadius: 5, overflow: 'hidden' },
     button: {
         width: '100%',
         height: 52,
