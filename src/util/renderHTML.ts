@@ -1,6 +1,7 @@
 import { useLazyFetchSlugQuery } from '@api/service';
 import { navigate } from '@navigation/service';
 import { capitalize, maxBy } from 'lodash';
+import { Linking } from 'react-native';
 
 const slugPattern = /^https:\/\/printerval\.com\/([^\/?]+)$/;
 
@@ -12,9 +13,26 @@ export const useNavigateFromWebLink = () => {
      * @param url
      */
     const navigateFromLink = async (url: string) => {
+        if (isLoading) return;
+
+        if (url.includes('contact/ticket')) {
+            navigate('CreateTicket');
+        } else if (url.includes('contact-us')) {
+            //do sth
+        } else if (url.includes('tel') || url.includes('mailto')) {
+            try {
+                Linking.openURL(url);
+            } catch (e) {}
+        } else {
+            //xử lý regex
+            handleMatchingRegex(url);
+        }
+    };
+
+    const handleMatchingRegex = async (url: string) => {
         const match = url.match(slugPattern);
         //console.log('Match regex', match);
-        if (!match || isLoading) return;
+        if (!match) return;
 
         var keyword = match[1].split('-')[0];
         try {

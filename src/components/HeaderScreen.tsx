@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: SCREEN_WIDTH,
         backgroundColor: 'white',
-        zIndex: 1000,
+        zIndex: 500,
         //borderWidth: 1,
     },
     iconBack: {

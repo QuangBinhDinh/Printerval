@@ -75,4 +75,4 @@ export const ORDER_SIZE = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
 /**
  * ID của các post được coi là policy (để phân biệt với các post tips cho người dùng)
  */
-export const POLICY_POST_ID = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+export const POLICY_POST_ID = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 650, 651];

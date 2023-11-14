@@ -10,6 +10,7 @@ import RenderHTML, {
     defaultSystemFonts,
 } from 'react-native-render-html';
 import { useNavigateFromWebLink } from '@util/renderHTML';
+import { lightColor } from '@styles/color';
 
 const baseStyle: MixedStyleDeclaration = {
     fontFamily: 'Poppins-Regular',
@@ -20,6 +21,7 @@ const baseStyle: MixedStyleDeclaration = {
 const tagsStyles: MixedStyleRecord = {
     b: { fontFamily: 'Poppins-SemiBold', fontWeight: '500' },
     strong: { fontFamily: 'Poppins-Medium', fontWeight: '500' },
+    a: { color: lightColor.secondary },
 };
 
 const BlogScreen = () => {

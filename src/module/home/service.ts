@@ -65,6 +65,9 @@ const globalDomain = globalApi.injectEndpoints({
         fetchPrintervalPost: build.query<{ meta: ResponseMeta; result: Post[] }, void>({
             query: () => ({ url: 'post' }),
         }),
+        fetchPostById: build.query<{ meta: ResponseMeta; result: Post[] }, number>({
+            query: id => ({ url: `post?filters=id=${id}` }),
+        }),
     }),
 });
 
@@ -77,4 +80,4 @@ export const {
 
 export const { useFetchExploreProdQuery, useBrowsingHistoryMutation } = extendedDomain;
 
-export const { useLazyFetchPrintervalPostQuery } = globalDomain;
+export const { useLazyFetchPrintervalPostQuery, useLazyFetchPostByIdQuery } = globalDomain;

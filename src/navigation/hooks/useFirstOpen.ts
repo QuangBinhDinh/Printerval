@@ -2,7 +2,7 @@ import { useLogin } from '@auth/hook/useLogin';
 import { useLoginFirstOpen } from '@auth/hook/useLoginFirstOpen';
 import auth from '@auth/reducer';
 import { POST_EXPIRE_DAY, STORAGE_KEY } from '@constant/index';
-import { useLazyFetchPrintervalPostQuery } from '@home/service';
+import { useLazyFetchPostByIdQuery, useLazyFetchPrintervalPostQuery } from '@home/service';
 import { createSelector } from '@reduxjs/toolkit';
 import config from '@store/configReducer';
 import { useAppDispatch, useAppSelector } from '@store/hook';
@@ -68,14 +68,23 @@ export const useFirstOpen = () => {
 
     const validPost = useSelector(postCheckSelector);
     const [fetchPosts] = useLazyFetchPrintervalPostQuery();
+    const [fetchPostById] = useLazyFetchPostByIdQuery();
+
     const fetchPrintervalPosts = async () => {
         if (!validPost) {
             try {
                 var today = new Date();
                 today.setDate(today.getDate() + POST_EXPIRE_DAY);
 
-                var res = await fetchPosts().unwrap();
-                dispatch(posts.actions.setPrintervalPosts({ timeStamp: today.getTime(), list: res.result }));
+                //650, 651 là ID của Refund và Exchange policy mới tách
+                var batch = await Promise.all([
+                    fetchPosts().unwrap(),
+                    fetchPostById(650).unwrap(),
+                    fetchPostById(651).unwrap(),
+                ]);
+
+                var listPost = [...batch[0].result, ...batch[1].result, ...batch[2].result];
+                dispatch(posts.actions.setPrintervalPosts({ timeStamp: today.getTime(), list: listPost }));
             } catch (e) {
                 console.log(e);
             }

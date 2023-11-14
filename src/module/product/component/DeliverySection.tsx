@@ -8,6 +8,7 @@ import moment from 'moment';
 import { formatPrice } from '@util/index';
 import { Product } from '@type/common';
 import { navigate } from '@navigation/service';
+import { useAppSelector } from '@store/hook';
 
 interface IProps {
     country: string;
@@ -15,6 +16,8 @@ interface IProps {
     product: Product;
 }
 const DeliverySection = ({ data, country, product }: IProps) => {
+    const policyPost = useAppSelector(state => state.posts.policyPost);
+
     const renderTimeShipping = (defaultMinTime: number, defaultMaxTime: number) => {
         const minTime = moment().add(defaultMinTime, 'days').format('ll');
         const maxTime = moment().add(defaultMaxTime, 'days').format('ll');
@@ -28,6 +31,21 @@ const DeliverySection = ({ data, country, product }: IProps) => {
     const toCreateTicket = () => {
         navigate('CreateTicket');
     };
+
+    const toRefundPolicy = () => {
+        var post = policyPost.find(item => item.id == 650);
+        if (post) {
+            navigate('BlogScreen', { title: post?.name, content: post?.content }, 650);
+        }
+    };
+
+    const toExchangePolicy = () => {
+        var post = policyPost.find(item => item.id == 651);
+        if (post) {
+            navigate('BlogScreen', { title: post?.name, content: post?.content }, 651);
+        }
+    };
+
     return (
         <View style={styles.container}>
             {!!data && (
@@ -52,9 +70,11 @@ const DeliverySection = ({ data, country, product }: IProps) => {
                     <TextSemiBold style={{ color: '#444', fontSize: 15 }}>Policies</TextSemiBold>
                     <TextNormal style={{ fontSize: 13 }}>
                         Elgible for{' '}
-                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>Refund</TextNormal>
+                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }} onPress={toRefundPolicy}>
+                            Refund
+                        </TextNormal>
                         {` or `}
-                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>
+                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }} onPress={toExchangePolicy}>
                             Return and Replacement
                         </TextNormal>
                         {'\n'}within 30 days from the date of delivery

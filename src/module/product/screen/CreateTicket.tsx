@@ -20,6 +20,7 @@ import moment from 'moment';
 import { alertSuccess } from '@components/popup/PopupSuccess';
 import { goBack } from '@navigation/service';
 import ImageReview from '@product/component/ImageReview';
+import InvisibleLoad from '@components/loading/InvisibleLoad';
 
 const ticketTypes = [
     { id: 'order', name: 'Order' },
@@ -111,6 +112,7 @@ const CreateTicket = () => {
     }, [userInfo]);
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <InvisibleLoad visible={isLoading} />
             <HeaderScreen title="Create a ticket" />
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}

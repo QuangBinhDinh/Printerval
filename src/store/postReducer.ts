@@ -27,7 +27,7 @@ const posts = createSlice({
         setPrintervalPosts: (state, action: PayloadAction<{ timeStamp: number; list: Post[] }>) => {
             state.expire_timestamp = action.payload.timeStamp;
 
-            state.policyPost = action.payload.list.filter(item => POLICY_POST_ID.includes(item.id));
+            state.policyPost = action.payload.list.filter(item => POLICY_POST_ID.includes(item.id) && item.id != 11);
 
             var blogPost = action.payload.list.filter(item => !POLICY_POST_ID.includes(item.id));
             state.blogPost = shuffleArray<Post>(blogPost);

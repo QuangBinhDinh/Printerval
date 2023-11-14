@@ -26,7 +26,7 @@ export default memo(BlogHome);
 
 const BlogItem = ({ item }: { item: Post }) => {
     const toDetailBlog = () => {
-        console.log(item);
+        //console.log(item);
         navigate('BlogScreen', { title: item.name, content: item.content }, item.id);
     };
     return (
