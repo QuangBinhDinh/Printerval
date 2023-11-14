@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import TrendExplore from './component/TrendExplore';
@@ -23,8 +23,14 @@ import { PrintervalLogo } from '@assets/svg';
 import { usePreventGoBack } from '@navigation/customHook';
 import { useAppSelector } from '@store/hook';
 import ProductRow from '@components/product/ProductRow';
+import FastImage from 'react-native-fast-image';
 
-//testing commit
+const SPICE_UP_IMG = [
+    'https://picsum.photos/id/162/300/300',
+    'https://picsum.photos/id/163/300/300',
+    'https://picsum.photos/id/164/300/300',
+];
+
 const HomeScreen = () => {
     const insets = useSafeAreaInsets();
     const prodHistory = useAppSelector(state => state.category.productHistory);
@@ -36,6 +42,11 @@ const HomeScreen = () => {
     const { data: explore } = useFetchExploreProdQuery();
 
     usePreventGoBack();
+
+    useLayoutEffect(() => {
+        //testing purpose
+        FastImage.preload(SPICE_UP_IMG.map(item => ({ uri: item })));
+    }, []);
     return (
         <View style={[styles.container, { paddingTop: 10 + insets.top / 1.25 }]}>
             <View style={{ width: '100%', paddingBottom: 10 }}>
@@ -46,7 +57,7 @@ const HomeScreen = () => {
                 <TrendExplore data={trendExplore ?? []} />
                 <MainCategory data={banner?.result} />
                 <ExploreProd data={explore?.result} />
-                <SpiceUpView />
+                <SpiceUpView listImg={SPICE_UP_IMG} />
                 <PopularDesign />
                 <SupportArtist />
                 <Guarantee />

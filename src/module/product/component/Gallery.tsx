@@ -16,7 +16,7 @@ interface IProps {
     selectedColorGuide: string;
 }
 const Gallery = ({ gallery, isShirt, colIndex, selectedColorGuide }: IProps) => {
-    const cdnGallery = gallery.map(url => cdnImageV2(url));
+    const cdnGallery = gallery.map(url => cdnImageV2(url, 960, 960));
     return (
         <View style={styles.container}>
             <SwiperImage images={cdnGallery} />

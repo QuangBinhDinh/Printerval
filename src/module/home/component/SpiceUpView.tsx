@@ -1,11 +1,53 @@
 import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { SCREEN_WIDTH } from '@util/index';
-import React, { memo } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { cloneDeep } from 'lodash';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import { Image, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-const SpiceUpView = () => {
+/**
+ * Duration transition change image
+ */
+const ANIM_DURATION = 500;
+
+const AnimatedImage = Animated.createAnimatedComponent(FastImage);
+const SpiceUpView = ({ listImg }: { listImg: string[] }) => {
+    const [listImage, setImage] = useState<string[]>(listImg);
+    const [nextImage, setNext] = useState<any>(null);
+
+    const toNextImage = () => {
+        var temp = cloneDeep(listImage);
+        var remove = temp.shift();
+        temp.push(remove);
+        setNext(temp);
+    };
+    const toPrevImage = () => {
+        var temp = cloneDeep(listImage);
+        var remove = temp.pop();
+        temp.unshift(remove);
+        setNext(temp);
+    };
+
+    const opacity = useSharedValue(0);
+    const animImage = useAnimatedStyle(() => ({
+        opacity: opacity.value,
+    }));
+    useEffect(() => {
+        if (nextImage) {
+            opacity.value = withTiming(1, { duration: ANIM_DURATION }, finished => {
+                if (finished) {
+                    runOnJS(setImage)(nextImage);
+                }
+            });
+        }
+    }, [nextImage]);
+
+    useEffect(() => {
+        opacity.value = withTiming(0, { duration: 50 });
+    }, [listImage]);
+
     return (
         <View style={{ width: SCREEN_WIDTH, marginTop: 32 }}>
             <View style={styles.contentView}>
@@ -28,9 +70,36 @@ const SpiceUpView = () => {
                 </ImageBackground>
             </View>
             <View style={styles.imageContainer}>
-                <FastImage style={styles.smallImage} />
-                <FastImage style={styles.bigImage} />
-                <FastImage style={styles.smallImage} />
+                <Pressable style={styles.smallImage} onPress={toPrevImage}>
+                    <FastImage style={[styles.image]} source={{ uri: listImage[0] }} />
+                    {!!nextImage && (
+                        <AnimatedImage
+                            style={[StyleSheet.absoluteFillObject, animImage]}
+                            source={{ uri: nextImage[0] }}
+                            resizeMode={'cover'}
+                        />
+                    )}
+                </Pressable>
+                <Pressable style={styles.smallImage} onPress={toNextImage}>
+                    <FastImage style={styles.image} source={{ uri: listImage[2] }} />
+                    {!!nextImage && (
+                        <AnimatedImage
+                            style={[StyleSheet.absoluteFillObject, animImage]}
+                            source={{ uri: nextImage[2] }}
+                            resizeMode={'cover'}
+                        />
+                    )}
+                </Pressable>
+                <View style={styles.bigImage}>
+                    <FastImage style={styles.image} source={{ uri: listImage[1] }} />
+                    {!!nextImage && (
+                        <AnimatedImage
+                            style={[StyleSheet.absoluteFillObject, animImage]}
+                            source={{ uri: nextImage[1] }}
+                            resizeMode={'cover'}
+                        />
+                    )}
+                </View>
             </View>
         </View>
     );
@@ -53,16 +122,21 @@ const styles = StyleSheet.create({
         width: (SCREEN_WIDTH - 5) / 3,
         aspectRatio: 1,
         borderRadius: 130,
-        borderWidth: 1.5,
+        borderWidth: 2,
         borderColor: lightColor.primary,
+        overflow: 'hidden',
     },
     bigImage: {
-        width: (SCREEN_WIDTH - 5) / 3,
-        aspectRatio: 1,
+        width: SCREEN_WIDTH * 0.55,
+        height: SCREEN_WIDTH * 0.55,
+        position: 'absolute',
+        left: SCREEN_WIDTH * 0.225,
+        right: SCREEN_WIDTH * 0.225,
         borderRadius: 130,
-        borderWidth: 1.5,
+        borderWidth: 2,
         borderColor: lightColor.secondary,
-        zIndex: 200,
-        transform: [{ scale: 22 / 13 }],
+
+        overflow: 'hidden',
     },
+    image: { width: '100%', height: '100%' },
 });
