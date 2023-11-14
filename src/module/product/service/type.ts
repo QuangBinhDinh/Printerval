@@ -51,3 +51,16 @@ export interface ProductReportArgs {
     report: string;
     name: string;
 }
+
+export interface TicketSendArgs {
+    token_customer: number | string;
+    title: string;
+    email: string;
+    content: string;
+    files?: string;
+    status: string;
+    type: string;
+    customer_name: string;
+    token_ticket: string;
+    order_code?: string;
+}

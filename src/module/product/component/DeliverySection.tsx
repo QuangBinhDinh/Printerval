@@ -24,6 +24,10 @@ const DeliverySection = ({ data, country, product }: IProps) => {
     const toReportProduct = () => {
         navigate('ReportProduct', { product });
     };
+
+    const toCreateTicket = () => {
+        navigate('CreateTicket');
+    };
     return (
         <View style={styles.container}>
             {!!data && (
@@ -64,7 +68,9 @@ const DeliverySection = ({ data, country, product }: IProps) => {
                     <TextSemiBold style={{ color: '#444', fontSize: 15 }}>Report Content</TextSemiBold>
                     <TextNormal style={{ fontSize: 13 }}>
                         Having trouble?{' '}
-                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>Submit a ticket</TextNormal>
+                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }} onPress={toCreateTicket}>
+                            Submit a ticket
+                        </TextNormal>
                         {` and we will get back to you!\n`}
                         If you want to report this product,{' '}
                         <TextNormal onPress={toReportProduct} style={{ color: lightColor.secondary, fontSize: 13 }}>
