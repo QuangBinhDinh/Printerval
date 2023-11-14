@@ -4,9 +4,9 @@ import { lightColor } from '@styles/color';
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { RANDOM_IMAGE_URL } from '../../../constant';
 import { useAppSelector } from '@store/hook';
 import { Post } from '@type/common';
+import { navigate } from '@navigation/service';
 
 const BlogHome = () => {
     const blog = useAppSelector(state => state.posts.blogPost);
@@ -25,8 +25,12 @@ const BlogHome = () => {
 export default memo(BlogHome);
 
 const BlogItem = ({ item }: { item: Post }) => {
+    const toDetailBlog = () => {
+        console.log(item);
+        navigate('BlogScreen', { title: item.name, content: item.content }, item.id);
+    };
     return (
-        <Pressable style={styles.item}>
+        <Pressable style={styles.item} onPress={toDetailBlog}>
             <FastImage
                 style={{ width: 112, height: 112, borderRadius: 5, backgroundColor: lightColor.graybg }}
                 source={{ uri: item.image_url }}

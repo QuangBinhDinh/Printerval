@@ -1,5 +1,6 @@
 import { PrintervalLogo } from '@assets/svg';
 import { SCREEN_WIDTH } from '@util/index';
+import { useNavigateFromWebLink } from '@util/renderHTML';
 import React, { memo } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -24,8 +25,12 @@ const HeaderBanner = ({ data }: { data: any[] }) => {
 export default memo(HeaderBanner);
 
 const Banner = ({ item }: { item: any }) => {
+    const { navigateFromLink } = useNavigateFromWebLink();
+    const toScreen = () => {
+        navigateFromLink(item.href);
+    };
     return (
-        <Pressable style={styles.item}>
+        <Pressable style={styles.item} onPress={toScreen}>
             <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: item.image_url }} />
         </Pressable>
     );

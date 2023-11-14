@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { RootState } from '@store/store';
 import { getVersion, isPinOrFingerprintSet } from 'react-native-device-info';
 import { SERVICE_DEBUG } from './constant';
+import { Slug } from '@type/common';
 
 const GLOBAL_URL = 'https://glob.api.printerval.com/';
 
@@ -83,7 +84,11 @@ export const api = createApi({
             'User-Agent': `printervalApp/${getVersion()}`,
         },
     }),
-    endpoints: build => ({}),
+    endpoints: build => ({
+        fetchSlug: build.query<{ result: Slug[] }, string>({
+            query: keyword => ({ url: `slug_manager?filters=slug=${keyword}` }),
+        }),
+    }),
 });
 
 export const domainApi = createApi({
@@ -127,4 +132,5 @@ export const globalApi = createApi({
     endpoints: build => ({}),
 });
 
+export const { useLazyFetchSlugQuery } = api;
 export const { usePostImageMutation } = domainApi;

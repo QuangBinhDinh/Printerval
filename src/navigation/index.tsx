@@ -30,6 +30,8 @@ import PopupError from '@components/popup/PopupError';
 import AllReview from '@product/screen/AllReview';
 import ReportProduct from '@product/screen/ReportProduct';
 import BottomMessage from '@components/popup/BottomMessage';
+import BlogScreen from '@user/screen/BlogScreen';
+import CreateTicket from '@product/screen/CreateTicket';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -111,6 +113,9 @@ const Router = () => {
                 <Stack.Screen name="CreateReview" component={CreateReview} />
                 <Stack.Screen name="AllReview" component={AllReview} />
                 <Stack.Screen name="ReportProduct" component={ReportProduct} />
+
+                <Stack.Screen name="BlogScreen" component={BlogScreen} />
+                <Stack.Screen name="CreateTicket" component={CreateTicket} />
             </Stack.Navigator>
         </NavigationContainer>
     );

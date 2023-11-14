@@ -42,6 +42,11 @@ type RootStackParams = {
     ReportProduct: {
         product: Product;
     };
+
+    BlogScreen: {
+        title: string;
+        content: string;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -52,3 +57,4 @@ export type LoginScreenRouteProp = RouteProp<RootStackParams, 'LoginScreen'>;
 export type StyleGuideRouteProp = RouteProp<RootStackParams, 'StyleGuide'>;
 export type CreateReviewRouteProp = RouteProp<RootStackParams, 'CreateReview'>;
 export type ReportProductRouteProp = RouteProp<RootStackParams, 'ReportProduct'>;
+export type BlogScreenRouteProp = RouteProp<RootStackParams, 'BlogScreen'>;

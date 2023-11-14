@@ -85,3 +85,23 @@ export interface Post {
     created_at: string;
     url: string;
 }
+
+export interface Slug {
+    id: number;
+    slug: string;
+
+    /**
+     * Phân loại slug (tag, category)
+     */
+    type: 'tag' | 'category' | 'color';
+
+    /**
+     * Priority lớn hơn sẽ ưu tiên navigate đến màn tương ứng
+     */
+    priority: number;
+
+    /**
+     * Tag/Category ID cần được navigate đến
+     */
+    target_id: number;
+}
