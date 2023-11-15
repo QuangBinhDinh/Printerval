@@ -1,6 +1,7 @@
 import { CartWhite } from '@assets/svg';
 import FancyButton from '@components/FancyButton';
 import { TextNormal } from '@components/text';
+import { useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH } from '@util/index';
@@ -11,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
     const insets = useSafeAreaInsets();
+    const accessToken = useAppSelector(state => state.auth.accessToken);
 
     return (
         <View>
@@ -34,7 +36,11 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
                         if (!isFocused && !event.defaultPrevented) {
                             var name = route.name;
-                            if (name == 'Cart') name = 'CartNavigator';
+                            if (name == 'Cart') {
+                                if (accessToken) {
+                                    name = 'CartNavigator';
+                                } else name = 'LoginScreen';
+                            }
                             // The `merge: true` option makes sure that the params inside the tab screen are preserved
                             navigation.navigate({ name, merge: true });
                         }

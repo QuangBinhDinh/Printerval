@@ -24,6 +24,7 @@ import { goBack } from '@navigation/service';
 import { useAppSelector } from '@store/hook';
 import { showMessage } from '@components/popup/BottomMessage';
 import { Icon } from '@rneui/base';
+import { cdnImageV2 } from '@util/cdnV2';
 
 const OPTION = [
     { id: 'violates_trademark', name: 'It violates a trademark' },
@@ -108,9 +109,12 @@ const ReportProduct = () => {
                 ref={ref}
             >
                 <View style={styles.productContainer}>
-                    <FastImage style={styles.productImg} source={{ uri: cdnImage(product.image_url, 630, 630) }} />
+                    <FastImage style={styles.productImg} source={{ uri: cdnImageV2(product.image_url, 540, 540) }} />
                     <View style={{ flex: 1, paddingLeft: 10 }}>
-                        <TextNormal style={{ fontSize: 13, lineHeight: 16, color: lightColor.primary }}>
+                        <TextNormal
+                            style={{ fontSize: 15, lineHeight: 20, color: lightColor.primary }}
+                            numberOfLines={2}
+                        >
                             {he.decode(product.name)}
                         </TextNormal>
                         <TextNormal style={styles.price}>
@@ -167,7 +171,7 @@ const ReportProduct = () => {
                     }}
                     onPress={() => setExpand(!isExpand)}
                 >
-                    <TextSemiBold style={{ fontSize: 16 }}>How does this work</TextSemiBold>
+                    <TextSemiBold style={{ fontSize: 16 }}>How does this work?</TextSemiBold>
                     <Icon type="feather" name={`chevron-${isExpand ? 'down' : 'right'}`} size={20} color="#999" />
                 </Pressable>
                 {isExpand && (

@@ -89,6 +89,7 @@ export const api = createApi({
             query: keyword => ({ url: `slug_manager?filters=slug=${keyword}` }),
         }),
     }),
+    tagTypes: ['Cart'],
 });
 
 export const domainApi = createApi({

@@ -105,3 +105,25 @@ export interface Slug {
      */
     target_id: number;
 }
+
+export interface CartItem {
+    id: number;
+    cart_id: number;
+    product_id: number;
+    product_sku_id: number;
+    price: number;
+    quantity: number;
+    configurations: string;
+    created_at: string;
+    updated_at: string;
+    discount: number;
+    product_name: string;
+    image_url: string;
+    display_price: string;
+    high_price: string;
+    name_variant: string;
+
+    is_valid_buy_design: 0 | 1;
+
+    is_include_design_fee: 0 | 1;
+}
