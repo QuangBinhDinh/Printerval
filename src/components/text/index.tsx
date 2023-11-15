@@ -28,10 +28,12 @@ const RadioText = ({
     containerStyle?: StyleProp<ViewStyle>;
     onPress: any;
 }) => (
-    <View style={[{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }, containerStyle]}>
-        <Pressable
-            onPress={onPress}
-            hitSlop={10}
+    <Pressable
+        style={[{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }, containerStyle]}
+        onPress={onPress}
+        hitSlop={10}
+    >
+        <View
             style={{
                 height: 20,
                 width: 20,
@@ -42,9 +44,9 @@ const RadioText = ({
             }}
         >
             {selected && <View style={{ height: 9, width: 9, borderRadius: 9, backgroundColor: 'black' }} />}
-        </Pressable>
+        </View>
         <TextNormal style={{ marginLeft: 8, marginTop: 2 }}>{title}</TextNormal>
-    </View>
+    </Pressable>
 );
 
 export { TextSemiBold, TextNormal, RadioText };

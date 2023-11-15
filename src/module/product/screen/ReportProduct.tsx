@@ -179,7 +179,7 @@ const ReportProduct = () => {
                         if we need any further information. Thanks again!
                     </TextNormal>
                 )}
-                <View style={{ height: 80 }} />
+                <View style={{ height: 110 }} />
             </KeyboardAwareScrollView>
 
             <View
