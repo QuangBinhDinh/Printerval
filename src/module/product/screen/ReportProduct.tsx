@@ -77,7 +77,7 @@ const ReportProduct = () => {
                     goBack();
                 }
             } catch (e: any) {
-                var msg = e.message || JSON.stringify(e);
+                var msg = JSON.stringify(e.message?.content) || JSON.stringify(e.message) || JSON.stringify(e);
                 showMessage(msg);
             }
         },

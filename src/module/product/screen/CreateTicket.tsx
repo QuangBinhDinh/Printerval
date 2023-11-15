@@ -55,6 +55,7 @@ const initialValues = {
 const validationSchema = yup.object().shape({
     title: yup.string().required('Field cannot be empty'),
     ticketType: yup.string().required('Field cannot be empty'),
+    content: yup.string().required('Content required'),
     email: yup.string().email().required('Field cannot be empty'),
     custome_name: yup.string().required('Field cannot be empty'),
     order_code: yup.string().when('ticketType', {
@@ -90,7 +91,7 @@ const CreateTicket = () => {
                 token_ticket: md5(moment().format()),
                 ...(images.length > 0 && { files: JSON.stringify(images) }),
             };
-            console.log(body);
+            //console.log(body);
             try {
                 const res = await postTicket(body).unwrap();
                 if (res.status == 'successful') {
@@ -98,7 +99,7 @@ const CreateTicket = () => {
                     goBack();
                 }
             } catch (e: any) {
-                var msg = e.message || JSON.stringify(e);
+                var msg = JSON.stringify(e.message?.content) || JSON.stringify(e.message) || JSON.stringify(e);
                 showMessage(msg);
             }
         },
@@ -173,6 +174,7 @@ const CreateTicket = () => {
                     onChangeText={text => setFieldValue('content', text)}
                     error={errors.content}
                     touched={touched.content}
+                    required
                     textArea
                 />
                 <ImageReview imageUrl={images} setImageUrl={setImages} screen="CreateTicket" />
