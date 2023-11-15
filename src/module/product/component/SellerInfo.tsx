@@ -6,12 +6,15 @@ import React, { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-const SellerInfo = ({ seller }: { seller?: Seller }) => {
+const SellerInfo = ({ seller, prodImg }: { seller?: Seller; prodImg?: string }) => {
     const random_bg = useMemo(() => randomizeColor(1)[0], []);
     return (
         <View style={styles.container}>
-            <View style={[styles.avatar, { backgroundColor: random_bg }]}>
-                <FastImage style={{ width: '100%', height: '100%' }} source={{ uri: seller?.image_avatar ?? '' }} />
+            <View style={[styles.avatar]}>
+                <FastImage
+                    style={{ width: '100%', height: '100%' }}
+                    source={{ uri: seller?.image_avatar || prodImg }}
+                />
             </View>
             <View style={[styles.content]}>
                 <TextSemiBold style={{ fontSize: 15, marginTop: 0 }}>Designed and sold by</TextSemiBold>
@@ -35,6 +38,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 6,
         overflow: 'hidden',
+        backgroundColor: '#999',
     },
     content: {
         flex: 1,

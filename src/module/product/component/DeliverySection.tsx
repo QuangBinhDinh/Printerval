@@ -3,7 +3,7 @@ import { TextNormal, TextSemiBold } from '@components/text';
 import { ShippingInfo } from '@product/service/type';
 import { lightColor } from '@styles/color';
 import React, { memo } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import moment from 'moment';
 import { formatPrice } from '@util/index';
 import { Product } from '@type/common';
@@ -85,18 +85,23 @@ const DeliverySection = ({ data, country, product }: IProps) => {
             <View style={styles.section}>
                 <ReportFlag width={22} height={22} />
                 <View style={{ flex: 1, paddingLeft: 10 }}>
-                    <TextSemiBold style={{ color: '#444', fontSize: 15 }}>Report Content</TextSemiBold>
-                    <TextNormal style={{ fontSize: 13 }}>
-                        Having trouble?{' '}
-                        <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }} onPress={toCreateTicket}>
-                            Submit a ticket
+                    <Pressable onPress={toCreateTicket} hitSlop={8}>
+                        <TextSemiBold style={{ color: '#444', fontSize: 15 }}>Report Content</TextSemiBold>
+                        <TextNormal style={{ fontSize: 13 }}>
+                            Having trouble?{' '}
+                            <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>
+                                Submit a ticket
+                            </TextNormal>
+                            {` and we will get back to you!`}
                         </TextNormal>
-                        {` and we will get back to you!\n`}
-                        If you want to report this product,{' '}
-                        <TextNormal onPress={toReportProduct} style={{ color: lightColor.secondary, fontSize: 13 }}>
-                            click here
+                    </Pressable>
+
+                    <Pressable onPress={toReportProduct} hitSlop={8}>
+                        <TextNormal style={{ fontSize: 13 }}>
+                            If you want to report this product,{' '}
+                            <TextNormal style={{ color: lightColor.secondary, fontSize: 13 }}>click here</TextNormal>
                         </TextNormal>
-                    </TextNormal>
+                    </Pressable>
                 </View>
             </View>
         </View>

@@ -32,6 +32,7 @@ import ReportProduct from '@product/screen/ReportProduct';
 import BottomMessage from '@components/popup/BottomMessage';
 import BlogScreen from '@user/screen/BlogScreen';
 import CreateTicket from '@product/screen/CreateTicket';
+import ModalOption from '@components/input/ModalOption';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -78,6 +79,7 @@ const Router = () => {
             <PopupSuccess />
             <PopupError />
             <BottomMessage />
+            <ModalOption />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

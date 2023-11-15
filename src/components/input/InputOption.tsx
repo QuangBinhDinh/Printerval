@@ -1,10 +1,10 @@
+import React, { memo, useState } from 'react';
+import { Pressable, StyleProp, TextInputProps, TextStyle, ViewStyle, StyleSheet, TextInput, View } from 'react-native';
 import { TextNormal } from '@components/text';
 import { Icon } from '@rneui/base';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
-import React, { memo, useState } from 'react';
-import { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { openModalOption } from './ModalOption';
 
 const RATIO = SCREEN_HEIGHT / 810;
 
@@ -19,67 +19,63 @@ type InputProps = TextInputProps & {
 
     title: string;
 
-    /**
-     * Có phải text area không
-     */
-    textArea?: boolean;
-
-    /**
-     * Chiều cao text area
-     */
-    areaHeight?: number;
-
     required?: boolean;
+
+    /**
+     * Id item đang được select
+     */
+    value: string;
+
+    /**
+     * Gán giá trị Id đang được select
+     */
+    setValue: any;
+
+    /**
+     * List các option
+     */
+    options: {
+        id: string | number;
+        value: string;
+    }[];
 };
-const InputNormal = ({
+const InputOption = ({
     containerStyle,
     errorStyle,
     value,
-    onChangeText,
+    setValue,
     error,
     touched,
-    placeholder,
-    secureTextEntry = false,
-    textArea,
-    areaHeight = 150,
     required,
     title,
-    ...rest
+    options,
 }: InputProps) => {
-    const [hidePass, setHidePass] = useState(secureTextEntry);
+    const openModal = () => {
+        openModalOption({
+            data: options,
+            callback: item => setValue('ticketType', item.id),
+            title: 'Select ticket type',
+            selectedId: value,
+        });
+    };
+
+    const textValue = options.find(i => i.id == value)?.value;
+
     return (
         <View style={[styles.container, containerStyle]}>
             <TextNormal style={styles.titleStyle}>
                 {title}
                 {required && <TextNormal style={{ color: lightColor.price }}> *</TextNormal>}
             </TextNormal>
-            <View
-                style={[
-                    styles.inputView,
-                    !!error && touched && { borderColor: lightColor.error },
-                    textArea && { height: areaHeight, borderWidth: 1, marginTop: 10, padding: 8 },
-                ]}
+            <Pressable
+                style={[styles.inputView, !!error && touched && { borderColor: lightColor.error }]}
+                onPress={openModal}
             >
-                <TextInput
-                    style={[styles.inputStyle, textArea && { textAlignVertical: 'top' }]}
-                    value={value}
-                    onChangeText={onChangeText}
-                    placeholder={placeholder}
-                    placeholderTextColor={lightColor.grayout}
-                    secureTextEntry={hidePass}
-                    multiline={textArea}
-                    {...rest}
-                />
-                {secureTextEntry && (
-                    <Icon
-                        type="entypo"
-                        name={hidePass ? 'eye' : 'eye-with-line'}
-                        size={22}
-                        color="#999"
-                        onPress={() => setHidePass(!hidePass)}
-                    />
-                )}
-            </View>
+                <TextNormal style={[styles.inputStyle, !textValue && { color: '#999' }]}>
+                    {textValue || '--Select type--'}
+                </TextNormal>
+                <Icon type="feather" name={'chevron-down'} size={22} color="#999" />
+            </Pressable>
             <View style={{ height: 18 }}>
                 {!!error && touched && <TextNormal style={[styles.error, errorStyle]}>{error}</TextNormal>}
             </View>
@@ -87,7 +83,7 @@ const InputNormal = ({
     );
 };
 
-export default memo(InputNormal);
+export default memo(InputOption);
 
 const styles = StyleSheet.create({
     container: {
@@ -105,17 +101,17 @@ const styles = StyleSheet.create({
         width: '100%',
         borderBottomWidth: 1,
         borderColor: '#D6D6D6',
+
         alignItems: 'center',
+        justifyContent: 'center',
         paddingRight: 4,
     },
     inputStyle: {
         fontSize: 15,
         fontFamily: 'Poppins-Regular',
-        height: '100%',
+        marginTop: 4,
         flex: 1,
         color: '#444',
-        padding: 0,
-        paddingTop: 4,
     },
     error: {
         fontSize: 11,

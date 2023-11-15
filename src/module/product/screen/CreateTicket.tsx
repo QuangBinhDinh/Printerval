@@ -21,17 +21,18 @@ import { alertSuccess } from '@components/popup/PopupSuccess';
 import { goBack } from '@navigation/service';
 import ImageReview from '@product/component/ImageReview';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
+import InputNormal from '@components/input/InputNormal';
+import InputOption from '@components/input/InputOption';
 
 const ticketTypes = [
-    { id: 'order', name: 'Order' },
-
-    { id: 'change_order', name: 'Change Order Info' },
-    { id: 'tracking_code', name: 'Track Order' },
-    { id: 'claim_paypal', name: 'Claim Paypal' },
-    { id: 'unhappy_customer', name: 'Unhappy Customers' },
-    { id: 'issue_report', name: 'Issue Report' },
-    { id: 'complaint', name: 'Other' },
-    { id: 'cancel_order', name: 'Cancel/Refund Order' },
+    { id: 'order', value: 'Order' },
+    { id: 'change_order', value: 'Change Order Info' },
+    { id: 'tracking_code', value: 'Track Order' },
+    { id: 'claim_paypal', value: 'Claim Paypal' },
+    { id: 'unhappy_customer', value: 'Unhappy Customers' },
+    { id: 'issue_report', value: 'Issue Report' },
+    { id: 'complaint', value: 'Other' },
+    { id: 'cancel_order', value: 'Cancel/Refund Order' },
 ];
 const ticketTypesRequiredOrderCode = [
     'order',
@@ -54,10 +55,8 @@ const initialValues = {
 const validationSchema = yup.object().shape({
     title: yup.string().required('Field cannot be empty'),
     ticketType: yup.string().required('Field cannot be empty'),
-
     email: yup.string().email().required('Field cannot be empty'),
     custome_name: yup.string().required('Field cannot be empty'),
-    content: yup.string().required('Field cannot be empty'),
     order_code: yup.string().when('ticketType', {
         is: (tic: string) => ticketTypesRequiredOrderCode.includes(tic),
         then: schema => schema.required('Field cannot be empty'),
@@ -91,16 +90,16 @@ const CreateTicket = () => {
                 token_ticket: md5(moment().format()),
                 ...(images.length > 0 && { files: JSON.stringify(images) }),
             };
-            //console.log(body);
+            console.log(body);
             try {
                 const res = await postTicket(body).unwrap();
                 if (res.status == 'successful') {
                     alertSuccess('Your ticket is created');
                     goBack();
                 }
-            } catch (e) {
-                console.log(e);
-                showMessage('Something went wrong');
+            } catch (e: any) {
+                var msg = e.message || JSON.stringify(e);
+                showMessage(msg);
             }
         },
     });
@@ -122,55 +121,53 @@ const CreateTicket = () => {
                 enableResetScrollToCoords={false}
             >
                 <View style={{ height: 20 }} />
-                <InputBold
+                <InputNormal
                     title="Your email"
                     value={values.email}
                     onChangeText={text => setFieldValue('email', text)}
                     error={errors.email}
                     touched={touched.email}
+                    required
                 />
-                <InputBold
+                <InputNormal
                     title="Your Name"
                     value={values.custome_name}
                     onChangeText={text => setFieldValue('custome_name', text)}
                     error={errors.custome_name}
                     touched={touched.custome_name}
+                    required
                 />
-                <InputBold
+                <InputNormal
                     title="Subject"
                     value={values.title}
                     onChangeText={text => setFieldValue('title', text)}
                     error={errors.title}
                     touched={touched.title}
+                    required
                 />
 
-                <TextSemiBold style={styles.sectionTitle}>Please select ticket type</TextSemiBold>
-                {!!errors.ticketType && touched.ticketType && (
-                    <TextNormal style={styles.error}>{errors.ticketType}</TextNormal>
-                )}
-                <View style={styles.optionRow}>
-                    {ticketTypes.map(item => (
-                        <RadioText
-                            containerStyle={{ minWidth: (SCREEN_WIDTH - 40) / 2 }}
-                            key={item.id}
-                            title={item.name}
-                            onPress={() => setFieldValue('ticketType', item.id)}
-                            selected={values.ticketType == item.id}
-                        />
-                    ))}
-                </View>
+                <InputOption
+                    title="Ticket type"
+                    value={values.ticketType}
+                    setValue={setFieldValue}
+                    options={ticketTypes}
+                    error={errors.ticketType}
+                    touched={touched.ticketType}
+                    required
+                />
 
                 {ticketTypesRequiredOrderCode.includes(values.ticketType) && (
-                    <InputBold
+                    <InputNormal
                         title="Order Code"
                         value={values.order_code}
                         onChangeText={text => setFieldValue('order_code', text)}
                         error={errors.order_code}
                         touched={touched.order_code}
+                        required
                     />
                 )}
 
-                <InputBold
+                <InputNormal
                     title="How can we help you?"
                     value={values.content}
                     onChangeText={text => setFieldValue('content', text)}
@@ -178,7 +175,7 @@ const CreateTicket = () => {
                     touched={touched.content}
                     textArea
                 />
-                <ImageReview imageUrl={images} setImageUrl={setImages} />
+                <ImageReview imageUrl={images} setImageUrl={setImages} screen="CreateTicket" />
                 <View style={{ height: 80 }} />
             </KeyboardAwareScrollView>
 

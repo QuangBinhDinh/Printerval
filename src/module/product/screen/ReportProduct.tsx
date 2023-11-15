@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import HeaderScreen from '@components/HeaderScreen';
 import { RadioText, TextNormal, TextSemiBold } from '@components/text';
 import { ReportProductRouteProp } from '@navigation/navigationRoute';
 import { useRoute } from '@react-navigation/native';
 import { lightColor } from '@styles/color';
 import { cdnImage } from '@util/cdnImage';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import he from 'he';
@@ -23,6 +23,7 @@ import { alertError } from '@components/popup/PopupError';
 import { goBack } from '@navigation/service';
 import { useAppSelector } from '@store/hook';
 import { showMessage } from '@components/popup/BottomMessage';
+import { Icon } from '@rneui/base';
 
 const OPTION = [
     { id: 'violates_trademark', name: 'It violates a trademark' },
@@ -55,6 +56,7 @@ const ReportProduct = () => {
         params: { product },
     } = useRoute<ReportProductRouteProp>();
     const insets = useSafeAreaInsets();
+    const ref = useRef<KeyboardAwareScrollView>(null);
 
     const [postReport, { isLoading }] = usePostProductReportMutation();
     const { submitForm, errors, values, setFieldValue, resetForm, touched } = useFormik({
@@ -74,11 +76,19 @@ const ReportProduct = () => {
                     alertSuccess('Your report is sent');
                     goBack();
                 }
-            } catch (e) {
-                showMessage('Something went wrong');
+            } catch (e: any) {
+                var msg = e.message || JSON.stringify(e);
+                showMessage(msg);
             }
         },
     });
+
+    const [isExpand, setExpand] = useState(false);
+    useEffect(() => {
+        if (isExpand) {
+            ref.current?.scrollToEnd();
+        }
+    }, [isExpand]);
 
     const userInfo = useAppSelector(state => state.auth.userInfo);
     useEffect(() => {
@@ -95,6 +105,7 @@ const ReportProduct = () => {
                 contentContainerStyle={{ paddingHorizontal: 18 }}
                 enableOnAndroid
                 enableResetScrollToCoords={false}
+                ref={ref}
             >
                 <View style={styles.productContainer}>
                     <FastImage style={styles.productImg} source={{ uri: cdnImage(product.image_url, 630, 630) }} />
@@ -145,6 +156,29 @@ const ReportProduct = () => {
                     touched={touched.content}
                     textArea
                 />
+
+                <Pressable
+                    style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        marginTop: 16,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                    onPress={() => setExpand(!isExpand)}
+                >
+                    <TextSemiBold style={{ fontSize: 16 }}>How does this work</TextSemiBold>
+                    <Icon type="feather" name={`chevron-${isExpand ? 'down' : 'right'}`} size={20} color="#999" />
+                </Pressable>
+                {isExpand && (
+                    <TextNormal style={{ fontSize: 15, lineHeight: 20, marginTop: 12 }}>
+                        When you report a concern a notification is sent to the Printerval objections team. We review
+                        the content and follow up in cases where the content falls outside Printerval's guidelines. Due
+                        to the volume of emails the team receives, we cannot respond to every query regarding these
+                        reports but please rest assured we do check every single report carefully and we'll be in touch
+                        if we need any further information. Thanks again!
+                    </TextNormal>
+                )}
                 <View style={{ height: 80 }} />
             </KeyboardAwareScrollView>
 

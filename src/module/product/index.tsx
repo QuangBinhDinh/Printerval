@@ -242,7 +242,7 @@ const DetailProduct = () => {
                         </View>
                     </View>
 
-                    <SellerInfo seller={seller} />
+                    <SellerInfo seller={seller} prodImg={detail?.image_url} />
 
                     <DeliverySection
                         data={shipResult?.result}

@@ -14,8 +14,15 @@ interface IProps {
     imageUrl: string[];
 
     setImageUrl: any;
+
+    screen?: string;
 }
-const ImageReview = ({ imageUrl, setImageUrl }: IProps) => {
+const ImageReview = ({ imageUrl, setImageUrl, screen = 'ReportProduct' }: IProps) => {
+    const title =
+        screen == 'ReportProduct'
+            ? 'Maximum 5 images'
+            : 'If you have a photo or image that will help our investigation, please add it here.';
+
     const [postImage] = usePostImageMutation();
     const [loading, setLoading] = useState(false);
 
@@ -59,7 +66,7 @@ const ImageReview = ({ imageUrl, setImageUrl }: IProps) => {
     };
     return (
         <View style={{ width: '100%', marginTop: 16 }}>
-            <TextNormal>Maximum 5 images</TextNormal>
+            <TextNormal style={{ color: screen == 'ProductScreen' ? '#444' : '#999' }}>{title}</TextNormal>
             <View style={styles.imageRow}>
                 {imageUrl.map((item, index) => (
                     <View style={[styles.imageView, index % 3 == 2 && { marginRight: 0 }]} key={item + index}>
@@ -127,7 +134,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         zIndex: 200,
-        //position: 'absolute',
+        // position: 'absolute',
         // top: 0,
         // left: 0,
     },
