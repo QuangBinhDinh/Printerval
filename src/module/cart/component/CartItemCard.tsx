@@ -17,8 +17,10 @@ interface IProps {
     item: CartItem;
 
     removeCart: any;
+
+    editCart: any;
 }
-const CartItemCard = ({ item, removeCart }: IProps) => {
+const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
     const productName = useMemo(() => {
         if (!item.name_variant) return item.product_name;
         return item.product_name.substring(0, item.product_name.indexOf(item.name_variant) - 2);
@@ -30,6 +32,10 @@ const CartItemCard = ({ item, removeCart }: IProps) => {
 
     const onDelete = () => {
         askBeforeRemove(() => removeCart(item.id));
+    };
+
+    const openEditModal = () => {
+        editCart(item);
     };
 
     return (
@@ -54,8 +60,8 @@ const CartItemCard = ({ item, removeCart }: IProps) => {
                         </TextNormal>
                     </Pressable>
 
-                    <Pressable style={styles.variantView}>
-                        {!!item.name_variant && (
+                    <Pressable style={styles.variantView} onPress={openEditModal}>
+                        {!!item.product_sku_id && (
                             <View style={styles.variantInner}>
                                 <TextNormal style={styles.textGray} numberOfLines={1}>
                                     {item.name_variant}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import HeaderScreen from '@components/HeaderScreen';
@@ -15,6 +15,7 @@ import { shadowTop } from '@styles/shadow';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import PopupRemoveCart from './component/PopupRemoveCart';
 import LoadingCart from './component/LoadingCart';
+import ProductEditModal from './component/ProductEditModal';
 
 const CartScreen = () => {
     const insets = useSafeAreaInsets();
@@ -24,17 +25,22 @@ const CartScreen = () => {
         isFetching,
         isLoading,
         isSuccess,
+        refetch,
     } = useFetchCartQuery({ customerId: userInfo?.id || 1, token });
 
     const [deleteCartItem] = useRemoveCartItemMutation();
-
     const [displayCart, setDisplayCart] = useState<CartItem[]>([]);
     const removeCart = useCallback((id: number) => {
         setDisplayCart(prev => prev.filter(item => item.id !== id));
         deleteCartItem(id);
     }, []);
 
-    const renderItem = ({ item }: { item: CartItem }) => <CartItemCard item={item} removeCart={removeCart} />;
+    // ID product đang được chỉnh sửa (nếu có)
+    const [prodEditing, setEditing] = useState<CartItem | null>(null);
+
+    const renderItem = ({ item }: { item: CartItem }) => (
+        <CartItemCard item={item} removeCart={removeCart} editCart={setEditing} />
+    );
     const toCheckout = () => {};
 
     useEffect(() => {
@@ -58,6 +64,7 @@ const CartScreen = () => {
                     renderItem={renderItem}
                     contentContainerStyle={{ paddingHorizontal: 16 }}
                     ListFooterComponent={<View style={{ height: 100 }} />}
+                    refreshControl={<RefreshControl onRefresh={refetch} refreshing={false} />}
                 />
             )}
 
@@ -83,6 +90,8 @@ const CartScreen = () => {
             )}
 
             <PopupRemoveCart />
+
+            {!!prodEditing && <ProductEditModal prodEdit={prodEditing} setProduct={setEditing} />}
         </View>
     );
 };

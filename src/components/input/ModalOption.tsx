@@ -65,8 +65,6 @@ const ModalOption = () => {
             isVisible={visible}
             onBackdropPress={() => setVisible(false)}
             onBackButtonPress={() => setVisible(false)}
-            // animationIn={'fadeIn'}
-            // animationOut={'fadeOut'}
             backdropOpacity={0.2}
             style={{
                 justifyContent: 'flex-end',

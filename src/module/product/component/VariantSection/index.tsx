@@ -64,7 +64,7 @@ const VariantSection = ({
                 const priceList = variantPrice[title];
                 const varDetails = ids.map(num => mappings[num]);
 
-                const nameValue = mappings[displaySelected[index]].name;
+                const nameValue = mappings[displaySelected[index]]?.name;
                 if (title == 'color') {
                     return (
                         <View key={title}>

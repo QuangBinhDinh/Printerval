@@ -23,8 +23,17 @@ const extendedApi = api.injectEndpoints({
             query: cartId => ({ url: 'cart/empty-cart', method: 'post', params: { ids: cartId } }),
             invalidatesTags: ['Cart'],
         }),
+        //query này sẽ k trigger invalidate tag, dùng trong trường hợp change item
+        removeCartV2: build.mutation<any, number>({
+            query: cartId => ({ url: 'cart/empty-cart', method: 'post', params: { ids: cartId } }),
+        }),
     }),
 });
 
-export const { useAddToCartMutation, useFetchCartQuery, useUpdateQuantityMutation, useRemoveCartItemMutation } =
-    extendedApi;
+export const {
+    useAddToCartMutation,
+    useFetchCartQuery,
+    useUpdateQuantityMutation,
+    useRemoveCartItemMutation,
+    useRemoveCartV2Mutation,
+} = extendedApi;
