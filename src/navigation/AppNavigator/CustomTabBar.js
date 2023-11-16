@@ -1,7 +1,8 @@
+import { api } from '@api/service';
 import { CartWhite } from '@assets/svg';
 import FancyButton from '@components/FancyButton';
 import { TextNormal } from '@components/text';
-import { useAppSelector } from '@store/hook';
+import { useAppDispatch, useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH } from '@util/index';
@@ -13,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const CustomTabBar = ({ state, descriptors, navigation }) => {
     const insets = useSafeAreaInsets();
     const accessToken = useAppSelector(state => state.auth.accessToken);
-
+    const dispatch = useAppDispatch();
     return (
         <View>
             <View style={[styles.rowContainer, shadowTop]}>
@@ -39,6 +40,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                             if (name == 'Cart') {
                                 if (accessToken) {
                                     name = 'CartNavigator';
+                                    //invalid tag Cart để refetch lại giỏ hàng, nếu không sẽ bị cache
+                                    dispatch(api.util.invalidateTags(['Cart']));
                                 } else name = 'LoginScreen';
                             }
                             // The `merge: true` option makes sure that the params inside the tab screen are preserved

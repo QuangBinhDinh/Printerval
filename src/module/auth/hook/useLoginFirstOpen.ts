@@ -19,7 +19,6 @@ export const useLoginFirstOpen = () => {
     const [loginSocial] = usePostLoginSocialMutation();
 
     const handleSuccess = async (newUser: any) => {
-        setState('success');
         var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
         // không nhất thiết phải gen token mới (giữ phiên)
         if (!token) {
@@ -28,6 +27,7 @@ export const useLoginFirstOpen = () => {
         }
         storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
         dispatch(auth.actions.setNewUser({ ...newUser, token }));
+        setState('success');
     };
 
     const doLogin = async ({ email, password }: { email: string; password: string }) => {

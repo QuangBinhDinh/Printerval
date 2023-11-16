@@ -12,6 +12,7 @@ import storage from '@util/storage';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { useEffect } from 'react';
+import { Alert } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import { getUniqueId } from 'react-native-device-info';
 import { useSelector } from 'react-redux';
@@ -49,7 +50,7 @@ export const useFirstOpen = () => {
                 doLogin(emailData);
             } else {
                 await loginAsGuest();
-                RNBootSplash.hide({ fade: true, duration: 1000 });
+                //RNBootSplash.hide({ fade: true, duration: 1000 });
             }
         }
     };

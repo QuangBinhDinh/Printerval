@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     img: {
         width: 125,
         height: 125,
-        backgroundColor: '#999',
+        backgroundColor: lightColor.lightbg,
         borderRadius: 6,
         overflow: 'hidden',
     },
