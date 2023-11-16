@@ -58,6 +58,7 @@ const CartScreen = () => {
             ) : (
                 <KeyboardAwareFlatList
                     style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
                     enableOnAndroid
                     enableResetScrollToCoords={false}
                     data={displayCart}

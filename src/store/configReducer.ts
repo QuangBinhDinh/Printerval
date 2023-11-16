@@ -1,10 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+export interface PaymentConfig {
+    public_key: string;
+    test_public_key: string;
+
+    stripe_fee_percent: number;
+    paypal_fee_percent: number;
+
+    design_fee: number;
+    design_include_fee: number;
+}
 interface ConfigState {
     /**
      * Category ID được coi là không có option print back của sp
      */
     invalidPrintBack: string[] | null;
+
+    paymentConfig: PaymentConfig;
 
     appRating: {
         rate: number;
@@ -18,6 +30,7 @@ const initialState: ConfigState = {
         rate: 0,
         rateCount: 0,
     },
+    paymentConfig: null,
 };
 
 /**
@@ -37,6 +50,10 @@ const config = createSlice({
 
         setAppRating: (state, action) => {
             state.appRating = action.payload;
+        },
+
+        setPaymentConfiguration: (state, action: PayloadAction<PaymentConfig>) => {
+            state.paymentConfig = action.payload;
         },
     },
 });

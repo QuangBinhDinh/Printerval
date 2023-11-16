@@ -19,6 +19,11 @@ const extendedApi = api.injectEndpoints({
             invalidatesTags: ['Cart'],
         }),
 
+        updateCartConfig: build.mutation<any, { id: number; quantity: number; configurations: string }>({
+            query: args => ({ url: 'cart/update-cart-item', method: 'post', params: args }),
+            invalidatesTags: ['Cart'],
+        }),
+
         removeCartItem: build.mutation<any, number>({
             query: cartId => ({ url: 'cart/empty-cart', method: 'post', params: { ids: cartId } }),
             invalidatesTags: ['Cart'],
@@ -36,4 +41,5 @@ export const {
     useUpdateQuantityMutation,
     useRemoveCartItemMutation,
     useRemoveCartV2Mutation,
+    useUpdateCartConfigMutation,
 } = extendedApi;

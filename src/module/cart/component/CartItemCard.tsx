@@ -9,9 +9,10 @@ import { lightColor } from '@styles/color';
 import { formatPrice } from '@util/index';
 import he from 'he';
 import { navigate } from '@navigation/service';
-import { useUpdateQuantityMutation } from '../service';
+import { useUpdateCartConfigMutation, useUpdateQuantityMutation } from '../service';
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
 import { askBeforeRemove } from './PopupRemoveCart';
+import { useAppSelector } from '@store/hook';
 
 interface IProps {
     item: CartItem;
@@ -21,9 +22,27 @@ interface IProps {
     editCart: any;
 }
 const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
+    const { design_fee, design_include_fee } = useAppSelector(state => state.config.paymentConfig);
+    const new_fee = item.is_include_design_fee ? design_fee + design_include_fee : design_fee;
+
+    const [updateConfig] = useUpdateCartConfigMutation();
+
     const productName = useMemo(() => {
         if (!item.name_variant) return item.product_name;
         return item.product_name.substring(0, item.product_name.indexOf(item.name_variant) - 2);
+    }, [item]);
+
+    const nameVariant = useMemo(() => {
+        let name = '';
+        if (item.name_variant) name = item.name_variant;
+        else {
+            var commaIndex = item.product_name.indexOf(',');
+            if (commaIndex != -1) {
+                name = item.product_name.slice(commaIndex + 1);
+            }
+        }
+
+        return name;
     }, [item]);
 
     const toDetailProduct = () => {
@@ -33,9 +52,22 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
     const onDelete = () => {
         askBeforeRemove(() => removeCart(item.id));
     };
-
     const openEditModal = () => {
         editCart(item);
+    };
+
+    const [selectedBuyDesign, setBuyDesign] = useState(item.configurations?.includes('buy_design'));
+    const onPressBuyDesign = () => {
+        var config = item.configurations ? JSON.parse(item.configurations) : {};
+        if (!selectedBuyDesign) {
+            config.buy_design = 1;
+            config.design_fee = new_fee;
+        } else {
+            delete config.buy_design;
+            delete config.design_fee;
+        }
+        setBuyDesign(!selectedBuyDesign);
+        updateConfig({ id: item.id, quantity: item.quantity, configurations: JSON.stringify(config) });
     };
 
     return (
@@ -64,7 +96,7 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                         {!!item.product_sku_id && (
                             <View style={styles.variantInner}>
                                 <TextNormal style={styles.textGray} numberOfLines={1}>
-                                    {item.name_variant}
+                                    {nameVariant}
                                 </TextNormal>
                                 <Icon type="feather" name="chevron-down" size={18} color="#999" />
                             </View>
@@ -85,6 +117,23 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                     </View>
                 </View>
             </View>
+
+            <View style={styles.designRow}>
+                <Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={onPressBuyDesign}>
+                    <View style={styles.checkBox}>
+                        {selectedBuyDesign && (
+                            <Icon type="antdesign" name="check" size={16} color={lightColor.secondary} />
+                        )}
+                    </View>
+                    <TextNormal style={{ fontSize: 13, lineHeight: 16 }}>
+                        Download the original design file {formatPrice(new_fee)}
+                    </TextNormal>
+                </Pressable>
+
+                <Pressable hitSlop={12}>
+                    <Icon type="feather" name="download" color="#999" size={18} />
+                </Pressable>
+            </View>
         </View>
     );
 };
@@ -99,8 +148,9 @@ const CartItemQty = memo(({ itemQty, id }: { itemQty: number; id: number }) => {
     const [qtyTemp, setQtyTemp] = useState(-1);
 
     useEffect(() => {
-        setText(itemQty.toString());
-        setQtyTemp(-1);
+        // might have bug
+        // setText(itemQty.toString());
+        // setQtyTemp(-1);
     }, [itemQty]);
 
     const increase = () => {
@@ -253,5 +303,23 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlignVertical: 'center',
         textAlign: 'center',
+    },
+
+    designRow: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 8,
+        justifyContent: 'space-between',
+    },
+    checkBox: {
+        width: 20,
+        height: 20,
+        borderRadius: 4,
+        borderWidth: 1.5,
+        borderColor: lightColor.secondary,
+        marginRight: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

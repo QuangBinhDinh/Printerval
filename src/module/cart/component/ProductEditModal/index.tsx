@@ -180,7 +180,7 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                             ]}
                         >
                             <Pressable style={styles.buttonSumbit} onPress={changeProduct}>
-                                {isAdding || isDeleting ? (
+                                {isDeleting ? (
                                     <ActivityIndicator size="small" color="white" />
                                 ) : (
                                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Update Item</TextSemiBold>
@@ -191,7 +191,7 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                                 onPress={addNewProduct}
                             >
                                 {isAdding ? (
-                                    <ActivityIndicator size="small" color="white" />
+                                    <ActivityIndicator size="small" color={lightColor.secondary} />
                                 ) : (
                                     <TextSemiBold style={{ fontSize: 15, color: lightColor.secondary }}>
                                         Add Item
