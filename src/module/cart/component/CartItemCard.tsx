@@ -11,6 +11,7 @@ import he from 'he';
 import { navigate } from '@navigation/service';
 import { useUpdateQuantityMutation } from '../service';
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
+import { askBeforeRemove } from './PopupRemoveCart';
 
 interface IProps {
     item: CartItem;
@@ -27,6 +28,10 @@ const CartItemCard = ({ item, removeCart }: IProps) => {
         navigate('DetailProduct', { productId: item.product_id, productName }, item.product_id);
     };
 
+    const onDelete = () => {
+        askBeforeRemove(() => removeCart(item.id));
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
@@ -39,7 +44,7 @@ const CartItemCard = ({ item, removeCart }: IProps) => {
                 </Pressable>
 
                 <View style={{ flex: 1, paddingLeft: 10 }}>
-                    <Pressable style={styles.iconClose} hitSlop={10} onPress={() => removeCart(item.id)}>
+                    <Pressable style={styles.iconClose} hitSlop={10} onPress={onDelete}>
                         <Icon type="antdesign" name="close" size={18} color={'#444'} />
                     </Pressable>
 

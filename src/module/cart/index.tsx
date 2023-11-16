@@ -15,6 +15,7 @@ import FancyButton from '@components/FancyButton';
 import { TextSemiBold } from '@components/text';
 import { shadowTop } from '@styles/shadow';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
+import PopupRemoveCart from './component/PopupRemoveCart';
 
 const CartScreen = () => {
     const insets = useSafeAreaInsets();
@@ -71,6 +72,8 @@ const CartScreen = () => {
                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Checkout</TextSemiBold>
                 </FancyButton>
             </View>
+
+            <PopupRemoveCart />
         </View>
     );
 };
