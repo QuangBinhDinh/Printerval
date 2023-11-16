@@ -17,7 +17,13 @@ interface IProps {
     variantPrice: VariantPrice;
     detailVariant: ProdVariants | null;
     colIndex: number;
-    errors: ErrorField | null;
+
+    errors?: ErrorField | null;
+
+    /**
+     * View này có được dùng trong màn edit Cart không
+     */
+    isEdit?: boolean;
 }
 const VariantSection = ({
     changeValue,
@@ -28,6 +34,7 @@ const VariantSection = ({
     detailVariant,
     colIndex,
     errors,
+    isEdit,
 }: IProps) => {
     const curPrice = ` (${formatPrice(detailVariant?.price ?? '')})`; // hiển thị giá biến thể đang được chọn
 
@@ -56,11 +63,13 @@ const VariantSection = ({
             {Object.entries(options).map(([title, ids], index) => {
                 const priceList = variantPrice[title];
                 const varDetails = ids.map(num => mappings[num]);
+
+                const nameValue = mappings[displaySelected[index]].name;
                 if (title == 'color') {
                     return (
                         <View key={title}>
                             <TextSemiBold style={styles.optionTitle}>
-                                {capitalize(title)}: <TextNormal>{mappings[displaySelected[index]].name}</TextNormal>
+                                {capitalize(title)}: <TextNormal>{nameValue}</TextNormal>
                             </TextSemiBold>
                             <ScrollView
                                 style={styles.optionRow}
@@ -89,8 +98,10 @@ const VariantSection = ({
                     return (
                         <View key={title} style={{ marginTop: 16 }}>
                             <View style={styles.titleRow}>
-                                <TextSemiBold style={styles.optionTitle}>{capitalize(title)}</TextSemiBold>
-                                {title == 'style' ? (
+                                <TextSemiBold style={styles.optionTitle}>
+                                    {capitalize(title)}: <TextNormal>{nameValue}</TextNormal>{' '}
+                                </TextSemiBold>
+                                {isEdit ? null : title == 'style' ? (
                                     <Pressable style={{ flexDirection: 'row' }} hitSlop={8} onPress={toStyleGuide}>
                                         <Image style={styles.optionIcon} source={require('@image/style-guide.png')} />
                                         <TextNormal style={{ fontSize: 13 }}>Style guide</TextNormal>
@@ -125,7 +136,9 @@ const VariantSection = ({
                 }
                 return (
                     <View key={title} style={{ marginTop: 16 }}>
-                        <TextSemiBold style={styles.optionTitle}>{capitalize(title)}</TextSemiBold>
+                        <TextSemiBold style={styles.optionTitle}>
+                            {capitalize(title)}: <TextNormal>{nameValue}</TextNormal>
+                        </TextSemiBold>
                         <ScrollView
                             style={styles.optionRow}
                             contentContainerStyle={styles.optionScroll}
@@ -174,7 +187,7 @@ const styles = StyleSheet.create({
         paddingRight: 16,
     },
     optionIcon: { width: 17, height: 17, marginRight: 4 },
-    optionTitle: { fontSize: 15, color: 'black', marginLeft: 18 },
+    optionTitle: { fontSize: 15, color: '#444', marginLeft: 18 },
 
     row2: {
         flexDirection: 'row',
