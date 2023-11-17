@@ -16,8 +16,6 @@ interface IProps {
     product: Product;
 }
 const DeliverySection = ({ data, country, product }: IProps) => {
-    const policyPost = useAppSelector(state => state.posts.policyPost);
-
     const renderTimeShipping = (defaultMinTime: number, defaultMaxTime: number) => {
         const minTime = moment().add(defaultMinTime, 'days').format('ll');
         const maxTime = moment().add(defaultMaxTime, 'days').format('ll');
@@ -33,17 +31,11 @@ const DeliverySection = ({ data, country, product }: IProps) => {
     };
 
     const toRefundPolicy = () => {
-        var post = policyPost.find(item => item.id == 650);
-        if (post) {
-            navigate('BlogScreen', { title: post?.name, content: post?.content }, 650);
-        }
+        navigate('BlogScreen', { postId: 650 }, 650);
     };
 
     const toExchangePolicy = () => {
-        var post = policyPost.find(item => item.id == 651);
-        if (post) {
-            navigate('BlogScreen', { title: post?.name, content: post?.content }, 651);
-        }
+        navigate('BlogScreen', { postId: 651 }, 651);
     };
 
     return (

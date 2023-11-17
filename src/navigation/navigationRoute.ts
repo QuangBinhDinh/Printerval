@@ -44,8 +44,7 @@ type RootStackParams = {
     };
 
     BlogScreen: {
-        title: string;
-        content: string;
+        postId: number;
     };
 };
 

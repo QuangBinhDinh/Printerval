@@ -27,7 +27,7 @@ export default memo(BlogHome);
 const BlogItem = ({ item }: { item: Post }) => {
     const toDetailBlog = () => {
         //console.log(item);
-        navigate('BlogScreen', { title: item.name, content: item.content }, item.id);
+        navigate('BlogScreen', { postId: item.id }, item.id);
     };
     return (
         <Pressable style={styles.item} onPress={toDetailBlog}>

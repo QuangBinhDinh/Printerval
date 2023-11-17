@@ -25,18 +25,8 @@ const postCheckSelector = createSelector(
 
 export const useFirstOpen = () => {
     const invalidConfig = useAppSelector(state => state.config.invalidPrintBack);
-    const { doLogin, doLoginSocial, loginState } = useLoginFirstOpen();
+    const { doLogin, doLoginSocial, loginAsGuest, loginState } = useLoginFirstOpen();
     const dispatch = useAppDispatch();
-
-    const loginAsGuest = async () => {
-        var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
-        if (!token) {
-            const did = await getUniqueId();
-            token = `${did}-${Date.now()}`;
-        }
-        storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
-        dispatch(auth.actions.setCustomerToken(token));
-    };
 
     const loginPrinterval = async () => {
         //Lấy username/password nếu có từ storage để login
@@ -101,13 +91,15 @@ export const useFirstOpen = () => {
                 today.setDate(today.getDate() + POST_EXPIRE_DAY);
 
                 //650, 651 là ID của Refund và Exchange policy mới tách
+                //772 là ID của Sell Design policy
                 var batch = await Promise.all([
                     fetchPosts().unwrap(),
                     fetchPostById(650).unwrap(),
                     fetchPostById(651).unwrap(),
+                    fetchPostById(772).unwrap(),
                 ]);
 
-                var listPost = [...batch[0].result, ...batch[1].result, ...batch[2].result];
+                var listPost = [...batch[0].result, ...batch[1].result, ...batch[2].result, ...batch[3].result];
                 dispatch(posts.actions.setPrintervalPosts({ timeStamp: today.getTime(), list: listPost }));
             } catch (e) {
                 console.log(e);
@@ -118,6 +110,7 @@ export const useFirstOpen = () => {
     };
 
     useEffect(() => {
+        console.log(loginState);
         if (loginState !== 'uninitialize') {
             RNBootSplash.hide({ fade: true, duration: 1000 });
         }
