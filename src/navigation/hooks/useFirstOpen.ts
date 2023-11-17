@@ -17,10 +17,17 @@ import RNBootSplash from 'react-native-bootsplash';
 import { getUniqueId } from 'react-native-device-info';
 import { useSelector } from 'react-redux';
 
-// kiểm tra xem post đã expire chưa
+// kiểm tra xem post đã expire hoặc đã có additonal post chưa
 const postCheckSelector = createSelector(
-    (state: RootState) => state.posts?.expire_timestamp,
-    time => !!time && time >= Date.now(),
+    (state: RootState) => state.posts,
+    posts => {
+        const { expire_timestamp, policyPost } = posts;
+        return (
+            !!expire_timestamp &&
+            expire_timestamp >= Date.now() &&
+            policyPost.filter(i => [650, 651, 772].includes(i.id)).length == 3
+        );
+    },
 );
 
 export const useFirstOpen = () => {
@@ -110,7 +117,6 @@ export const useFirstOpen = () => {
     };
 
     useEffect(() => {
-        console.log(loginState);
         if (loginState !== 'uninitialize') {
             RNBootSplash.hide({ fade: true, duration: 1000 });
         }

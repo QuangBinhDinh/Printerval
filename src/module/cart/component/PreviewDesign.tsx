@@ -106,11 +106,11 @@ const PreviewDesign = ({ cartList }: IProps) => {
                 margin: 0,
             }}
         >
-            <View style={[styles.container, { paddingBottom: 16 + insets.bottom / 2 }]}>
-                <TextNormal style={{ lineHeight: 21 }}>
+            <View style={[styles.container, { paddingBottom: 16 + insets.bottom / 3 }]}>
+                <TextNormal style={{ lineHeight: 21, width: '95%' }}>
                     You will receive the link to download the original design file of this item within 24 hours
                 </TextNormal>
-                <Pressable hitSlop={10} onPress={toDesignPolicy} style={{ alignSelf: 'flex-start', marginTop: 2 }}>
+                <Pressable hitSlop={10} onPress={toDesignPolicy} style={{ width: '95%', marginTop: 2 }}>
                     <TextNormal style={{ lineHeight: 21 }}>
                         See more at our{' '}
                         <TextNormal style={{ lineHeight: 21, color: lightColor.secondary }}>
