@@ -12,11 +12,12 @@ import RenderHTML, {
 import { useNavigateFromWebLink } from '@util/renderHTML';
 import { lightColor } from '@styles/color';
 import { useAppSelector } from '@store/hook';
+import { normalize } from '@rneui/themed';
 
 const baseStyle: MixedStyleDeclaration = {
     fontFamily: 'Poppins-Regular',
     color: '#444444',
-    fontSize: 15,
+    fontSize: normalize(15),
 };
 
 const tagsStyles: MixedStyleRecord = {

@@ -26,13 +26,15 @@ import InputOption from '@components/input/InputOption';
 
 const ticketTypes = [
     { id: 'order', value: 'Order' },
+    { id: 'cancel_order', value: 'Cancel/Refund Order' },
     { id: 'change_order', value: 'Change Order Info' },
     { id: 'tracking_code', value: 'Track Order' },
     { id: 'claim_paypal', value: 'Claim Paypal' },
     { id: 'unhappy_customer', value: 'Unhappy Customers' },
     { id: 'issue_report', value: 'Issue Report' },
+    { id: 'seller_information', value: 'Seller Information' },
+    { id: 'seller_production', value: 'Seller Production' },
     { id: 'complaint', value: 'Other' },
-    { id: 'cancel_order', value: 'Cancel/Refund Order' },
 ];
 const ticketTypesRequiredOrderCode = [
     'order',
