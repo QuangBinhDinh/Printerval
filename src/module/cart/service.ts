@@ -1,4 +1,4 @@
-import { api } from '@api/service';
+import { api, domainApi } from '@api/service';
 import { CartItem } from '@type/common';
 import { AddToCartBody } from './type';
 
@@ -35,11 +35,26 @@ const extendedApi = api.injectEndpoints({
     }),
 });
 
+const extendedDomain = domainApi.injectEndpoints({
+    endpoints: build => ({
+        getPreviewDesign: build.mutation<
+            { product_id: number; design_url: string }[],
+            { product_id: number; product_sku_id: number }[]
+        >({
+            query: body => ({ url: '/service/pod/preview-design', method: 'post', body: { data: body } }),
+            transformResponse: res => res.result,
+        }),
+    }),
+});
+
 export const {
     useAddToCartMutation,
     useFetchCartQuery,
+    useLazyFetchCartQuery,
     useUpdateQuantityMutation,
     useRemoveCartItemMutation,
     useRemoveCartV2Mutation,
     useUpdateCartConfigMutation,
 } = extendedApi;
+
+export const { useGetPreviewDesignMutation } = extendedDomain;

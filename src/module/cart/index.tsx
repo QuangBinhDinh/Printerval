@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import HeaderScreen from '@components/HeaderScreen';
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 import { useAppSelector } from '@store/hook';
-import { useFetchCartQuery, useRemoveCartItemMutation } from './service';
+import { useFetchCartQuery, useGetPreviewDesignMutation, useRemoveCartItemMutation } from './service';
 import { CartItem } from '@type/common';
 import CartItemCard from './component/CartItemCard';
-import { SCREEN_WIDTH } from '@util/index';
+import { SCREEN_WIDTH, formatPrice } from '@util/index';
 import FancyButton from '@components/FancyButton';
 import { TextSemiBold } from '@components/text';
 import { shadowTop } from '@styles/shadow';
@@ -16,10 +16,40 @@ import InvisibleLoad from '@components/loading/InvisibleLoad';
 import PopupRemoveCart from './component/PopupRemoveCart';
 import LoadingCart from './component/LoadingCart';
 import ProductEditModal from './component/ProductEditModal';
+import PreviewDesign from './component/PreviewDesign';
+import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '@store/store';
+import { useSelector } from 'react-redux';
+
+/**
+ * Selector trả về giá trị boolean  có đang call api nào liên quan đến cart không
+ */
+const fetchSelector = createSelector(
+    [(state: RootState) => state.api.mutations, (state: RootState) => state.api.queries],
+    (mutation, query) => {
+        const list_api = [
+            'addToCart',
+            'fetchCart',
+            'updateQuantity',
+            'updateCartConfig',
+            'removeCartItem',
+            'removeCartV2',
+        ];
+        return (
+            Object.values(mutation).some(
+                item => list_api.includes(item?.endpointName || '') && item?.status == 'pending',
+            ) ||
+            Object.values(query).some(item => list_api.includes(item?.endpointName || '') && item?.status == 'pending')
+        );
+    },
+);
 
 const CartScreen = () => {
-    const insets = useSafeAreaInsets();
     const { userInfo, token } = useAppSelector(state => state.auth);
+
+    //payConfig phải khác null mới hiện cart !!!
+    const payConfig = useAppSelector(state => state.config.paymentConfig);
+
     const {
         data: { items, sub_total } = {},
         isFetching,
@@ -27,8 +57,23 @@ const CartScreen = () => {
         isSuccess,
         refetch,
     } = useFetchCartQuery({ customerId: userInfo?.id || 1, token });
-
     const [deleteCartItem] = useRemoveCartItemMutation();
+
+    const finalSubTotal = useMemo(() => {
+        var price = 0;
+        if (!!items && items.length > 0 && payConfig) {
+            price = items.reduce((prev, next) => {
+                let design_fee = 0;
+                if (next.configurations?.includes('buy_design')) {
+                    if (next.is_include_design_fee) design_fee = payConfig.design_fee + payConfig.design_include_fee;
+                    else design_fee = payConfig.design_fee;
+                }
+                return prev + next.price * next.quantity + design_fee;
+            }, 0);
+        }
+        return price;
+    }, [items, sub_total, payConfig]);
+
     const [displayCart, setDisplayCart] = useState<CartItem[]>([]);
     const removeCart = useCallback((id: number) => {
         setDisplayCart(prev => prev.filter(item => item.id !== id));
@@ -38,18 +83,18 @@ const CartScreen = () => {
     // ID product đang được chỉnh sửa (nếu có)
     const [prodEditing, setEditing] = useState<CartItem | null>(null);
 
+    useEffect(() => {
+        if (isSuccess && !!items) {
+            setDisplayCart(items);
+        }
+    }, [isSuccess, items]);
+
     const renderItem = ({ item }: { item: CartItem }) => (
         <CartItemCard item={item} removeCart={removeCart} editCart={setEditing} />
     );
-    const toCheckout = () => {};
-
-    useEffect(() => {
-        if (isSuccess && !!items) setDisplayCart(items);
-    }, [isSuccess, items]);
-
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <InvisibleLoad visible={isFetching} />
+            {/* <InvisibleLoad visible={isFetching} /> */}
 
             <HeaderScreen title="Your Cart" />
 
@@ -69,28 +114,11 @@ const CartScreen = () => {
                 />
             )}
 
-            {!isLoading && (
-                <View
-                    style={[
-                        styles.bottomView,
-                        { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2 },
-                        shadowTop,
-                    ]}
-                >
-                    <TextSemiBold style={styles.price}>{sub_total}</TextSemiBold>
-
-                    <FancyButton
-                        style={styles.button}
-                        backgroundColor={lightColor.secondary}
-                        onPress={toCheckout}
-                        disabled={isLoading}
-                    >
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Checkout</TextSemiBold>
-                    </FancyButton>
-                </View>
-            )}
+            {!isLoading && <CartBottom subTotal={finalSubTotal} />}
 
             <PopupRemoveCart />
+
+            <PreviewDesign cartList={items} />
 
             {!!prodEditing && <ProductEditModal prodEdit={prodEditing} setProduct={setEditing} />}
         </View>
@@ -98,6 +126,32 @@ const CartScreen = () => {
 };
 
 export default CartScreen;
+
+const CartBottom = ({ subTotal }: { subTotal: number }) => {
+    const insets = useSafeAreaInsets();
+
+    const cartLoading = useSelector(fetchSelector);
+    const toCheckout = () => {
+        console.log('Checkout');
+    };
+
+    return (
+        <View
+            style={[styles.bottomView, { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2 }, shadowTop]}
+        >
+            <TextSemiBold style={styles.price}>{formatPrice(subTotal)}</TextSemiBold>
+
+            <FancyButton
+                style={styles.button}
+                backgroundColor={lightColor.secondary}
+                onPress={toCheckout}
+                disabled={cartLoading}
+            >
+                <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Checkout</TextSemiBold>
+            </FancyButton>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     bottomView: {

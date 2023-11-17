@@ -2,7 +2,7 @@ import { TextNormal, TextSemiBold } from '@components/text';
 import { useFetchProductInfoQuery } from '@product/service';
 import { lightColor } from '@styles/color';
 import { cdnImageV2 } from '@util/cdnV2';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@util/index';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, formatPrice } from '@util/index';
 import he from 'he';
 import React, { memo, useState } from 'react';
 import { ActivityIndicator, InteractionManager, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -153,8 +153,10 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                                         {he.decode(product?.name || '')}
                                     </TextNormal>
                                     <TextNormal style={styles.price}>
-                                        {product?.display_price}{' '}
-                                        <TextNormal style={styles.oldPrice}>{product?.display_high_price}</TextNormal>
+                                        {formatPrice(detailSelectVar?.price || '')}{' '}
+                                        <TextNormal style={styles.oldPrice}>
+                                            {formatPrice(detailSelectVar?.high_price || '')}
+                                        </TextNormal>
                                     </TextNormal>
                                 </View>
                             </View>

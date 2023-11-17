@@ -126,4 +126,6 @@ export interface CartItem {
     is_valid_buy_design: 0 | 1;
 
     is_include_design_fee: 0 | 1;
+
+    is_custom_design: 0 | 1;
 }

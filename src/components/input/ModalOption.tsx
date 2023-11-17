@@ -44,7 +44,7 @@ const ModalOption = () => {
 
     const submit = (item: Option) => {
         setState(prev => ({ ...prev, selectedId: item.id }));
-        console.log('Select item', item);
+        // console.log('Select item', item);
         if (callback) callback(item);
         debounce(() => {
             setVisible(false);

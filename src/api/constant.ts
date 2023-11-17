@@ -3,9 +3,9 @@
  */
 export const SERVICE_DEBUG: string[] = [
     'fetchProductInfo',
-    'postProductReview',
     'addToCart',
     'fetchCart',
     'removeCartItem',
     'updateQuantity',
+    'getPreviewDesign',
 ];

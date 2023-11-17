@@ -116,5 +116,16 @@ export const useLoginFirstOpen = () => {
         }
     };
 
-    return { doLogin, doLoginSocial, loginState, loading };
+    const loginAsGuest = async () => {
+        var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
+        if (!token) {
+            const did = await getUniqueId();
+            token = `${did}-${Date.now()}`;
+        }
+        storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
+        dispatch(auth.actions.setCustomerToken(token));
+        setState('success');
+    };
+
+    return { doLogin, doLoginSocial, loginState, loading, loginAsGuest };
 };

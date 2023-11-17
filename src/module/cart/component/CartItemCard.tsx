@@ -13,6 +13,7 @@ import { useUpdateCartConfigMutation, useUpdateQuantityMutation } from '../servi
 import { useDebounceValue } from '@components/hooks/useDebounceValue';
 import { askBeforeRemove } from './PopupRemoveCart';
 import { useAppSelector } from '@store/hook';
+import { showDesign } from './PreviewDesign';
 
 interface IProps {
     item: CartItem;
@@ -25,7 +26,7 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
     const { design_fee, design_include_fee } = useAppSelector(state => state.config.paymentConfig);
     const new_fee = item.is_include_design_fee ? design_fee + design_include_fee : design_fee;
 
-    const [updateConfig] = useUpdateCartConfigMutation();
+    const [updateConfig, { isLoading }] = useUpdateCartConfigMutation();
 
     const productName = useMemo(() => {
         if (!item.name_variant) return item.product_name;
@@ -56,7 +57,9 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
         editCart(item);
     };
 
-    const [selectedBuyDesign, setBuyDesign] = useState(item.configurations?.includes('buy_design'));
+    const isBuyDesign = item.configurations?.includes('buy_design');
+
+    const [selectedBuyDesign, setBuyDesign] = useState(isBuyDesign);
     const onPressBuyDesign = () => {
         var config = item.configurations ? JSON.parse(item.configurations) : {};
         if (!selectedBuyDesign) {
@@ -69,6 +72,9 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
         setBuyDesign(!selectedBuyDesign);
         updateConfig({ id: item.id, quantity: item.quantity, configurations: JSON.stringify(config) });
     };
+    useEffect(() => {
+        setBuyDesign(isBuyDesign);
+    }, [isBuyDesign]);
 
     return (
         <View style={styles.container}>
@@ -118,22 +124,28 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                 </View>
             </View>
 
-            <View style={styles.designRow}>
-                <Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={onPressBuyDesign}>
-                    <View style={styles.checkBox}>
-                        {selectedBuyDesign && (
-                            <Icon type="antdesign" name="check" size={16} color={lightColor.secondary} />
-                        )}
-                    </View>
-                    <TextNormal style={{ fontSize: 13, lineHeight: 16 }}>
-                        Download the original design file {formatPrice(new_fee)}
-                    </TextNormal>
-                </Pressable>
+            {item.is_custom_design == 0 && item.is_valid_buy_design == 1 && (
+                <View style={styles.designRow}>
+                    <Pressable
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        onPress={onPressBuyDesign}
+                        disabled={isLoading}
+                    >
+                        <View style={styles.checkBox}>
+                            {selectedBuyDesign && (
+                                <Icon type="antdesign" name="check" size={16} color={lightColor.secondary} />
+                            )}
+                        </View>
+                        <TextNormal style={{ fontSize: 13, lineHeight: 16 }}>
+                            Download the original design file {formatPrice(new_fee)}
+                        </TextNormal>
+                    </Pressable>
 
-                <Pressable hitSlop={12}>
-                    <Icon type="feather" name="download" color="#999" size={18} />
-                </Pressable>
-            </View>
+                    <Pressable hitSlop={12} onPress={() => showDesign(item.product_id)}>
+                        <Icon type="feather" name="download" color="#999" size={18} />
+                    </Pressable>
+                </View>
+            )}
         </View>
     );
 };
