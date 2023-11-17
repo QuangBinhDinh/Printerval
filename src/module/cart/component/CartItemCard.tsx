@@ -14,6 +14,7 @@ import { useDebounceValue } from '@components/hooks/useDebounceValue';
 import { askBeforeRemove } from './PopupRemoveCart';
 import { useAppSelector } from '@store/hook';
 import { showDesign } from './PreviewDesign';
+import { normalize } from '@rneui/themed';
 
 interface IProps {
     item: CartItem;
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
         borderColor: lightColor.borderGray,
     },
     input: {
-        fontSize: 13,
+        fontSize: normalize(13),
         fontFamily: 'Poppins-Medium',
         color: '#444',
         padding: 0,

@@ -65,7 +65,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                                     backgroundColor="rgba(255, 205, 169, 1)"
                                 >
                                     <View style={styles.cartInner}>
-                                        <CartWhite width={28} height={28} />
+                                        <CartWhite width={24} height={24} />
                                     </View>
                                 </FancyButton>
                             </View>
@@ -109,24 +109,25 @@ const styles = StyleSheet.create({
     },
     button: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     label: {
-        fontSize: 13,
+        fontSize: 12,
+        lineHeight: 18,
         marginTop: 3,
     },
 
     cartOuter: {
-        height: 76,
-        width: 76,
+        height: 60,
+        width: 60,
         backgroundColor: 'rgba(255, 205, 169, 1)',
         borderRadius: 56,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: -30,
+        marginTop: -28,
 
         overflow: 'hidden',
     },
     cartInner: {
-        height: 54,
-        width: 54,
+        height: 45,
+        width: 45,
         backgroundColor: lightColor.secondary,
         borderRadius: 40,
         justifyContent: 'center',

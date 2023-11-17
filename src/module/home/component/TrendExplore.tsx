@@ -46,5 +46,5 @@ const styles = StyleSheet.create({
     },
     item: { height: 150, width: 100, marginLeft: 12, alignItems: 'center' },
     image: { width: 100, height: 100, borderRadius: 50 },
-    itemTitle: { fontSize: 14, marginTop: 10, width: '90%', textAlign: 'center', lineHeight: 18 },
+    itemTitle: { fontSize: 13.5, marginTop: 10, width: '100%', textAlign: 'center', lineHeight: 18 },
 });

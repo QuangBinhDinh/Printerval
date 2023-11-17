@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
+        lineHeight: 20,
         marginTop: 2,
     },
     textSelected: { color: lightColor.secondary },

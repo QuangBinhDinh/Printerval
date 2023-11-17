@@ -1,4 +1,5 @@
 import { TextNormal, TextSemiBold } from '@components/text';
+import { normalize } from '@rneui/themed';
 import { lightColor } from '@styles/color';
 import { DynamicObject } from '@type/base';
 import { CustomAttribute, ErrorField } from '@type/product';
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         marginTop: 4,
         borderWidth: 1,
         borderColor: lightColor.borderGray,
-        fontSize: 15,
+        fontSize: normalize(15),
         fontFamily: 'Poppins-Regular',
         textAlignVertical: 'center',
         padding: 0,

@@ -23,8 +23,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <HomeFill width={25} height={25} />;
-                        else return <Home width={25} height={25} />;
+                        if (focused) return <HomeFill width={24} height={24} />;
+                        else return <Home width={24} height={24} />;
                     },
                 }}
                 name="HomeScreen"
@@ -35,8 +35,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'Search',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <SearchFill width={24} height={24} />;
-                        else return <Search width={24} height={24} />;
+                        if (focused) return <SearchFill width={23} height={23} />;
+                        else return <Search width={23} height={23} />;
                     },
                     lazy: false,
                 }}
@@ -47,8 +47,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'Cart',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <SearchFill width={24} height={24} />;
-                        else return <Search width={24} height={24} />;
+                        if (focused) return <SearchFill width={23} height={23} />;
+                        else return <Search width={23} height={23} />;
                     },
                 }}
                 name="Cart"
@@ -59,8 +59,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'Wishlist',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <HeartFill width={24} height={24} />;
-                        else return <Heart width={24} height={24} />;
+                        if (focused) return <HeartFill width={23} height={23} />;
+                        else return <Heart width={23} height={23} />;
                     },
                 }}
                 name="Notify"
@@ -71,8 +71,8 @@ const BottomTabs = () => {
                 options={{
                     title: 'You',
                     tabBarIcon: ({ focused }) => {
-                        if (focused) return <UserFill width={27} height={24} />;
-                        else return <User width={27} height={24} />;
+                        if (focused) return <UserFill width={24} height={24} />;
+                        else return <User width={24} height={24} />;
                     },
                 }}
                 name="UserScreen"

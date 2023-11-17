@@ -1,5 +1,6 @@
 import { TextNormal } from '@components/text';
 import { Icon } from '@rneui/base';
+import { normalize } from '@rneui/themed';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
 import React, { memo, useState } from 'react';
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         paddingRight: 4,
     },
     inputStyle: {
-        fontSize: 15,
+        fontSize: normalize(15),
         fontFamily: 'Poppins-Regular',
         height: '100%',
         flex: 1,

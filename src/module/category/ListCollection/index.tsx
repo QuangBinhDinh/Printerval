@@ -17,6 +17,7 @@ import LoadingCategory from './LoadingCategory';
 import Collection from './Collection';
 import { SCREEN_WIDTH } from '@util/index';
 import { pushNavigate } from '@navigation/service';
+import { normalize } from '@rneui/themed';
 
 const checkSelector = createSelector(
     (state: RootState) => state.category.valid_timestamp,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 8,
         height: '100%',
-        fontSize: 15,
+        fontSize: normalize(15),
         fontFamily: 'Poppins-Regular',
         color: '#444',
         padding: 0,
