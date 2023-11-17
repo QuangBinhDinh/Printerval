@@ -1,15 +1,28 @@
+import { normalize } from '@rneui/themed';
 import React from 'react';
 import { Pressable, StyleProp, Text, TextProps, View, ViewStyle } from 'react-native';
 
 const TextSemiBold = ({ children, style, ...rest }: TextProps) => (
-    <Text style={[{ fontFamily: 'Poppins-Medium', color: '#5441B5' }, style]} allowFontScaling={false} {...rest}>
+    <Text
+        style={[
+            { fontFamily: 'Poppins-Medium', color: '#5441B5' },
+            style,
+            !!style?.fontSize && { fontSize: normalize(style.fontSize) },
+        ]}
+        allowFontScaling={false}
+        {...rest}
+    >
         {children}
     </Text>
 );
 
 const TextNormal = ({ children, style, ...rest }: TextProps) => (
     <Text
-        style={[{ fontFamily: 'Poppins-Regular', color: '#444', fontSize: 15 }, style]}
+        style={[
+            { fontFamily: 'Poppins-Regular', color: '#444', fontSize: 15 },
+            style,
+            !!style?.fontSize && { fontSize: normalize(style.fontSize) },
+        ]}
         allowFontScaling={false}
         {...rest}
     >

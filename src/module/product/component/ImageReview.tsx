@@ -69,22 +69,19 @@ const ImageReview = ({ imageUrl, setImageUrl, screen = 'ReportProduct' }: IProps
             <TextNormal style={{ color: screen == 'ProductScreen' ? '#444' : '#999' }}>{title}</TextNormal>
             <View style={styles.imageRow}>
                 {imageUrl.map((item, index) => (
-                    <View style={[styles.imageView, index % 3 == 2 && { marginRight: 0 }]} key={item + index}>
+                    <View style={[styles.image]} key={item + index}>
                         <FastImage
                             style={{ width: '100%', height: '100%', backgroundColor: lightColor.lightbg }}
                             source={{ uri: item }}
                             resizeMode="contain"
                         />
-                        <Pressable hitSlop={16} style={styles.iconClose} onPress={() => deleteImage(item)}>
-                            <Icon type="material-community" name="close-circle" color={'black'} size={20} />
+                        <Pressable hitSlop={10} style={styles.iconClose} onPress={() => deleteImage(item)}>
+                            <Icon type="material-community" name="close-circle" color={'black'} size={16} />
                         </Pressable>
                     </View>
                 ))}
                 {imageUrl.length < MAX_IMAGES && (
-                    <Pressable
-                        style={[styles.imagePlaceholder, imageUrl.length % 3 == 2 && { marginRight: 0 }]}
-                        onPress={openImagePicker}
-                    >
+                    <Pressable style={[styles.image]} onPress={openImagePicker}>
                         {loading ? (
                             <ActivityIndicator size={'small'} color={lightColor.secondary} />
                         ) : (
@@ -109,6 +106,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginTop: 12,
     },
     imageView: {
         marginTop: 12,
@@ -129,6 +127,15 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 16,
+        //borderWidth: 1,
     },
     image1: {
         width: 60,

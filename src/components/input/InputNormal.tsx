@@ -41,7 +41,7 @@ const InputNormal = ({
     placeholder,
     secureTextEntry = false,
     textArea,
-    areaHeight = 150,
+    areaHeight = 100,
     required,
     title,
     ...rest
@@ -57,7 +57,7 @@ const InputNormal = ({
                 style={[
                     styles.inputView,
                     !!error && touched && { borderColor: lightColor.error },
-                    textArea && { height: areaHeight, borderWidth: 1, marginTop: 10, padding: 8 },
+                    textArea && { height: areaHeight },
                 ]}
             >
                 <TextInput

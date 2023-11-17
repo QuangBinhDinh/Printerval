@@ -27,7 +27,7 @@ const ProductTitle = ({ detail, category, title }: IProps) => {
                 </View>
             </View>
 
-            <TextSemiBold style={{ fontSize: 20, marginTop: 8, lineHeight: 25 }}>{title}</TextSemiBold>
+            <TextSemiBold style={{ fontSize: 20, marginTop: 8, lineHeight: 24 }}>{title}</TextSemiBold>
         </View>
     );
 };
