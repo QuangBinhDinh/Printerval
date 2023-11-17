@@ -7,6 +7,7 @@ import {
     ProductReviewArgs,
     ProductReportArgs,
     TicketSendArgs,
+    ProdConfigArgs,
 } from './type';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
@@ -121,6 +122,13 @@ const extendedDomain = domainApi.injectEndpoints({
 
         postTicket: build.mutation<{ status: string }, TicketSendArgs>({
             query: body => ({ url: 'ticket/direct-send', method: 'post', body }),
+        }),
+
+        postMultiProduct: build.mutation<
+            { status: string },
+            { token: string; customerId: number; data: ProdConfigArgs }
+        >({
+            query: body => ({ url: 'bought-together/add-all-to-cart', method: 'post', body }),
         }),
     }),
 });

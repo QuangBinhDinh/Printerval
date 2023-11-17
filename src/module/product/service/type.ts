@@ -64,3 +64,10 @@ export interface TicketSendArgs {
     token_ticket: string;
     order_code?: string;
 }
+
+export interface ProdConfigArgs {
+    productId: number;
+    productSkuId: number;
+    quantity: number;
+    configurations?: string;
+}

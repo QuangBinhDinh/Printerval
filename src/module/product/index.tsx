@@ -9,7 +9,7 @@ import FastImage from 'react-native-fast-image';
 import { cdnImage } from '@util/cdnImage';
 import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
-import { SCREEN_WIDTH } from '@util/index';
+import { SCREEN_WIDTH, formatPrice } from '@util/index';
 import { TextNormal, TextSemiBold } from '@components/text';
 import { useFetchOther } from './hook/useFetchOther';
 import SellerInfo from './component/SellerInfo';
@@ -30,7 +30,7 @@ import Quantity from './component/VariantSection/Quantity';
 import AddToCartView from './component/AddToCartView';
 import { DynamicObject } from '@type/base';
 import CustomizeSection from './component/CustomizeSection';
-import { ErrorField } from '@type/product';
+import { ErrorField, ProductTogether } from '@type/product';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
@@ -70,6 +70,7 @@ const DetailProduct = () => {
         colIndex,
         prodNoVariant,
         description,
+        default_variant_name,
     } = useVariant(productId, productName);
 
     const {
@@ -90,6 +91,24 @@ const DetailProduct = () => {
         isShirt,
         colorObj,
     } = useFetchOther(variantReady);
+
+    const thisProd: ProductTogether = useMemo(() => {
+        if (!detail) return null;
+
+        return {
+            id: detail.id,
+            name: detail.name,
+            image_url: detailSelectVar?.gallery[0] || detail.image_url,
+            quantity: 1,
+            price: detailSelectVar?.price || detail.price,
+            high_price: detailSelectVar?.high_price || detail.high_price,
+            display_price: detailSelectVar ? formatPrice(detailSelectVar.price) : detail.display_price,
+            display_high_price: detailSelectVar ? formatPrice(detailSelectVar.high_price) : detail.display_high_price,
+
+            productSku: detailSelectVar?.id || -1,
+            variantName: default_variant_name,
+        };
+    }, [detail, detailSelectVar]);
 
     /**
      * Trả về ảnh color guide dựa vào biến thể đang được chọn
@@ -250,7 +269,9 @@ const DetailProduct = () => {
                         product={detail}
                     />
 
-                    <BoughtTogether data={boughtTogether} currentProd={detail} />
+                    {!!boughtTogether && boughtTogether.length > 0 && !!thisProd && (
+                        <BoughtTogether data={boughtTogether} currentProd={thisProd} />
+                    )}
 
                     <ReviewSection
                         product={detail}

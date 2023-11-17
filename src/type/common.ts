@@ -32,6 +32,24 @@ export interface Product {
          */
         custom_design_option: Nullable<{ title: string; values: string[] }[]>;
     };
+
+    variant_default: {
+        /**
+         * ID của variant default
+         */
+        id: number;
+
+        /**
+         * Variant name của biến thể
+         */
+        product_name: string;
+
+        price: string;
+        high_price: string;
+        display_price: string;
+        display_high_price: string;
+        image_url: string;
+    }[];
 }
 
 export interface Seller {

@@ -344,6 +344,16 @@ export const useVariant = (product_id: number, product_name: string, product_sku
         };
     }, [detailSelectVar]);
 
+    const variant_name_beautify = useMemo(() => {
+        if (!selectedVariant || !mappings) return '';
+        return selectedVariant.map(id => mappings[id || 'none']?.name || '').join(', ');
+    }, [mappings, selectedVariant]);
+
+    const default_variant_name = useMemo(() => {
+        if (!detailSelectVar || !mappings) return '';
+        return detailSelectVar.variants.map(id => mappings[id]?.name || '').join(', ');
+    }, [mappings, detailSelectVar]);
+
     return {
         mappings,
         selectedVariant,
@@ -364,5 +374,12 @@ export const useVariant = (product_id: number, product_name: string, product_sku
          */
         prodNoVariant,
         description,
+
+        /**
+         * Tên đầy đủ biến thể sp
+         */
+        variant_name_beautify,
+
+        default_variant_name,
     };
 };

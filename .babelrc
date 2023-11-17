@@ -40,7 +40,8 @@
             "@searchResult": "./src/module/searchResult",
             "@auth": "./src/module/auth",
             "@user": "./src/module/user",
-            "@product": "./src/module/product"
+            "@product": "./src/module/product",
+            "@cart": "./src/module/cart"
           }
         }
       ],

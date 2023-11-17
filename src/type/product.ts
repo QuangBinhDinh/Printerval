@@ -4,7 +4,7 @@ export interface ProdVariants {
     id: number;
     is_default: 0 | 1;
     variants: number[];
-    product_id: string;
+    product_id: number;
     price: string;
     high_price: string;
     gallery: string[];
@@ -70,4 +70,19 @@ export interface ErrorField {
     timestamp: number;
 
     type: 'custom_text' | 'size' | 'custom_image';
+}
+
+export interface ProductTogether {
+    id: number;
+    name: string;
+    image_url: string;
+
+    quantity: number;
+    display_price: string;
+    display_high_price: string;
+    price: string;
+    high_price: string;
+
+    productSku: number;
+    variantName: string;
 }
