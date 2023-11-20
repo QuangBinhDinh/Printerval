@@ -10,7 +10,7 @@ import {
 } from './type';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
-import { DynamicObject, Nullable } from '@type/base';
+import { Nullable } from '@type/base';
 import { ProductTogether } from '@type/product';
 
 const extendedApi = api.injectEndpoints({

@@ -1,10 +1,7 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { TextNormal, TextSemiBold } from '@components/text';
-import { ProductScreenRouteProp } from '@navigation/navigationRoute';
-import { useRoute } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import { lightColor } from '@styles/color';
-import { Product } from '@type/common';
 
 import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';

@@ -8,11 +8,16 @@ import Animated, {
     Extrapolation,
 } from 'react-native-reanimated';
 import { Icon } from '@rneui/base';
-import { ShareIcon } from '@assets/svg';
+import { CartSecondary, ShareIcon } from '@assets/svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
-import { goBack } from '@navigation/service';
+import { goBack, navigate } from '@navigation/service';
 import { TextSemiBold } from '@components/text';
+import { SCREEN_WIDTH } from '@util/index';
+import { useAppDispatch } from '@store/hook';
+import { api } from '@api/service';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface IProps {
     scrollY: SharedValue<number>;
@@ -22,11 +27,17 @@ interface IProps {
 
 const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
 
     const animHeader = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(scrollY.value, [0, 150], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
         borderBottomColor: interpolateColor(scrollY.value, [0, 150], ['rgba(225,225,225,0)', 'rgba(225,225,225,1)']),
     }));
+
+    const toCart = () => {
+        dispatch(api.util.invalidateTags(['Cart']));
+        navigate('CartNavigator');
+    };
 
     const animTitle = useAnimatedStyle(() => ({
         transform: [
@@ -38,6 +49,24 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
             },
         ],
     }));
+
+    const headerRight = useAnimatedStyle(() => ({
+        transform: [
+            {
+                translateX: interpolate(scrollY.value, [100, 200], [35, 0], {
+                    extrapolateLeft: Extrapolation.CLAMP,
+                    extrapolateRight: Extrapolation.CLAMP,
+                }),
+            },
+        ],
+    }));
+
+    const cartStyle = useAnimatedStyle(() => ({
+        opacity: interpolate(scrollY.value, [100, 200], [0, 1], {
+            extrapolateLeft: Extrapolation.CLAMP,
+            extrapolateRight: Extrapolation.CLAMP,
+        }),
+    }));
     return (
         <Animated.View
             style={[styles.header, { height: 54 + insets.top / 1.5, paddingTop: 6 + insets.top / 1.5 }, animHeader]}
@@ -46,13 +75,19 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
                 <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
             </Pressable>
             <Animated.View style={[styles.titleView, animTitle]}>
-                <TextSemiBold style={{ fontSize: 18 }} numberOfLines={1}>
+                <TextSemiBold style={{ fontSize: 18, marginTop: 3 }} numberOfLines={1}>
                     {title}
                 </TextSemiBold>
             </Animated.View>
-            <Pressable style={styles.button}>
-                <ShareIcon width={26} height={22} />
-            </Pressable>
+
+            <Animated.View style={[styles.rightContainer, headerRight]}>
+                <Pressable style={styles.rightButton}>
+                    <ShareIcon width={22} height={22} />
+                </Pressable>
+                <AnimatedPressable style={[styles.rightButton, cartStyle]} onPress={toCart}>
+                    <CartSecondary width={23} height={23} />
+                </AnimatedPressable>
+            </Animated.View>
         </Animated.View>
     );
 };
@@ -75,8 +110,16 @@ const styles = StyleSheet.create({
     button: {
         height: 48,
         width: 48,
+
         justifyContent: 'center',
         alignItems: 'center',
     },
-    titleView: { flex: 1, height: '100%', justifyContent: 'center', paddingHorizontal: 5 },
+    rightContainer: { flexDirection: 'row', width: 80, height: 48 },
+    rightButton: {
+        flex: 1,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titleView: { flex: 1, height: '100%', justifyContent: 'center' },
 });

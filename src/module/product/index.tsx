@@ -5,8 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import { useRoute } from '@react-navigation/native';
 import { ProductScreenRouteProp } from '@navigation/navigationRoute';
-import FastImage from 'react-native-fast-image';
-import { cdnImage } from '@util/cdnImage';
 import ProductTitle from './component/ProductTitle';
 import ProductFeature from './component/ProductFeature';
 import { SCREEN_WIDTH, formatPrice } from '@util/index';
