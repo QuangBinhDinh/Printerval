@@ -15,6 +15,8 @@ import { askBeforeRemove } from './PopupRemoveCart';
 import { useAppSelector } from '@store/hook';
 import { showDesign } from './PreviewDesign';
 import { normalize } from '@rneui/themed';
+import EventEmitter from '../../../EventEmitter';
+import { DynamicObject } from '@type/base';
 
 interface IProps {
     item: CartItem;
@@ -45,6 +47,20 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
         }
 
         return name;
+    }, [item]);
+
+    const productConfigStr = useMemo(() => {
+        if (!item.configurations) return '';
+        var obj: DynamicObject = JSON.parse(item.configurations);
+        var config = Object.entries(obj).reduce((prev: DynamicObject, [key, value]) => {
+            if (['number', 'string'].includes(typeof value)) prev[key] = value;
+            return prev;
+        }, {});
+
+        delete config.design_fee;
+        delete config.previewUrl;
+
+        return JSON.stringify(config);
     }, [item]);
 
     const toDetailProduct = () => {
@@ -128,7 +144,7 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                             )}
                         </View>
 
-                        <CartItemQty itemQty={item.quantity} id={item.id} />
+                        <CartItemQty itemQty={item.quantity} id={item.id} configStr={productConfigStr} />
                     </View>
                 </View>
             </View>
@@ -161,18 +177,24 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
 
 export default memo(CartItemCard);
 
-const CartItemQty = memo(({ itemQty, id }: { itemQty: number; id: number }) => {
+const EVENT_NAME = 'increase_qty_cart_item';
+const CartItemQty = memo(({ itemQty, id, configStr }: { itemQty: number; id: number; configStr: string }) => {
     const [qtyText, setText] = useState(itemQty.toString());
 
     //chỉ dùng để lưu trữ qty mới đc thay đổi bởi user. Nếu như qty từ data thay đổi , giá trị này sẽ bị reset
     //sử dụng debounce mỗi khi giá trị này thay đổi để call api update quantity
     const [qtyTemp, setQtyTemp] = useState(-1);
 
+    const increaseLocalByOne = () => {
+        setText(prev => (Number(prev) + 1).toString());
+    };
     useEffect(() => {
-        // might have bug
-        // setText(itemQty.toString());
-        // setQtyTemp(-1);
-    }, [itemQty]);
+        //DANGER: export function increase qty text +1 cho ProductEditModal sử dụng
+        EventEmitter.addListener(`${EVENT_NAME}_${id}`, increase);
+        return () => {
+            EventEmitter.removeListener(`${EVENT_NAME}_${id}`, increaseLocalByOne);
+        };
+    }, []);
 
     const increase = () => {
         var numQty = Number(qtyText);
@@ -210,11 +232,11 @@ const CartItemQty = memo(({ itemQty, id }: { itemQty: number; id: number }) => {
         setQtyTemp(newValue);
     };
 
-    const [postNewQty] = useUpdateQuantityMutation();
+    const [postNewQty] = useUpdateCartConfigMutation();
     const debounceQty = useDebounceValue<number>(qtyTemp, 750);
     useEffect(() => {
         if (debounceQty > 0) {
-            postNewQty({ id, quantity: debounceQty });
+            postNewQty({ id, quantity: debounceQty, configurations: configStr });
         }
     }, [debounceQty]);
 
@@ -239,6 +261,14 @@ const CartItemQty = memo(({ itemQty, id }: { itemQty: number; id: number }) => {
         </View>
     );
 });
+
+/**
+ * DANGER: Update(+1) local quantity của 1 cart item
+ * @param cartId
+ */
+export const increaseQtyLocal = (cartId: number) => {
+    EventEmitter.dispatch(`${EVENT_NAME}_${cartId}`);
+};
 
 const styles = StyleSheet.create({
     container: {

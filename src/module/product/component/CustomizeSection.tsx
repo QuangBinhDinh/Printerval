@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         padding: 0,
         paddingLeft: 10,
+        color: '#444',
     },
 
     optionButton: {

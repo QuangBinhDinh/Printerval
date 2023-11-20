@@ -52,6 +52,13 @@ const CartScreen = () => {
     //payConfig phải khác null mới hiện cart !!!
     const payConfig = useAppSelector(state => state.config.paymentConfig);
 
+    //timestamp dùng để refresh lại qty input. Mặc định input qty của cart item sẽ chỉ nhận giá trị từ data trả vể lần đầu tiên
+    //khi đuọc mount nên cần trường này để refresh lại cho 1 số trường hợp
+    const [qtyTimestamp, setRefreshQty] = useState<number | null>(Date.now());
+    const refreshQty = () => {
+        setRefreshQty(Date.now());
+    };
+
     const {
         data: { items, sub_total } = {},
         isFetching,
@@ -123,7 +130,9 @@ const CartScreen = () => {
 
             <PreviewDesign cartList={items} />
 
-            {!!prodEditing && <ProductEditModal prodEdit={prodEditing} setProduct={setEditing} />}
+            {!!prodEditing && (
+                <ProductEditModal prodEdit={prodEditing} setProduct={setEditing} refreshQty={refreshQty} />
+            )}
         </View>
     );
 };

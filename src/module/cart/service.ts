@@ -14,7 +14,7 @@ const extendedApi = api.injectEndpoints({
             providesTags: ['Cart'],
         }),
 
-        updateQuantity: build.mutation<any, { id: number; quantity: number }>({
+        updateQuantity: build.mutation<any, { id: number; quantity: number; configurations: string }>({
             query: args => ({ url: 'cart/update-cart-item', method: 'post', params: args }),
             invalidatesTags: ['Cart'],
         }),

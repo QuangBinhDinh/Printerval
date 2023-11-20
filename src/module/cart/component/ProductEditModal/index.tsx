@@ -20,15 +20,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { shadowTop } from '@styles/shadow';
 import { showMessage } from '@components/popup/BottomMessage';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
+import { increaseQtyLocal } from '../CartItemCard';
 
 interface IProps {
     prodEdit: CartItem;
 
     setProduct: any;
+
+    refreshQty: () => void;
 }
 
 const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
     const insets = useSafeAreaInsets();
+    const invalidPrintBack = useAppSelector(state => state.config.invalidPrintBack);
 
     const [addCart, { isLoading: isAdding }] = useAddToCartMutation();
     const [deleteCart, { isLoading: isDeleting }] = useRemoveCartV2Mutation();
@@ -54,15 +58,52 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
 
     const prodImg = gallery ? gallery[0] : prodEdit.image_url;
 
-    //sp có custom field
+    //có hiển thị option print location không
+    const showPrint = useMemo(() => {
+        if (!result || !invalidPrintBack) return false;
+
+        let pass = false;
+        let isInvalidPrintBack = false;
+        let isShirt = false;
+        const prod = result.product;
+        const category = result.category;
+
+        var jsonBreadcrumb = JSON.parse(category.breadcrumb);
+        var filter = jsonBreadcrumb.filter((item: any) => item.id == 6);
+        if (filter.length > 0) {
+            isShirt = true;
+        }
+        if (invalidPrintBack.includes(category.id.toString())) {
+            isInvalidPrintBack = true;
+        }
+        if (
+            isShirt &&
+            !isInvalidPrintBack &&
+            !prod.attributes.multiple_design &&
+            !prod.attributes.double_sided &&
+            !prod.attributes.is_custom_design
+        ) {
+            pass = true;
+        }
+
+        return pass;
+    }, [result, invalidPrintBack]);
+
+    const initialPrint = JSON.parse(prodEdit.configurations)?.print_location || 'front';
+    const [printLocation, setLocation] = useState<'front' | 'back'>(initialPrint);
+
+    //object chỉ gồm custom field
     const customObject = useMemo(() => {
         if (!prodEdit.configurations) return null;
-        let config: DynamicObject = JSON.parse(prodEdit.configurations);
+        var obj: DynamicObject = JSON.parse(prodEdit.configurations);
+        var config = Object.entries(obj).reduce((prev: DynamicObject, [key, value]) => {
+            if (['number', 'string'].includes(typeof value)) prev[key] = value;
+            return prev;
+        }, {});
         delete config.buy_design;
         delete config.design_fee;
         delete config.previewUrl;
         delete config.print_location;
-
         return config;
     }, [prodEdit]);
 
@@ -91,14 +132,33 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
             customerId: userInfo.id,
             quantity: 1,
         };
-        try {
-            var res = await addCart(params).unwrap();
-            if (res.status == 'successful') {
-                onCloseWithMessage('Item is added to cart');
+        if (prodEdit.configurations) {
+            //giữ nguyên config nếu có
+            var obj: DynamicObject = JSON.parse(prodEdit.configurations);
+            //tạo object mới chỉ gồm các custom field
+            var config = Object.entries(obj).reduce((prev: DynamicObject, [key, value]) => {
+                if (['number', 'string'].includes(typeof value)) prev[key] = value;
+                return prev;
+            }, {});
+            if (showPrint) config.print_location = printLocation;
+            if (Object.keys(config).length > 0) params.configurations = JSON.stringify(config);
+        }
+
+        //DANGER: refresh lại qty (+1) trong trường hợp thêm sp giống y hệt ban đầu
+        if (detailSelectVar?.id == prodEdit.product_sku_id && printLocation == initialPrint) {
+            //call đến function đã đc export ở component CartItemCard
+            increaseQtyLocal(prodEdit.id);
+            onCloseWithMessage('Item is added to cart');
+        } else {
+            try {
+                var res = await addCart(params).unwrap();
+                if (res.status == 'successful') {
+                    onCloseWithMessage('Item is added to cart');
+                }
+            } catch (e) {
+                console.log(e);
+                onCloseWithMessage('Something went wrong');
             }
-        } catch (e) {
-            console.log(e);
-            onCloseWithMessage('Something went wrong');
         }
     };
 
@@ -120,6 +180,7 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                 if (['number', 'string'].includes(typeof value)) prev[key] = value;
                 return prev;
             }, {});
+            if (showPrint) config.print_location = printLocation;
             if (Object.keys(config).length > 0) params.configurations = JSON.stringify(config);
         }
         try {
@@ -171,7 +232,7 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                 style={[styles.bottom, { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2 }, shadowTop]}
             >
                 <Pressable style={styles.buttonSumbit} onPress={changeProduct}>
-                    {isDeleting ? (
+                    {isDeleting || isAdding ? (
                         <ActivityIndicator size="small" color="white" />
                     ) : (
                         <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Update Item</TextSemiBold>
@@ -210,7 +271,7 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} bounces={false}>
                             <View style={styles.productContainer}>
                                 <FastImage style={styles.productImg} source={{ uri: cdnImageV2(prodImg, 540, 540) }} />
-                                <View style={{ flex: 1, paddingLeft: 10 }}>
+                                <View style={{ flex: 1, paddingLeft: 16 }}>
                                     <TextNormal
                                         style={{ fontSize: 13, lineHeight: 17, color: lightColor.primary }}
                                         numberOfLines={2}
@@ -236,6 +297,45 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                                 colIndex={colIndex}
                                 isEdit
                             />
+
+                            {showPrint && (
+                                <>
+                                    <TextSemiBold style={{ marginLeft: 18, marginTop: 16, color: '#444' }}>
+                                        Print Location
+                                    </TextSemiBold>
+                                    <View style={styles.printContainer}>
+                                        <Pressable
+                                            style={[
+                                                styles.optionFront,
+                                                printLocation == 'front' && styles.optionSelected,
+                                            ]}
+                                            onPress={() => setLocation('front')}
+                                        >
+                                            <TextNormal
+                                                style={[styles.text, printLocation == 'front' && styles.textSelected]}
+                                            >
+                                                Front
+                                            </TextNormal>
+                                        </Pressable>
+                                        <View
+                                            style={{ width: 1, backgroundColor: lightColor.secondary, height: '100%' }}
+                                        ></View>
+                                        <Pressable
+                                            style={[
+                                                styles.optionBack,
+                                                printLocation == 'back' && styles.optionSelected,
+                                            ]}
+                                            onPress={() => setLocation('back')}
+                                        >
+                                            <TextNormal
+                                                style={[styles.text, printLocation == 'back' && styles.textSelected]}
+                                            >
+                                                Back
+                                            </TextNormal>
+                                        </Pressable>
+                                    </View>
+                                </>
+                            )}
 
                             <CustomView />
                             <View style={{ height: 140 }} />
@@ -280,6 +380,45 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     oldPrice: { fontSize: 13, color: lightColor.grayout, textDecorationLine: 'line-through' },
+    text: {
+        fontSize: 15,
+        marginTop: 2,
+    },
+    textSelected: { color: lightColor.secondary },
+    printContainer: {
+        height: 40,
+        width: 150,
+        flexDirection: 'row',
+        marginLeft: 18,
+        marginTop: 4,
+    },
+    optionFront: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6,
+
+        borderColor: lightColor.borderGray,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+    },
+    optionBack: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
+
+        borderColor: lightColor.borderGray,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
+    },
+    optionSelected: {
+        borderColor: lightColor.secondary,
+    },
 
     bottom: {
         height: 64,
