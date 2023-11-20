@@ -4,7 +4,7 @@ import { lightColor } from '@styles/color';
 import { cdnImageV2 } from '@util/cdnV2';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, formatPrice } from '@util/index';
 import he from 'he';
-import React, { memo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { ActivityIndicator, InteractionManager, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
@@ -46,15 +46,25 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
         gallery,
         variantReady,
         detailSelectVar,
+        prodNoVariant,
         colIndex,
     } = useVariant(prodEdit.product_id, '', prodEdit.product_sku_id);
-
-    // console.log('Display option', displayOption);
-    // console.log('Detail var', detailSelectVar);
 
     const { product } = result || {};
 
     const prodImg = gallery ? gallery[0] : prodEdit.image_url;
+
+    //sp có custom field
+    const customObject = useMemo(() => {
+        if (!prodEdit.configurations) return null;
+        let config: DynamicObject = JSON.parse(prodEdit.configurations);
+        delete config.buy_design;
+        delete config.design_fee;
+        delete config.previewUrl;
+        delete config.print_location;
+
+        return config;
+    }, [prodEdit]);
 
     const onClose = () => {
         setVisible(false);
@@ -122,6 +132,61 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
             onCloseWithMessage('Something went wrong');
         }
     };
+
+    const CustomView = () => {
+        if (customObject) {
+            return (
+                <View style={{ marginTop: 12, paddingHorizontal: 18 }}>
+                    {Object.entries(customObject).map(([title, value]) => {
+                        return (
+                            <TextNormal key={title} style={{ marginTop: 12, lineHeight: 20 }}>
+                                <TextSemiBold style={{ fontSize: 15, color: '#444' }}>{title}: </TextSemiBold>
+                                {value}
+                            </TextNormal>
+                        );
+                    })}
+                </View>
+            );
+        }
+        return null;
+    };
+
+    const BottomView = () => {
+        if (prodNoVariant)
+            return (
+                <View
+                    style={[
+                        styles.bottom,
+                        { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2, justifyContent: 'center' },
+                        shadowTop,
+                    ]}
+                >
+                    <Pressable style={styles.buttonSumbit} onPress={onClose}>
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>OK</TextSemiBold>
+                    </Pressable>
+                </View>
+            );
+        return (
+            <View
+                style={[styles.bottom, { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2 }, shadowTop]}
+            >
+                <Pressable style={styles.buttonSumbit} onPress={changeProduct}>
+                    {isDeleting ? (
+                        <ActivityIndicator size="small" color="white" />
+                    ) : (
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Update Item</TextSemiBold>
+                    )}
+                </Pressable>
+                <Pressable style={[styles.buttonSumbit, { backgroundColor: 'white' }]} onPress={addNewProduct}>
+                    {isAdding ? (
+                        <ActivityIndicator size="small" color={lightColor.secondary} />
+                    ) : (
+                        <TextSemiBold style={{ fontSize: 15, color: lightColor.secondary }}>Add Item</TextSemiBold>
+                    )}
+                </Pressable>
+            </View>
+        );
+    };
     return (
         <Modal
             useNativeDriverForBackdrop
@@ -147,15 +212,15 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                                 <FastImage style={styles.productImg} source={{ uri: cdnImageV2(prodImg, 540, 540) }} />
                                 <View style={{ flex: 1, paddingLeft: 10 }}>
                                     <TextNormal
-                                        style={{ fontSize: 15, lineHeight: 20, color: lightColor.primary }}
+                                        style={{ fontSize: 13, lineHeight: 17, color: lightColor.primary }}
                                         numberOfLines={2}
                                     >
                                         {he.decode(product?.name || '')}
                                     </TextNormal>
                                     <TextNormal style={styles.price}>
-                                        {formatPrice(detailSelectVar?.price || '')}{' '}
+                                        {formatPrice(detailSelectVar?.price || prodEdit.price || '')}{' '}
                                         <TextNormal style={styles.oldPrice}>
-                                            {formatPrice(detailSelectVar?.high_price || '')}
+                                            {formatPrice(detailSelectVar?.high_price || prodEdit.high_price || '')}
                                         </TextNormal>
                                     </TextNormal>
                                 </View>
@@ -171,36 +236,11 @@ const ProductEditModal = ({ prodEdit, setProduct }: IProps) => {
                                 colIndex={colIndex}
                                 isEdit
                             />
+
+                            <CustomView />
                             <View style={{ height: 140 }} />
                         </ScrollView>
-
-                        <View
-                            style={[
-                                styles.bottom,
-                                { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2 },
-                                shadowTop,
-                            ]}
-                        >
-                            <Pressable style={styles.buttonSumbit} onPress={changeProduct}>
-                                {isDeleting ? (
-                                    <ActivityIndicator size="small" color="white" />
-                                ) : (
-                                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Update Item</TextSemiBold>
-                                )}
-                            </Pressable>
-                            <Pressable
-                                style={[styles.buttonSumbit, { backgroundColor: 'white' }]}
-                                onPress={addNewProduct}
-                            >
-                                {isAdding ? (
-                                    <ActivityIndicator size="small" color={lightColor.secondary} />
-                                ) : (
-                                    <TextSemiBold style={{ fontSize: 15, color: lightColor.secondary }}>
-                                        Add Item
-                                    </TextSemiBold>
-                                )}
-                            </Pressable>
-                        </View>
+                        <BottomView />
                     </>
                 )}
             </View>
@@ -237,7 +277,7 @@ const styles = StyleSheet.create({
     price: {
         color: lightColor.price,
         fontSize: 15,
-        marginTop: 2,
+        marginTop: 4,
     },
     oldPrice: { fontSize: 13, color: lightColor.grayout, textDecorationLine: 'line-through' },
 

@@ -172,10 +172,17 @@ const ReportProduct = () => {
                     onPress={() => setExpand(!isExpand)}
                 >
                     <TextSemiBold style={{ fontSize: 16 }}>How does this work?</TextSemiBold>
-                    <Icon type="feather" name={`chevron-${isExpand ? 'down' : 'right'}`} size={20} color="#999" />
+                    <Icon
+                        type="feather"
+                        name={`chevron-${isExpand ? 'down' : 'right'}`}
+                        size={22}
+                        color={lightColor.primary}
+                    />
                 </Pressable>
                 {isExpand && (
-                    <TextNormal style={{ fontSize: 15, lineHeight: 20, marginTop: 12 }}>
+                    <TextNormal
+                        style={{ fontSize: 15, lineHeight: 20, marginTop: 12, fontStyle: 'italic', color: '#999' }}
+                    >
                         When you report a concern a notification is sent to the Printerval objections team. We review
                         the content and follow up in cases where the content falls outside Printerval's guidelines. Due
                         to the volume of emails the team receives, we cannot respond to every query regarding these

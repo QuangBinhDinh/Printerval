@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, useEffect, useMemo, useState } from 'react';
 import FancyButton from '@components/FancyButton';
-import { TextSemiBold } from '@components/text';
+import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { DynamicObject, Nullable } from '@type/base';
@@ -71,7 +71,8 @@ const AddToCartView = forwardRef<any, IProps>(
         const [pushCart, { isLoading }] = useAddToCartMutation();
         const { userInfo, token } = useAppSelector(state => state.auth);
 
-        const productPrice = detailVariant?.price ?? detail?.price ?? 0;
+        const productPrice = detailVariant?.price || detail?.price || 0;
+        const productOldPrice = detailVariant?.high_price || detail?.high_price || 0;
         const notSelectedVariant = !inputs || inputs.includes(null); // chưa chọn option (có ID null) thì k cho thao tác button
 
         const [sizeSelected, setSizeSelected] = useState<'none' | 'first' | 'second'>(); // nếu là first sẽ auto addToCart khi user chọn size lần kế tiếp
@@ -233,7 +234,10 @@ const AddToCartView = forwardRef<any, IProps>(
                     shadowTop,
                 ]}
             >
-                <TextSemiBold style={styles.price}>{formatPrice(productPrice)}</TextSemiBold>
+                <View>
+                    <TextSemiBold style={styles.price}>{formatPrice(productPrice)}</TextSemiBold>
+                    <TextNormal style={styles.oldPrice}>{formatPrice(productOldPrice)}</TextNormal>
+                </View>
 
                 <FancyButton
                     style={styles.button}
@@ -270,6 +274,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         lineHeight: 24,
         color: lightColor.price,
+    },
+    oldPrice: {
+        fontSize: 15,
+        color: lightColor.grayout,
+        lineHeight: 20,
+        textDecorationLine: 'line-through',
     },
     button: {
         width: 220,

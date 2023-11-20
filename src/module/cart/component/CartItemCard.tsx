@@ -48,6 +48,7 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
     }, [item]);
 
     const toDetailProduct = () => {
+        // console.log(item);
         navigate('DetailProduct', { productId: item.product_id, productName }, item.product_id);
     };
 
@@ -100,14 +101,12 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                     </Pressable>
 
                     <Pressable style={styles.variantView} onPress={openEditModal}>
-                        {!!item.product_sku_id && (
-                            <View style={styles.variantInner}>
-                                <TextNormal style={styles.textGray} numberOfLines={1}>
-                                    {nameVariant}
-                                </TextNormal>
-                                <Icon type="feather" name="chevron-down" size={18} color="#999" />
-                            </View>
-                        )}
+                        <View style={styles.variantInner}>
+                            <TextNormal style={styles.textGray} numberOfLines={1}>
+                                {nameVariant}
+                            </TextNormal>
+                            <Icon type="feather" name="chevron-down" size={18} color="#999" />
+                        </View>
                     </Pressable>
 
                     <View style={styles.bottom}>
@@ -115,9 +114,18 @@ const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
                             <TextNormal style={{ fontSize: 13, color: lightColor.price }}>
                                 {item.display_price}
                             </TextNormal>
-                            <TextNormal style={{ fontSize: 13, color: '#999', textDecorationLine: 'line-through' }}>
-                                {formatPrice(item.high_price)}
-                            </TextNormal>
+                            {Number(item.high_price) > 0 && (
+                                <TextNormal
+                                    style={{
+                                        fontSize: 13,
+                                        color: '#999',
+                                        textDecorationLine: 'line-through',
+                                        lineHeight: 18,
+                                    }}
+                                >
+                                    {formatPrice(item.high_price)}
+                                </TextNormal>
+                            )}
                         </View>
 
                         <CartItemQty itemQty={item.quantity} id={item.id} />

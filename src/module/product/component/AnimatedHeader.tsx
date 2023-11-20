@@ -75,7 +75,7 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
                 <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
             </Pressable>
             <Animated.View style={[styles.titleView, animTitle]}>
-                <TextSemiBold style={{ fontSize: 18, marginTop: 3 }} numberOfLines={1}>
+                <TextSemiBold style={{ fontSize: 18, marginTop: 0, lineHeight: 25 }} numberOfLines={1}>
                     {title}
                 </TextSemiBold>
             </Animated.View>

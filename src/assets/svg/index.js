@@ -8,6 +8,7 @@ import Heart from './heart.svg';
 import HeartFill from './heart-fill.svg';
 import CartWhite from './cart-white.svg';
 import CartSecondary from './cart-secondary.svg';
+import CartEmpty from './cart-empty.svg';
 import Favorite from './favorite.svg';
 import PrintervalLogo from './printerval-logo.svg';
 import TrendingUp from './trending-up.svg';
@@ -31,6 +32,7 @@ export {
     HeartFill,
     CartWhite,
     CartSecondary,
+    CartEmpty,
     Favorite,
     PrintervalLogo,
     TrendingUp,

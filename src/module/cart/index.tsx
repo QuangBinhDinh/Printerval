@@ -20,6 +20,8 @@ import PreviewDesign from './component/PreviewDesign';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
+import EmptyCartScreen from './component/EmptyCartScreen';
+import { goBack } from '@navigation/service';
 
 /**
  * Selector trả về giá trị boolean  có đang call api nào liên quan đến cart không
@@ -111,10 +113,11 @@ const CartScreen = () => {
                     contentContainerStyle={{ paddingHorizontal: 16 }}
                     ListFooterComponent={<View style={{ height: 100 }} />}
                     refreshControl={<RefreshControl onRefresh={refetch} refreshing={false} />}
+                    ListEmptyComponent={<EmptyCartScreen />}
                 />
             )}
 
-            {!isLoading && <CartBottom subTotal={finalSubTotal} />}
+            {!isLoading && <CartBottom subTotal={finalSubTotal} isEmpty={displayCart.length == 0} />}
 
             <PopupRemoveCart />
 
@@ -127,13 +130,31 @@ const CartScreen = () => {
 
 export default CartScreen;
 
-const CartBottom = ({ subTotal }: { subTotal: number }) => {
+const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean }) => {
     const insets = useSafeAreaInsets();
 
     const cartLoading = useSelector(fetchSelector);
     const toCheckout = () => {
         console.log('Checkout');
     };
+    if (isEmpty)
+        return (
+            <View
+                style={[
+                    styles.bottomView,
+                    { height: 64 + insets.bottom / 2, paddingBottom: insets.bottom / 2, justifyContent: 'center' },
+                    shadowTop,
+                ]}
+            >
+                <FancyButton
+                    style={[styles.button, { width: '100%' }]}
+                    backgroundColor={lightColor.secondary}
+                    onPress={goBack}
+                >
+                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Shopping now</TextSemiBold>
+                </FancyButton>
+            </View>
+        );
 
     return (
         <View
