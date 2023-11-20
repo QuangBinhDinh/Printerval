@@ -1,4 +1,4 @@
-import { Nullable } from './base';
+import { DynamicObject, Nullable } from './base';
 
 export interface ProdVariants {
     id: number;
@@ -85,4 +85,19 @@ export interface ProductTogether {
 
     productSku: number;
     variantName: string;
+
+    attributes: {
+        multiple_design: any;
+        double_sided: any;
+        is_custom_design: any;
+    };
+
+    categories: { id: number }[];
+
+    /**
+     * Configuration của product , thường chỉ có print_location
+     *
+     * Nếu trường này không xuất hiện thì product đó sẽ k có option print location
+     */
+    configuration?: DynamicObject;
 }

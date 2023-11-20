@@ -14,7 +14,7 @@ interface ConfigState {
     /**
      * Category ID được coi là không có option print back của sp
      */
-    invalidPrintBack: string[] | null;
+    invalidPrintBack: number[] | null;
 
     paymentConfig: PaymentConfig;
 

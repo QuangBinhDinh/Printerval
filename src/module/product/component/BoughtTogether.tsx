@@ -11,59 +11,62 @@ import FastImage from 'react-native-fast-image';
 import { SCREEN_WIDTH, formatPrice } from '@util/index';
 import { sumBy } from 'lodash';
 import FancyButton from '@components/FancyButton';
-import { useAddToCartMutation } from '../../cart/service';
-import { ProdConfigArgs } from '@product/service/type';
+import { useAddAllToCartMutation } from '@cart/service';
 import { navigate } from '@navigation/service';
 import BoughtTogetherEdit from './BoughtTogetherEdit';
 import { ProdVariants, ProductTogether } from '@type/product';
 import { cdnImageV2 } from '@util/cdnV2';
+import { useAppSelector } from '@store/hook';
+import { alertSuccess } from '@components/popup/PopupSuccess';
 
-interface ProductEdit {
-    id: number;
-    name: string;
-    image_url: string;
-    productSku: number;
-}
+const BoughtTogether = ({ data, currentProd }: { data: ProductTogether[]; currentProd: ProductTogether }) => {
+    const invalidPrintBack = useAppSelector(state => state.config.invalidPrintBack);
+    const { userInfo, token } = useAppSelector(state => state.auth);
 
-const BoughtTogether = ({ data, currentProd }: { data: Product[]; currentProd: ProductTogether }) => {
-    const initialConfig: ProductTogether[] = data.map(item => {
-        var temp = item.variant_default[0] || item;
-        return {
-            id: item.id,
-            name: item.name,
-            image_url: item.image_url,
-            display_price: temp.display_price,
-            display_high_price: temp.display_high_price,
-            price: temp.price,
-            high_price: temp.high_price,
-            quantity: 1,
-            productSku: item.variant_default[0]?.id,
-            variantName: item.variant_default[0]?.product_name,
-        };
+    const [postAll] = useAddAllToCartMutation();
+    const transformData = data.map(item => {
+        if (invalidPrintBack) {
+            var ids = item.categories.map(i => i.id);
+            if (ids.includes(6) && !ids.some(i => invalidPrintBack.includes(i))) {
+                return {
+                    ...item,
+                    configuration: {
+                        print_location: 'front',
+                    },
+                };
+            }
+        }
+        return item;
     });
 
-    const [prodEdit, changeEdit] = useState<ProductTogether | null>(null);
-
     //bộ ID sp mua cùng , dùng để tick chọn
-    const [selected, setSelected] = useState<number[]>(data.map(i => i.id));
+    const [selected, setSelected] = useState<number[]>(transformData.map(i => i.id));
 
     //List config sp để gửi lên api add-all-to-cart
-    const [prodList, setList] = useState<ProductTogether[]>(initialConfig);
+    const [prodList, setList] = useState<ProductTogether[]>(transformData);
+
+    //sp đang được edit
+    const [prodEdit, changeEdit] = useState<ProductTogether | null>(null);
 
     //thay đổi variant id của sp đang được edit
-    const changeProdVariant = useCallback((item: ProdVariants, variantName: string) => {
+    const changeProdVariant = useCallback((item: ProdVariants, variantName: string, print_location: string) => {
         setList(prev =>
             prev.map(i => {
                 if (i.id == item.product_id)
                     return {
                         ...i,
                         productSku: item.id,
-                        image_url: item.gallery[0],
+                        image_url: item.gallery[0] || i.image_url,
                         price: item.price,
                         high_price: item.high_price,
                         display_price: formatPrice(item.price),
                         display_high_price: formatPrice(item.high_price),
                         variantName,
+                        ...(!!i.configuration && {
+                            configuration: {
+                                print_location,
+                            },
+                        }),
                     };
                 return i;
             }),
@@ -79,11 +82,27 @@ const BoughtTogether = ({ data, currentProd }: { data: Product[]; currentProd: P
 
     //call api thêm toàn bộ sp mua cùng được chọn vào giỏ hàng
     const addAllToCart = async () => {
-        var dataSend: ProdConfigArgs[] = [currentProd].concat(prodList).map(i => ({
+        if (!userInfo) return;
+        var dataSend = [currentProd].concat(prodList).map(i => ({
             quantity: i.quantity,
             productId: i.id,
             productSkuId: i.productSku,
+            configurations: i.configuration ? JSON.stringify(i.configuration) : '',
         }));
+
+        try {
+            var res = await postAll({
+                data: dataSend,
+                token,
+                customerId: userInfo.id,
+                productId: currentProd.id,
+            }).unwrap();
+            if (res.status == 'successful') {
+                alertSuccess('All product is added to cart!');
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     if (!data || data.length == 0) return null;

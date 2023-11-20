@@ -4,8 +4,8 @@ import { lightColor } from '@styles/color';
 import { cdnImageV2 } from '@util/cdnV2';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, formatPrice } from '@util/index';
 import he from 'he';
-import React, { memo, useState } from 'react';
-import { InteractionManager, ScrollView, StyleSheet, View } from 'react-native';
+import React, { memo, useMemo, useState } from 'react';
+import { InteractionManager, ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import LoadingEdit from '@cart/component/ProductEditModal/LoadingEdit';
@@ -15,13 +15,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { shadowTop } from '@styles/shadow';
 import FancyButton from '@components/FancyButton';
 import { ProdVariants, ProductTogether } from '@type/product';
+import { useAppSelector } from '@store/hook';
 
 interface IProps {
     prodEdit: ProductTogether;
 
     changeEdit: any;
 
-    changeVariant: (x: ProdVariants, name: string) => void;
+    changeVariant: (x: ProdVariants, name: string, location: string) => void;
 }
 
 const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
@@ -29,7 +30,9 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
 
     const [visible, setVisible] = useState(true);
 
-    const { data: { result } = {}, isLoading } = useFetchProductInfoQuery(prodEdit.id);
+    const [printLocation, setLocation] = useState<'front' | 'back'>(prodEdit.configuration?.print_location || 'front');
+
+    // const { data: { result } = {}, isLoading } = useFetchProductInfoQuery(prodEdit.id);
     const {
         mappings,
         selectedVariant,
@@ -43,8 +46,6 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
         variant_name_beautify,
     } = useVariant(prodEdit.id, '', prodEdit.productSku);
 
-    const { product } = result || {};
-
     const prodImg = gallery ? gallery[0] : prodEdit.image_url;
 
     const onClose = () => {
@@ -56,8 +57,7 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
 
     const submit = () => {
         if (detailSelectVar) {
-            console.log(detailSelectVar);
-            changeVariant(detailSelectVar, variant_name_beautify);
+            changeVariant(detailSelectVar, variant_name_beautify, printLocation);
             onClose();
         }
     };
@@ -76,7 +76,7 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
             }}
         >
             <View style={styles.container}>
-                {isLoading || !variantReady ? (
+                {!variantReady ? (
                     <LoadingEdit />
                 ) : (
                     <>
@@ -88,7 +88,7 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
                                         style={{ fontSize: 15, lineHeight: 20, color: lightColor.primary }}
                                         numberOfLines={2}
                                     >
-                                        {he.decode(product?.name || '')}
+                                        {he.decode(prodEdit.name || '')}
                                     </TextNormal>
                                     <TextNormal style={styles.price}>
                                         {formatPrice(detailSelectVar?.price || '')}{' '}
@@ -109,7 +109,46 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
                                 colIndex={colIndex}
                                 isEdit
                             />
-                            <View style={{ height: 140 }} />
+
+                            {prodEdit.configuration?.print_location && (
+                                <>
+                                    <TextSemiBold style={{ marginLeft: 18, marginTop: 16, color: '#444' }}>
+                                        Print Location
+                                    </TextSemiBold>
+                                    <View style={styles.printContainer}>
+                                        <Pressable
+                                            style={[
+                                                styles.optionFront,
+                                                printLocation == 'front' && styles.optionSelected,
+                                            ]}
+                                            onPress={() => setLocation('front')}
+                                        >
+                                            <TextNormal
+                                                style={[styles.text, printLocation == 'front' && styles.textSelected]}
+                                            >
+                                                Front
+                                            </TextNormal>
+                                        </Pressable>
+                                        <View
+                                            style={{ width: 1, backgroundColor: lightColor.secondary, height: '100%' }}
+                                        ></View>
+                                        <Pressable
+                                            style={[
+                                                styles.optionBack,
+                                                printLocation == 'back' && styles.optionSelected,
+                                            ]}
+                                            onPress={() => setLocation('back')}
+                                        >
+                                            <TextNormal
+                                                style={[styles.text, printLocation == 'back' && styles.textSelected]}
+                                            >
+                                                Back
+                                            </TextNormal>
+                                        </Pressable>
+                                    </View>
+                                </>
+                            )}
+                            <View style={{ height: 100 }} />
                         </ScrollView>
 
                         <View
@@ -184,5 +223,45 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: lightColor.secondary,
+    },
+
+    text: {
+        fontSize: 15,
+        marginTop: 2,
+    },
+    textSelected: { color: lightColor.secondary },
+    printContainer: {
+        height: 40,
+        width: 150,
+        flexDirection: 'row',
+        marginLeft: 18,
+        marginTop: 4,
+    },
+    optionFront: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6,
+
+        borderColor: lightColor.borderGray,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+    },
+    optionBack: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
+
+        borderColor: lightColor.borderGray,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
+    },
+    optionSelected: {
+        borderColor: lightColor.secondary,
     },
 });

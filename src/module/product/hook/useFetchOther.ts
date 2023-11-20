@@ -139,7 +139,7 @@ export const useFetchOther = (variantReady: boolean) => {
         prodCategory: result?.category,
         shipResult,
         seller: result?.product?.user,
-        boughtTogether: res1?.result,
+        boughtTogether: res1,
         ratingDashboard: res2?.result,
         reviewRes: res3,
 

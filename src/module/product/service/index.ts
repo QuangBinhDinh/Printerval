@@ -7,11 +7,11 @@ import {
     ProductReviewArgs,
     ProductReportArgs,
     TicketSendArgs,
-    ProdConfigArgs,
 } from './type';
 import qs from 'query-string';
 import { isEqual } from 'lodash';
-import { DynamicObject } from '@type/base';
+import { DynamicObject, Nullable } from '@type/base';
+import { ProductTogether } from '@type/product';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -78,7 +78,7 @@ const extendedApi = api.injectEndpoints({
 
 const extendedDomain = domainApi.injectEndpoints({
     endpoints: build => ({
-        fetchBoughtTogether: build.query<{ status: string; result: Product[] }, number>({
+        fetchBoughtTogether: build.query<Nullable<ProductTogether[]>, number>({
             query: productId => ({
                 url: `bought-together/mobile/find`,
                 params: {
@@ -87,6 +87,16 @@ const extendedDomain = domainApi.injectEndpoints({
                     limit: 3,
                 },
             }),
+            transformResponse: res => {
+                return res.result?.map((item: any) => ({
+                    ...item,
+                    quantity: 1,
+                    productSku: item.variant_default[0]?.id,
+                    variantName: item.variant_default[0]?.product_name,
+                    isShirt: !!item.categories?.find((i: any) => i.id == 6),
+                    category_id_list: item.categories?.map((i: any) => i.id),
+                }));
+            },
         }),
 
         fetchProductShipping: build.query<{ countryName: string; result: ShippingInfo }, ProdShippingArgs>({
@@ -122,13 +132,6 @@ const extendedDomain = domainApi.injectEndpoints({
 
         postTicket: build.mutation<{ status: string }, TicketSendArgs>({
             query: body => ({ url: 'ticket/direct-send', method: 'post', body }),
-        }),
-
-        postMultiProduct: build.mutation<
-            { status: string },
-            { token: string; customerId: number; data: ProdConfigArgs }
-        >({
-            query: body => ({ url: 'bought-together/add-all-to-cart', method: 'post', body }),
         }),
     }),
 });

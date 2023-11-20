@@ -1,6 +1,6 @@
 import { api, domainApi } from '@api/service';
 import { CartItem } from '@type/common';
-import { AddToCartBody } from './type';
+import { AddToCartBody, AllToCartBody } from './type';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -44,6 +44,10 @@ const extendedDomain = domainApi.injectEndpoints({
             query: body => ({ url: '/service/pod/preview-design', method: 'post', body: { data: body } }),
             transformResponse: res => res.result,
         }),
+
+        addAllToCart: build.mutation<any, AllToCartBody>({
+            query: body => ({ url: 'bought-together/add-all-to-cart', method: 'post', body }),
+        }),
     }),
 });
 
@@ -57,4 +61,4 @@ export const {
     useUpdateCartConfigMutation,
 } = extendedApi;
 
-export const { useGetPreviewDesignMutation } = extendedDomain;
+export const { useGetPreviewDesignMutation, useAddAllToCartMutation } = extendedDomain;

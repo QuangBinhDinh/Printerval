@@ -36,7 +36,6 @@ import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
 import InvisibleLoad from '@components/loading/InvisibleLoad';
 import { QueryStatus } from '@reduxjs/toolkit/query';
-import { api } from '@api/service';
 import Gallery from './component/Gallery';
 
 const addCartQuerySelector = createSelector(
@@ -92,7 +91,10 @@ const DetailProduct = () => {
         colorObj,
     } = useFetchOther(variantReady);
 
-    const thisProd: ProductTogether = useMemo(() => {
+    //không hiển thị bought together nếu như sp có custom input
+    const showTogether = !!customConfig && Object.keys(customConfig).length == 0;
+
+    const thisProd: Partial<ProductTogether> | null = useMemo(() => {
         if (!detail) return null;
 
         return {
@@ -104,15 +106,12 @@ const DetailProduct = () => {
             high_price: detailSelectVar?.high_price || detail.high_price,
             display_price: detailSelectVar ? formatPrice(detailSelectVar.price) : detail.display_price,
             display_high_price: detailSelectVar ? formatPrice(detailSelectVar.high_price) : detail.display_high_price,
-
             productSku: detailSelectVar?.id || -1,
             variantName: default_variant_name,
         };
     }, [detail, detailSelectVar]);
 
-    /**
-     * Trả về ảnh color guide dựa vào biến thể đang được chọn
-     */
+    //Trả về ảnh color guide dựa vào biến thể đang được chọn
     const selectedColorGuide = useMemo(() => {
         let image_url = '';
         if (
@@ -151,9 +150,8 @@ const DetailProduct = () => {
         //console.log(nativeEvent.contentOffset.y);
         scrollY.value = nativeEvent.contentOffset.y;
     };
-    /**
-     * Hàm tính postion của customize input để scroll đến
-     */
+
+    // Hàm tính postion của customize input để scroll đến
     const calculateOffset = useMemo(() => {
         var sizeOffset = 0;
         var textInputOffset = 0;
@@ -205,11 +203,6 @@ const DetailProduct = () => {
                     enableOnAndroid
                     enableResetScrollToCoords={false}
                 >
-                    {/* <FastImage
-                        style={{ width: '100%', aspectRatio: 1 }}
-                        resizeMode="cover"
-                        source={{ uri: cdnImage(detail?.image_url, 630, 630) }}
-                    /> */}
                     <Gallery
                         isShirt={isShirt}
                         colIndex={colIndex}
@@ -269,7 +262,7 @@ const DetailProduct = () => {
                         product={detail}
                     />
 
-                    {!!boughtTogether && boughtTogether.length > 0 && !!thisProd && (
+                    {showTogether && !!boughtTogether && boughtTogether.length > 0 && !!thisProd && (
                         <BoughtTogether data={boughtTogether} currentProd={thisProd} />
                     )}
 
