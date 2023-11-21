@@ -14,7 +14,7 @@ import { lightColor } from '@styles/color';
 import { goBack, navigate } from '@navigation/service';
 import { TextSemiBold } from '@components/text';
 import { SCREEN_WIDTH } from '@util/index';
-import { useAppDispatch } from '@store/hook';
+import { useAppDispatch, useAppSelector } from '@store/hook';
 import { api } from '@api/service';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@store/store';
@@ -41,6 +41,7 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const dispatch = useAppDispatch();
 
     const cartQty = useSelector(cartSelector);
+    const accessToken = useAppSelector(state => state.auth.accessToken);
 
     const animHeader = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(scrollY.value, [0, 150], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
@@ -48,8 +49,10 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     }));
 
     const toCart = () => {
-        dispatch(api.util.invalidateTags(['Cart']));
-        navigate('CartNavigator');
+        if (accessToken) {
+            dispatch(api.util.invalidateTags(['Cart']));
+            navigate('CartNavigator');
+        } else navigate('LoginScreen', { prevScreen: 'Product' });
     };
 
     const animTitle = useAnimatedStyle(() => ({

@@ -4,7 +4,6 @@ import { Platform, Text } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { FlatList } from 'react-native-gesture-handler';
-import { RANDOM_IMAGE_URL } from '../../../constant';
 import { ExploreTag } from '@home/service';
 
 const TrendExplore = ({ data }: { data: ExploreTag[] }) => {

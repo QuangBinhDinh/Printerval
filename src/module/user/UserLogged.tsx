@@ -11,6 +11,7 @@ import FastImage from 'react-native-fast-image';
 import storage from '@util/storage';
 import { STORAGE_KEY } from '@constant/index';
 import { getUniqueId } from 'react-native-device-info';
+import cart from '@cart/reducer';
 
 const UserLogged = () => {
     const userInfo = useAppSelector(state => state.auth.userInfo);
@@ -18,6 +19,8 @@ const UserLogged = () => {
 
     const toLogout = () => {
         navigate('LoginScreen');
+        dispatch(cart.actions.resetCart());
+
         InteractionManager.runAfterInteractions(async () => {
             dispatch(auth.actions.logout());
             const id = await getUniqueId();

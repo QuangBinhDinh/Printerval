@@ -22,6 +22,10 @@
       "sha1": "b9b65c039a1f10a5cb5e0726c6e7e18e98a8e517"
     },
     {
+      "path": "src/assets/fonts/Poppins-Italic.ttf",
+      "sha1": "597eeb5ac2ce09c6f57ee14457a91be9e4a826cd"
+    },
+    {
       "path": "src/assets/fonts/Poppins-Light.ttf",
       "sha1": "246982f0e815573f4915b4dd6f9861d56f147da2"
     },

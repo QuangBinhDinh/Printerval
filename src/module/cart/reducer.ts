@@ -38,7 +38,12 @@ const initialState: Cart = {
 const cart = createSlice({
     name: 'cart',
     initialState,
-    reducers: {},
+    reducers: {
+        resetCart: state => {
+            state.items = [];
+            state.cart_sub_total = 0;
+        },
+    },
     extraReducers: builder => {
         builder.addMatcher(cartEndpoints.fetchCart.matchFulfilled, (state, { payload }) => {
             state.items = payload.items;

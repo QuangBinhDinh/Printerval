@@ -180,9 +180,7 @@ const ReportProduct = () => {
                     />
                 </Pressable>
                 {isExpand && (
-                    <TextNormal
-                        style={{ fontSize: 15, lineHeight: 20, marginTop: 12, fontStyle: 'italic', color: '#999' }}
-                    >
+                    <TextNormal style={styles.italic}>
                         When you report a concern a notification is sent to the Printerval objections team. We review
                         the content and follow up in cases where the content falls outside Printerval's guidelines. Due
                         to the volume of emails the team receives, we cannot respond to every query regarding these
@@ -260,5 +258,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         overflow: 'hidden',
         backgroundColor: lightColor.secondary,
+    },
+    italic: {
+        fontSize: 15,
+        lineHeight: 20,
+        marginTop: 12,
+        fontFamily: 'Poppins-Italic',
+        color: '#999',
     },
 });

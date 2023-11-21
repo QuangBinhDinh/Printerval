@@ -65,7 +65,7 @@
 	<key>FacebookDisplayName</key>
 	<string>Printerval</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -99,6 +99,7 @@
 		<string>Inter-Medium.ttf</string>
 		<string>Inter-Regular.ttf</string>
 		<string>Inter-SemiBold.ttf</string>
+		<string>Poppins-Italic.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

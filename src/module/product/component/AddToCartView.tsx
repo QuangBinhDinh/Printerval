@@ -221,10 +221,6 @@ const AddToCartView = forwardRef<any, IProps>(
             }
         }, [sizeSelected, handleAddToCart, inputs, token, userInfo, hasCustomText]);
 
-        useEffect(() => {
-            console.log('Variant', detailVariant);
-        }, [detailVariant]);
-
         /**
          * Show thanh add to cart ở dưới khi data sẵn sàng
          */

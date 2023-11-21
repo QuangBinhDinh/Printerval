@@ -86,7 +86,7 @@ const PreviewDesign = ({ cartList }: IProps) => {
         const getPreviewDesign = async () => {
             if (idList && idList.length > 0) {
                 var result = await fetchDesign(idList).unwrap();
-                console.log('Design', result);
+                //console.log('Design', result);
                 setList(result);
             }
         };
