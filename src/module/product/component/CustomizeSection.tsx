@@ -8,6 +8,7 @@ import { capitalize, isEqual } from 'lodash';
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import CustomizeImage from './CustomizeImage';
 
 interface IProps {
     currentConfig: DynamicObject;
@@ -26,6 +27,8 @@ const CustomizeSection = ({ currentConfig, setConfig, customConfig, errors }: IP
     };
 
     const isSelected = (fieldName: string, value: string) => currentConfig[fieldName] == value;
+
+    // console.log('Image', custom_design_image);
     return (
         <View style={styles.container}>
             {custom_design_option &&
@@ -74,6 +77,9 @@ const CustomizeSection = ({ currentConfig, setConfig, customConfig, errors }: IP
                         </View>
                     );
                 })}
+            {!!custom_design_image && (
+                <CustomizeImage imageConfig={custom_design_image} setConfig={setFieldConfig} errors={errors} />
+            )}
         </View>
     );
 };

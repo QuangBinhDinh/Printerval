@@ -48,6 +48,7 @@ interface IProps {
         sizeOffset: number;
         textInputOffset: number;
         quantityOffset: number;
+        imageOffset: number;
     };
 
     prodNoVariant: boolean;
@@ -84,17 +85,18 @@ const AddToCartView = forwardRef<any, IProps>(
         const addToCart = () => {
             var timeStamp = Date.now();
 
+            console.log(configuration);
             // kiểm tra sp custom có config đúng chưa
             if (notSelectedVariant) {
                 setError({ timeStamp, type: 'size' });
                 setSizeSelected('first');
                 ref?.current?.scrollToPosition(0, offset.sizeOffset);
-            } else if (!checkConfigImage(configuration || {})) {
-                setError({ timeStamp, type: 'custom_image' });
-                ref?.current?.scrollToPosition(0, offset.sizeOffset);
             } else if (!checkConfiguration(configuration || {})) {
                 setError({ timeStamp, type: 'custom_text' });
                 ref?.current?.scrollToPosition(0, offset.textInputOffset);
+            } else if (!checkConfigImage(configuration || {})) {
+                setError({ timeStamp, type: 'custom_image' });
+                ref?.current?.scrollToPosition(0, offset.imageOffset);
             } else {
                 //phải login mới addToCart
                 if (!userInfo) {
@@ -135,7 +137,7 @@ const AddToCartView = forwardRef<any, IProps>(
                     item => item.product_id == detail?.id && item.product_sku_id == detailVariant.id,
                 );
                 if (same_variant?.configurations) {
-                    var old_config = primitiveObj(JSON.parse(same_variant.configurations));
+                    var old_config = JSON.parse(same_variant.configurations);
                     delete old_config.buy_design;
                     delete old_config.design_fee;
 
@@ -193,7 +195,7 @@ const AddToCartView = forwardRef<any, IProps>(
             if (cartList.length > 0) {
                 var same_variant = cartList.find(item => item.product_id == detail?.id);
                 if (same_variant?.configurations) {
-                    var old_config = primitiveObj(JSON.parse(same_variant.configurations));
+                    var old_config = JSON.parse(same_variant.configurations);
                     delete old_config.buy_design;
                     delete old_config.design_fee;
 
@@ -310,9 +312,6 @@ const checkConfiguration = (obj: DynamicObject) => {
     for (const key in obj) {
         if (!obj[key]) {
             return false;
-        } else if (obj[key].type == 'image') {
-            // trương hợp image rỗng
-            if (!obj[key].value) return false;
         }
     }
     return true;

@@ -145,5 +145,5 @@ const styles = StyleSheet.create({
         // top: 0,
         // left: 0,
     },
-    iconClose: { position: 'absolute', right: -10, top: -10 },
+    iconClose: { position: 'absolute', right: -8, top: -8 },
 });

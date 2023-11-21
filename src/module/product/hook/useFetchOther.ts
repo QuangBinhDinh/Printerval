@@ -97,7 +97,10 @@ export const useFetchOther = (variantReady: boolean) => {
 
         custom_design_image?.forEach(obj => {
             var imageKey = obj.name;
-            data[imageKey] = '';
+            data[imageKey] = {
+                type: 'image',
+                value: '',
+            };
         });
 
         custom_design_option?.forEach(opt => {

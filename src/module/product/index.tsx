@@ -153,6 +153,7 @@ const DetailProduct = () => {
     const calculateOffset = useMemo(() => {
         var sizeOffset = 0;
         var textInputOffset = 0;
+        var imageOffset = 0;
         var quantityOffset = 0;
         if (displayOption) {
             var offset = SCREEN_WIDTH + 110;
@@ -161,20 +162,28 @@ const DetailProduct = () => {
             }
             sizeOffset = offset - 300;
 
+            offset = offset + 88;
             if (customConfig?.custom_design_option) {
                 offset = offset + 88;
             }
+            textInputOffset = offset - 300;
+
+            if (customConfig?.custom_design_text) {
+                offset = offset + customConfig.custom_design_text.length * 150;
+            }
+            imageOffset = offset - 300;
             if (customConfig?.custom_design_image) {
-                offset = offset + 170 * customConfig.custom_design_image.length;
+                offset = offset + 95 * customConfig.custom_design_image.length;
             }
             offset = offset + 72;
-            textInputOffset = offset - 300;
+
             quantityOffset = offset + 120 - 300;
         }
         return {
             sizeOffset,
             textInputOffset,
             quantityOffset,
+            imageOffset,
         };
     }, [customConfig, displayOption, errors]);
 
