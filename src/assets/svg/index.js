@@ -1,5 +1,6 @@
 import Home from './home.svg';
 import HomeFill from './home-fill.svg';
+import HomeSecondary from './home-secondary.svg';
 import User from './user.svg';
 import UserFill from './user-fill.svg';
 import Search from './search.svg';
@@ -26,6 +27,7 @@ export {
     UserFill,
     Home,
     HomeFill,
+    HomeSecondary,
     Search,
     SearchFill,
     Heart,

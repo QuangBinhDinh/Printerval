@@ -196,7 +196,7 @@ const DetailProduct = () => {
                 <KeyboardAwareScrollView
                     style={{ flex: 1 }}
                     onScroll={onScroll}
-                    scrollEventThrottle={6}
+                    scrollEventThrottle={2}
                     ref={scrollRef}
                     enableOnAndroid
                     enableResetScrollToCoords={false}

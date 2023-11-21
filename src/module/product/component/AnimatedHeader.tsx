@@ -8,7 +8,7 @@ import Animated, {
     Extrapolation,
 } from 'react-native-reanimated';
 import { Icon } from '@rneui/base';
-import { CartSecondary, ShareIcon } from '@assets/svg';
+import { CartSecondary, HomeSecondary, ShareIcon } from '@assets/svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import { goBack, navigate } from '@navigation/service';
@@ -21,6 +21,8 @@ import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const THRESHOLD = 100;
 
 interface IProps {
     scrollY: SharedValue<number>;
@@ -44,9 +46,21 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const accessToken = useAppSelector(state => state.auth.accessToken);
 
     const animHeader = useAnimatedStyle(() => ({
-        backgroundColor: interpolateColor(scrollY.value, [0, 150], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
-        borderBottomColor: interpolateColor(scrollY.value, [0, 150], ['rgba(225,225,225,0)', 'rgba(225,225,225,1)']),
+        backgroundColor: interpolateColor(
+            scrollY.value,
+            [0, THRESHOLD],
+            ['rgba(255,255,255,0)', 'rgba(255,255,255,1)'],
+        ),
+        borderBottomColor: interpolateColor(
+            scrollY.value,
+            [0, THRESHOLD],
+            ['rgba(225,225,225,0)', 'rgba(225,225,225,1)'],
+        ),
     }));
+
+    const toHome = () => {
+        navigate('HomeScreen');
+    };
 
     const toCart = () => {
         if (accessToken) {
@@ -58,7 +72,7 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const animTitle = useAnimatedStyle(() => ({
         transform: [
             {
-                translateY: interpolate(scrollY.value, [200, 250], [50, 0], {
+                translateY: interpolate(scrollY.value, [0, THRESHOLD], [50, 0], {
                     extrapolateLeft: Extrapolation.CLAMP,
                     extrapolateRight: Extrapolation.CLAMP,
                 }),
@@ -69,7 +83,7 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const headerRight = useAnimatedStyle(() => ({
         transform: [
             {
-                translateX: interpolate(scrollY.value, [100, 200], [35, 0], {
+                translateX: interpolate(scrollY.value, [0, THRESHOLD], [60, 0], {
                     extrapolateLeft: Extrapolation.CLAMP,
                     extrapolateRight: Extrapolation.CLAMP,
                 }),
@@ -78,7 +92,7 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
     }));
 
     const cartStyle = useAnimatedStyle(() => ({
-        opacity: interpolate(scrollY.value, [100, 200], [0, 1], {
+        opacity: interpolate(scrollY.value, [0, THRESHOLD], [0, 1], {
             extrapolateLeft: Extrapolation.CLAMP,
             extrapolateRight: Extrapolation.CLAMP,
         }),
@@ -100,8 +114,11 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
                 <Pressable style={styles.rightButton}>
                     <ShareIcon width={22} height={22} />
                 </Pressable>
+                <AnimatedPressable style={[styles.rightButton, cartStyle]} onPress={toHome}>
+                    <HomeSecondary width={22} height={23} />
+                </AnimatedPressable>
                 <AnimatedPressable style={[styles.rightButton, cartStyle]} onPress={toCart}>
-                    <CartSecondary width={23} height={23} />
+                    <CartSecondary width={24} height={24} />
                     {!!cartQty && (
                         <View style={styles.cartQty}>
                             <TextSemiBold style={{ fontSize: 10, color: 'white', marginTop: 1 }}>
@@ -148,12 +165,12 @@ const styles = StyleSheet.create({
         top: 5,
         right: 1,
     },
-    rightContainer: { flexDirection: 'row', width: 80, height: 48 },
+    rightContainer: { flexDirection: 'row', width: 99, height: 48 },
     rightButton: {
         flex: 1,
 
         justifyContent: 'center',
         alignItems: 'center',
     },
-    titleView: { flex: 1, height: '100%', justifyContent: 'center' },
+    titleView: { flex: 1, height: '100%', justifyContent: 'center', paddingRight: 5 },
 });

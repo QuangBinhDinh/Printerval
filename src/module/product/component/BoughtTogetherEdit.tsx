@@ -46,6 +46,9 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
         variant_name_beautify,
     } = useVariant(prodEdit.id, '', prodEdit.productSku);
 
+    const productPrice = detailSelectVar?.price || prodEdit.price || '';
+    const productOldPrice = detailSelectVar?.high_price || prodEdit.high_price || '';
+
     const prodImg = gallery ? gallery[0] : prodEdit.image_url;
 
     const onClose = () => {
@@ -91,10 +94,12 @@ const ProductEditModal = ({ prodEdit, changeVariant, changeEdit }: IProps) => {
                                         {he.decode(prodEdit.name || '')}
                                     </TextNormal>
                                     <TextNormal style={styles.price}>
-                                        {formatPrice(detailSelectVar?.price || '')}{' '}
-                                        <TextNormal style={styles.oldPrice}>
-                                            {formatPrice(detailSelectVar?.high_price || '')}
-                                        </TextNormal>
+                                        {formatPrice(productPrice)}{' '}
+                                        {productOldPrice != '0.00' && (
+                                            <TextNormal style={styles.oldPrice}>
+                                                {formatPrice(productOldPrice)}
+                                            </TextNormal>
+                                        )}
                                     </TextNormal>
                                 </View>
                             </View>
