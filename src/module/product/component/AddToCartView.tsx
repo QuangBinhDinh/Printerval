@@ -75,8 +75,8 @@ const AddToCartView = forwardRef<any, IProps>(
         const { userInfo, token } = useAppSelector(state => state.auth);
         const cartList = useAppSelector(state => state.cart.items);
 
-        const productPrice = detailVariant?.price || detail?.price || 0;
-        const productOldPrice = detailVariant?.high_price || detail?.high_price || 0;
+        const productPrice = prodNoVariant ? detail?.price : detailVariant?.price;
+        const productOldPrice = prodNoVariant ? detail?.high_price : detailVariant?.high_price;
         const notSelectedVariant = !inputs || inputs.includes(null); // chưa chọn option (có ID null) thì k cho thao tác button
 
         const [sizeSelected, setSizeSelected] = useState<'none' | 'first' | 'second'>(); // nếu là first sẽ auto addToCart khi user chọn size lần kế tiếp
@@ -221,6 +221,10 @@ const AddToCartView = forwardRef<any, IProps>(
             }
         }, [sizeSelected, handleAddToCart, inputs, token, userInfo, hasCustomText]);
 
+        useEffect(() => {
+            console.log('Variant', detailVariant);
+        }, [detailVariant]);
+
         /**
          * Show thanh add to cart ở dưới khi data sẵn sàng
          */
@@ -243,8 +247,10 @@ const AddToCartView = forwardRef<any, IProps>(
                 ]}
             >
                 <View>
-                    <TextSemiBold style={styles.price}>{formatPrice(productPrice)}</TextSemiBold>
-                    <TextNormal style={styles.oldPrice}>{formatPrice(productOldPrice)}</TextNormal>
+                    <TextSemiBold style={styles.price}>{formatPrice(productPrice || 0)}</TextSemiBold>
+                    {productOldPrice != '0.00' && (
+                        <TextNormal style={styles.oldPrice}>{formatPrice(productOldPrice || 0)}</TextNormal>
+                    )}
                 </View>
 
                 <FancyButton

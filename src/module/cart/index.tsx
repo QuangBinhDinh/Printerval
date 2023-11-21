@@ -21,7 +21,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
 import EmptyCartScreen from './component/EmptyCartScreen';
-import { goBack } from '@navigation/service';
+import { goBack, navigate } from '@navigation/service';
 
 /**
  * Selector trả về giá trị boolean  có đang call api nào liên quan đến cart không
@@ -147,6 +147,10 @@ const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean 
     const toCheckout = () => {
         console.log('Checkout');
     };
+
+    const toShopping = () => {
+        navigate('HomeScreen');
+    };
     if (isEmpty)
         return (
             <View
@@ -159,7 +163,7 @@ const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean 
                 <FancyButton
                     style={[styles.button, { width: '100%' }]}
                     backgroundColor={lightColor.secondary}
-                    onPress={goBack}
+                    onPress={toShopping}
                 >
                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Shopping now</TextSemiBold>
                 </FancyButton>
