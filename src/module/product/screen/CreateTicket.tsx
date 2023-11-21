@@ -49,7 +49,7 @@ const initialValues = {
     email: '',
     custome_name: '',
     title: '',
-    ticketType: '',
+    ticketType: 'issue_report',
     content: '',
     order_code: '',
 };

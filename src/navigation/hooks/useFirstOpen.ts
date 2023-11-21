@@ -1,20 +1,16 @@
-import { useLogin } from '@auth/hook/useLogin';
+import { useLazyFetchPaymentConfigQuery } from '@api/service';
 import { useLoginFirstOpen } from '@auth/hook/useLoginFirstOpen';
-import auth from '@auth/reducer';
 import { POST_EXPIRE_DAY, STORAGE_KEY } from '@constant/index';
 import { useLazyFetchPostByIdQuery, useLazyFetchPrintervalPostQuery } from '@home/service';
 import { createSelector } from '@reduxjs/toolkit';
-import config, { PaymentConfig } from '@store/configReducer';
+import config from '@store/configReducer';
 import { useAppDispatch, useAppSelector } from '@store/hook';
 import posts from '@store/postReducer';
 import { RootState } from '@store/store';
 import storage from '@util/storage';
 import axios from 'axios';
-import { debounce } from 'lodash';
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
-import { getUniqueId } from 'react-native-device-info';
 import { useSelector } from 'react-redux';
 
 // kiểm tra xem post đã expire hoặc đã có additonal post chưa
@@ -33,6 +29,8 @@ const postCheckSelector = createSelector(
 export const useFirstOpen = () => {
     const invalidConfig = useAppSelector(state => state.config.invalidPrintBack);
     const { doLogin, doLoginSocial, loginAsGuest, loginState } = useLoginFirstOpen();
+    const [fetchPayment] = useLazyFetchPaymentConfigQuery();
+
     const dispatch = useAppDispatch();
 
     const loginPrinterval = async () => {
@@ -69,19 +67,7 @@ export const useFirstOpen = () => {
 
         //fetch cấu hình payment
         try {
-            var res2 = await axios.get('https://api.printerval.com/payment-info?token=megaads@123456');
-            if (res2.data.status == 'successful') {
-                const result = res2.data.result;
-                var configData: PaymentConfig = {
-                    public_key: result.stripe.public_key,
-                    test_public_key: result.stripe.test_public_key,
-                    stripe_fee_percent: result.stripe.include_fee / 100,
-                    paypal_fee_percent: result.paypal.include_fee / 100,
-                    design_fee: Number(result.sa.design_fee),
-                    design_include_fee: Number(result.sa.design_include_fee),
-                };
-                dispatch(config.actions.setPaymentConfiguration(configData));
-            }
+            var res2 = await fetchPayment();
         } catch (e) {
             console.log(e);
         }

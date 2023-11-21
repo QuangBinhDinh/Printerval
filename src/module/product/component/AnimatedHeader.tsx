@@ -16,6 +16,9 @@ import { TextSemiBold } from '@components/text';
 import { SCREEN_WIDTH } from '@util/index';
 import { useAppDispatch } from '@store/hook';
 import { api } from '@api/service';
+import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from '@store/store';
+import { useSelector } from 'react-redux';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -25,9 +28,19 @@ interface IProps {
     title: string;
 }
 
+const cartSelector = createSelector(
+    (state: RootState) => state.cart.items,
+    cart => {
+        if (cart.length == 0) return null;
+        return cart.reduce((prev, next) => prev + next.quantity, 0);
+    },
+);
+
 const AnimatedHeader = ({ scrollY, title }: IProps) => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
+
+    const cartQty = useSelector(cartSelector);
 
     const animHeader = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(scrollY.value, [0, 150], ['rgba(255,255,255,0)', 'rgba(255,255,255,1)']),
@@ -86,6 +99,13 @@ const AnimatedHeader = ({ scrollY, title }: IProps) => {
                 </Pressable>
                 <AnimatedPressable style={[styles.rightButton, cartStyle]} onPress={toCart}>
                     <CartSecondary width={23} height={23} />
+                    {!!cartQty && (
+                        <View style={styles.cartQty}>
+                            <TextSemiBold style={{ fontSize: 10, color: 'white', marginTop: 1 }}>
+                                {cartQty}
+                            </TextSemiBold>
+                        </View>
+                    )}
                 </AnimatedPressable>
             </Animated.View>
         </Animated.View>
@@ -113,6 +133,17 @@ const styles = StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    cartQty: {
+        width: 18,
+        height: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 16,
+        backgroundColor: lightColor.price,
+        position: 'absolute',
+        top: 5,
+        right: 1,
     },
     rightContainer: { flexDirection: 'row', width: 80, height: 48 },
     rightButton: {

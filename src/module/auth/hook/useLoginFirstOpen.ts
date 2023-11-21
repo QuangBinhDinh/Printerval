@@ -7,6 +7,8 @@ import { googleLogin, facebookLogin, appleLogin } from '@auth/loginSocial';
 import { showLoginError } from '../component/LoginError';
 import storage from '@util/storage';
 import { STORAGE_KEY } from '@constant/index';
+import { useLazyFetchCartQuery } from '@cart/service';
+import { User } from '@type/common';
 
 // dùng khi mới mở app
 export const useLoginFirstOpen = () => {
@@ -17,8 +19,9 @@ export const useLoginFirstOpen = () => {
 
     const [loginAccount] = usePostLoginMutation();
     const [loginSocial] = usePostLoginSocialMutation();
+    const [fetchCart] = useLazyFetchCartQuery();
 
-    const handleSuccess = async (newUser: any) => {
+    const handleSuccess = async (newUser: { accessToken: string; user: User }) => {
         var token = await storage.get(STORAGE_KEY.CUSTOMER_TOKEN);
         // không nhất thiết phải gen token mới (giữ phiên)
         if (!token) {
@@ -27,6 +30,9 @@ export const useLoginFirstOpen = () => {
         }
         storage.save(STORAGE_KEY.CUSTOMER_TOKEN, token);
         dispatch(auth.actions.setNewUser({ ...newUser, token }));
+
+        //fetch cart ngay khi login
+        fetchCart({ token, customerId: newUser.user.id });
         setState('success');
     };
 

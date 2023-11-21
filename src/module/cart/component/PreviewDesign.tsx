@@ -29,7 +29,7 @@ const policySelector = createSelector(
 
 const PreviewDesign = ({ cartList }: IProps) => {
     const insets = useSafeAreaInsets();
-    const { design_fee, design_include_fee } = useAppSelector(state => state.config.paymentConfig);
+    const { design_fee, design_include_fee } = useAppSelector(state => state.cart.paymentConfig);
     const [fetchDesign] = useGetPreviewDesignMutation();
     const [updateConfig] = useUpdateCartConfigMutation();
 

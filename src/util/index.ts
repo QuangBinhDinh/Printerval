@@ -139,6 +139,19 @@ const stripHTMLTags = (description: string | null | undefined, keepBr = false) =
     return temp;
 };
 
+/**
+ * Xoá các thuộc tính non-primitive của object (chỉ để lại string và number)
+ */
+const primitiveObj = (obj: any) => {
+    var temp = cloneDeep(obj);
+    for (const key in temp) {
+        if (typeof temp[key] != 'string' && typeof temp[key] != 'number') {
+            delete temp[key];
+        }
+    }
+    return temp;
+};
+
 export {
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
@@ -151,4 +164,5 @@ export {
     normalizeDateTime,
     stripHTMLTags,
     shuffleArray,
+    primitiveObj,
 };

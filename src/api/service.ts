@@ -88,6 +88,10 @@ export const api = createApi({
         fetchSlug: build.query<{ result: Slug[] }, string>({
             query: keyword => ({ url: `slug_manager?filters=slug=${keyword}` }),
         }),
+        fetchPaymentConfig: build.query<{ stripe: any; paypal: any; sa: any }, void>({
+            query: () => ({ url: `payment-info?token=megaads@123456` }),
+            transformResponse: res => res.result,
+        }),
     }),
     tagTypes: ['Cart'],
 });
@@ -133,5 +137,5 @@ export const globalApi = createApi({
     endpoints: build => ({}),
 });
 
-export const { useLazyFetchSlugQuery } = api;
+export const { useLazyFetchSlugQuery, useLazyFetchPaymentConfigQuery } = api;
 export const { usePostImageMutation } = domainApi;

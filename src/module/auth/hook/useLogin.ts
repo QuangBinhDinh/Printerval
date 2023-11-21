@@ -17,6 +17,7 @@ import { STORAGE_KEY } from '@constant/index';
 import { LoginScreenRouteProp } from '@navigation/navigationRoute';
 import { useRoute } from '@react-navigation/native';
 import { goBack, navigate, navigationRef, pop, replace } from '@navigation/service';
+import { useLazyFetchCartQuery } from '@cart/service';
 
 export const useLogin = () => {
     const { params: { onLogin, prevScreen } = {} } = useRoute<LoginScreenRouteProp>();
@@ -29,6 +30,7 @@ export const useLogin = () => {
     const [loginAccount] = usePostLoginMutation();
     const [loginSocial] = usePostLoginSocialMutation();
     const [createAccount] = useCreateAccountMutation();
+    const [fetchCart] = useLazyFetchCartQuery();
 
     const handleSuccess = async (newUser: any) => {
         setState('success');
@@ -38,9 +40,13 @@ export const useLogin = () => {
         storage.save(STORAGE_KEY.CUSTOMER_TOKEN, cusToken);
 
         dispatch(auth.actions.setNewUser({ ...newUser, token: cusToken }));
+
         if (!!onLogin) {
             // gọi callback auto add to cart ở màn Product
             onLogin({ token: cusToken, customerId: newUser.user.id });
+        } else {
+            //fetch cart ngay sau khi login
+            fetchCart({ token: cusToken, customerId: newUser.user.id });
         }
 
         if (prevScreen == 'Product') {

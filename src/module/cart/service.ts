@@ -59,6 +59,7 @@ export const {
     useRemoveCartItemMutation,
     useRemoveCartV2Mutation,
     useUpdateCartConfigMutation,
+    endpoints: cartEndpoints,
 } = extendedApi;
 
 export const { useGetPreviewDesignMutation, useAddAllToCartMutation } = extendedDomain;

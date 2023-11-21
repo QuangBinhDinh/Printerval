@@ -26,7 +26,7 @@ interface IProps {
     editCart: any;
 }
 const CartItemCard = ({ item, removeCart, editCart }: IProps) => {
-    const { design_fee, design_include_fee } = useAppSelector(state => state.config.paymentConfig);
+    const { design_fee, design_include_fee } = useAppSelector(state => state.cart.paymentConfig);
     const new_fee = item.is_include_design_fee ? design_fee + design_include_fee : design_fee;
 
     const [updateConfig, { isLoading }] = useUpdateCartConfigMutation();
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     },
 
     variantView: {
-        width: '85%',
+        width: '90%',
         height: 32,
         marginTop: 5,
     },
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#999',
         lineHeight: 16,
-        width: 150,
+        width: '80%',
     },
 
     bottom: {
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 6,
-        width: '85%',
+        width: '90%',
         alignItems: 'center',
     },
 

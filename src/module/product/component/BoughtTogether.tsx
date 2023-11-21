@@ -8,7 +8,7 @@ import FastImage from 'react-native-fast-image';
 import { SCREEN_WIDTH, formatPrice } from '@util/index';
 import { sumBy } from 'lodash';
 import FancyButton from '@components/FancyButton';
-import { useAddAllToCartMutation } from '@cart/service';
+import { useAddAllToCartMutation, useLazyFetchCartQuery } from '@cart/service';
 import { navigate } from '@navigation/service';
 import BoughtTogetherEdit from './BoughtTogetherEdit';
 import { ProdVariants, ProductTogether } from '@type/product';
@@ -19,6 +19,7 @@ import { alertSuccess } from '@components/popup/PopupSuccess';
 const BoughtTogether = ({ data, currentProd }: { data: ProductTogether[]; currentProd: ProductTogether }) => {
     const invalidPrintBack = useAppSelector(state => state.config.invalidPrintBack);
     const { userInfo, token } = useAppSelector(state => state.auth);
+    const [fetchCart] = useLazyFetchCartQuery();
 
     const [postAll] = useAddAllToCartMutation();
     const transformData = data.map(item => {
@@ -96,6 +97,7 @@ const BoughtTogether = ({ data, currentProd }: { data: ProductTogether[]; curren
             }).unwrap();
             if (res.status == 'successful') {
                 alertSuccess('All product is added to cart!');
+                fetchCart({ token, customerId: userInfo.id });
             }
         } catch (e) {
             console.log(e);

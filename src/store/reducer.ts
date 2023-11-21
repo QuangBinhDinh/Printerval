@@ -5,6 +5,7 @@ import category from '@category/reducer';
 import { api, domainApi, globalApi } from '@api/service';
 import config from './configReducer';
 import posts from './postReducer';
+import cart from '@cart/reducer';
 
 export const rootReducer = combineReducers({
     auth: auth.reducer,
@@ -12,6 +13,7 @@ export const rootReducer = combineReducers({
     category: category.reducer,
     config: config.reducer,
     posts: posts.reducer,
+    cart: cart.reducer,
     [api.reducerPath]: api.reducer,
     [domainApi.reducerPath]: domainApi.reducer,
     [globalApi.reducerPath]: globalApi.reducer,

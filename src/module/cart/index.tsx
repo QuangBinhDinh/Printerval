@@ -50,7 +50,7 @@ const CartScreen = () => {
     const { userInfo, token } = useAppSelector(state => state.auth);
 
     //payConfig phải khác null mới hiện cart !!!
-    const payConfig = useAppSelector(state => state.config.paymentConfig);
+    const payConfig = useAppSelector(state => state.cart.paymentConfig);
 
     //timestamp dùng để refresh lại qty input. Mặc định input qty của cart item sẽ chỉ nhận giá trị từ data trả vể lần đầu tiên
     //khi đuọc mount nên cần trường này để refresh lại cho 1 số trường hợp
@@ -96,7 +96,7 @@ const CartScreen = () => {
         if (isSuccess && !!items) {
             setDisplayCart(items);
         }
-    }, [isSuccess, items]);
+    }, [isSuccess, items, finalSubTotal]);
 
     const renderItem = ({ item }: { item: CartItem }) => (
         <CartItemCard item={item} removeCart={removeCart} editCart={setEditing} />
@@ -141,8 +141,9 @@ export default CartScreen;
 
 const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean }) => {
     const insets = useSafeAreaInsets();
-
     const cartLoading = useSelector(fetchSelector);
+    const sub = useAppSelector(state => state.cart.cart_sub_total);
+
     const toCheckout = () => {
         console.log('Checkout');
     };

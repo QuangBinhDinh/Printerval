@@ -6,14 +6,15 @@ import { shadowTop } from '@styles/shadow';
 import { DynamicObject, Nullable } from '@type/base';
 import { Product } from '@type/common';
 import { ErrorField, NewVariants, ProdVariants } from '@type/product';
-import { SCREEN_WIDTH, formatPrice } from '@util/index';
+import { SCREEN_WIDTH, formatPrice, primitiveObj } from '@util/index';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AddToCartBody, useAddToCartMutation } from '../../cart/service';
+import { useAddToCartMutation, useLazyFetchCartQuery } from '../../cart/service';
+import { AddToCartBody } from '@cart/type';
 import { useAppSelector } from '@store/hook';
 import { navigate } from '@navigation/service';
 import { alertSuccess } from '@components/popup/PopupSuccess';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 
 interface IProps {
     detail: Nullable<Product>;
@@ -69,7 +70,10 @@ const AddToCartView = forwardRef<any, IProps>(
     ) => {
         const insets = useSafeAreaInsets();
         const [pushCart, { isLoading }] = useAddToCartMutation();
+        const [fetchCart] = useLazyFetchCartQuery();
+
         const { userInfo, token } = useAppSelector(state => state.auth);
+        const cartList = useAppSelector(state => state.cart.items);
 
         const productPrice = detailVariant?.price || detail?.price || 0;
         const productOldPrice = detailVariant?.high_price || detail?.high_price || 0;
@@ -125,25 +129,27 @@ const AddToCartView = forwardRef<any, IProps>(
             }
             if (Object.keys(configObject).length > 0) params.configurations = JSON.stringify(configObject);
 
-            // if (!!cartList && cartList.length > 0) {
-            //     var same_variant = cartList.find(
-            //         item => item.product_id == productId && item.product_sku_id == detailVariant.id,
-            //     );
-            //     if (same_variant?.configurations) {
-            //         var old_config = primitiveObj(JSON.parse(same_variant.configurations));
-            //         delete old_config.buy_design;
-            //         delete old_config.design_fee;
+            //trường hợp thêm sp có config y hệt với sp đã ở trong cart
+            if (cartList.length > 0) {
+                var same_variant = cartList.find(
+                    item => item.product_id == detail?.id && item.product_sku_id == detailVariant.id,
+                );
+                if (same_variant?.configurations) {
+                    var old_config = primitiveObj(JSON.parse(same_variant.configurations));
+                    delete old_config.buy_design;
+                    delete old_config.design_fee;
 
-            //         if (isEqual(old_config, configObject)) {
-            //             console.log('THIS ITEM ALREADY IN CART !!!');
-            //             params.configurations = same_variant.configurations;
-            //         }
-            //     }
-            // }
+                    if (isEqual(old_config, configObject)) {
+                        console.log('THIS ITEM ALREADY IN CART !!!');
+                        params.configurations = same_variant.configurations;
+                    }
+                }
+            }
             setError(null);
             const res = await pushCart(params).unwrap();
             if (res.status == 'successful') {
                 alertSuccess('Product added to cart!');
+                fetchCart({ token, customerId });
             }
         };
 
@@ -183,23 +189,25 @@ const AddToCartView = forwardRef<any, IProps>(
             }
             if (Object.keys(configObject).length > 0) params.configurations = JSON.stringify(configObject);
 
-            // if (!!cartList && cartList.length > 0) {
-            //     var same_variant = cartList.find(item => item.product_id == productId);
-            //     if (same_variant?.configurations) {
-            //         var old_config = primitiveObj(JSON.parse(same_variant.configurations));
-            //         delete old_config.buy_design;
-            //         delete old_config.design_fee;
+            //trường hợp thêm sp có config y hệt với sp đã ở trong cart
+            if (cartList.length > 0) {
+                var same_variant = cartList.find(item => item.product_id == detail?.id);
+                if (same_variant?.configurations) {
+                    var old_config = primitiveObj(JSON.parse(same_variant.configurations));
+                    delete old_config.buy_design;
+                    delete old_config.design_fee;
 
-            //         if (isEqual(old_config, configObject)) {
-            //             console.log('THIS ITEM ALREADY IN CART !!!');
-            //             params.configurations = same_variant.configurations;
-            //         }
-            //     }
-            // }
+                    if (isEqual(old_config, configObject)) {
+                        console.log('THIS ITEM ALREADY IN CART !!!');
+                        params.configurations = same_variant.configurations;
+                    }
+                }
+            }
             setError(null); // clear error
             const res = await pushCart(params).unwrap();
             if (res.status == 'successful') {
                 alertSuccess('Product added to cart!');
+                fetchCart({ token, customerId });
             }
         };
 
