@@ -33,6 +33,7 @@ import BottomMessage from '@components/popup/BottomMessage';
 import BlogScreen from '@user/screen/BlogScreen';
 import CreateTicket from '@product/screen/CreateTicket';
 import ModalOption from '@components/input/ModalOption';
+import AddressBook from '@user/screen/AddressBook';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -115,9 +116,10 @@ const Router = () => {
                 <Stack.Screen name="CreateReview" component={CreateReview} />
                 <Stack.Screen name="AllReview" component={AllReview} />
                 <Stack.Screen name="ReportProduct" component={ReportProduct} />
+                <Stack.Screen name="CreateTicket" component={CreateTicket} />
 
                 <Stack.Screen name="BlogScreen" component={BlogScreen} />
-                <Stack.Screen name="CreateTicket" component={CreateTicket} />
+                <Stack.Screen name="AddressBook" component={AddressBook} />
             </Stack.Navigator>
         </NavigationContainer>
     );

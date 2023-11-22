@@ -7,5 +7,5 @@ export const SERVICE_DEBUG: string[] = [
     'fetchCart',
     'addAllToCart',
     'updateCartConfig',
-    'fetchAddressBook',
+    'fetchAddressFirstTime',
 ];
