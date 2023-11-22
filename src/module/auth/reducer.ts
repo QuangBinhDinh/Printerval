@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { User } from '@type/common';
+import { ShippingAddress, User } from '@type/common';
+import { userDomain } from '@user/service';
 
 interface Auth {
     /**
@@ -19,6 +20,8 @@ interface Auth {
      * Token dùng để addToCart, payment, show product history
      */
     token: string;
+
+    addressBook: ShippingAddress[];
 }
 
 const initialState: Auth = {
@@ -28,6 +31,8 @@ const initialState: Auth = {
     accessToken: null,
 
     token: '',
+
+    addressBook: [],
 };
 
 const auth = createSlice({
@@ -48,6 +53,14 @@ const auth = createSlice({
             if (action.payload.token) state.token = action.payload.token;
         },
         logout: () => initialState,
+    },
+    extraReducers: builder => {
+        builder.addMatcher(userDomain.fetchAddressFirstTime.matchFulfilled, (state, { payload }) => {
+            state.addressBook = payload;
+        });
+        builder.addMatcher(userDomain.fetchAddressBook.matchFulfilled, (state, { payload }) => {
+            state.addressBook = payload;
+        });
     },
 });
 

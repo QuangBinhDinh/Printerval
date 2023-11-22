@@ -18,6 +18,7 @@ import { LoginScreenRouteProp } from '@navigation/navigationRoute';
 import { useRoute } from '@react-navigation/native';
 import { goBack, navigate, navigationRef, pop, replace } from '@navigation/service';
 import { useLazyFetchCartQuery } from '@cart/service';
+import { useLazyFetchAddressFirstTimeQuery } from '@user/service';
 
 export const useLogin = () => {
     const { params: { onLogin, prevScreen } = {} } = useRoute<LoginScreenRouteProp>();
@@ -31,6 +32,7 @@ export const useLogin = () => {
     const [loginSocial] = usePostLoginSocialMutation();
     const [createAccount] = useCreateAccountMutation();
     const [fetchCart] = useLazyFetchCartQuery();
+    const [fetchAddress] = useLazyFetchAddressFirstTimeQuery();
 
     const handleSuccess = async (newUser: any) => {
         setState('success');
@@ -48,6 +50,7 @@ export const useLogin = () => {
             //fetch cart ngay sau khi login
             fetchCart({ token: cusToken, customerId: newUser.user.id });
         }
+        fetchAddress(newUser.accessToken);
 
         if (prevScreen == 'Product') {
             if (screenName == 'LoginScreen') goBack();

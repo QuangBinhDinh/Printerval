@@ -147,3 +147,36 @@ export interface CartItem {
 
     is_custom_design: 0 | 1;
 }
+
+export interface Country {
+    id: number;
+    iso: string;
+    name: string;
+    nicename: string;
+    numcode: number;
+    phonecode: number;
+    has_postal_code: number;
+}
+
+export interface Province {
+    id: number;
+    name: string;
+    country_id: number;
+}
+
+export interface ShippingAddress {
+    address: string;
+    city_name: string;
+    country: Country;
+    country_id: number;
+
+    customer_id: number;
+    full_name: string;
+    id: number;
+    optional_address: string;
+    phone: string | number;
+
+    province: Province;
+    province_id: number;
+    zip_code: string;
+}

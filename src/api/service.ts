@@ -123,6 +123,7 @@ export const domainApi = createApi({
             },
         }),
     }),
+    tagTypes: ['Address'],
 });
 
 export const globalApi = createApi({
