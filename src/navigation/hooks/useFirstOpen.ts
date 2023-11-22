@@ -1,4 +1,4 @@
-import { useLazyFetchPaymentConfigQuery } from '@api/service';
+import { useLazyFetchCountriesQuery, useLazyFetchPaymentConfigQuery } from '@api/service';
 import { useLoginFirstOpen } from '@auth/hook/useLoginFirstOpen';
 import { POST_EXPIRE_DAY, STORAGE_KEY } from '@constant/index';
 import { useLazyFetchPostByIdQuery, useLazyFetchPrintervalPostQuery } from '@home/service';
@@ -28,8 +28,11 @@ const postCheckSelector = createSelector(
 
 export const useFirstOpen = () => {
     const invalidConfig = useAppSelector(state => state.config.invalidPrintBack);
+    const countries = useAppSelector(state => state.config.countries);
+
     const { doLogin, doLoginSocial, loginAsGuest, loginState } = useLoginFirstOpen();
     const [fetchPayment] = useLazyFetchPaymentConfigQuery();
+    const [fetchCountries] = useLazyFetchCountriesQuery();
 
     const dispatch = useAppDispatch();
 
@@ -61,13 +64,10 @@ export const useFirstOpen = () => {
                     dispatch(config.actions.setInvalidPrintBack(invalid_print_back.split(',')));
                 }
             }
-        } catch (e) {
-            console.log(e);
-        }
 
-        //fetch cấu hình payment
-        try {
-            var res2 = await fetchPayment();
+            await fetchPayment();
+
+            await fetchCountries();
         } catch (e) {
             console.log(e);
         }

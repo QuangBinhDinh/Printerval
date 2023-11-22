@@ -4,11 +4,11 @@ import { TextNormal } from '@components/text';
 import { Icon } from '@rneui/base';
 import { lightColor } from '@styles/color';
 import { SCREEN_HEIGHT } from '@util/index';
-import { openModalOption } from './ModalOption';
+import { Option, openModalOption } from './ModalOption';
 
 const RATIO = SCREEN_HEIGHT / 810;
 
-type InputProps = TextInputProps & {
+interface IProps {
     containerStyle?: StyleProp<ViewStyle>;
 
     errorStyle?: StyleProp<TextStyle>;
@@ -19,17 +19,19 @@ type InputProps = TextInputProps & {
 
     title: string;
 
+    placeholder?: string;
+
     required?: boolean;
 
     /**
      * Id item đang được select
      */
-    value: string;
+    value: string | number;
 
     /**
      * Gán giá trị Id đang được select
      */
-    setValue: any;
+    setValue: (obj: Option) => void;
 
     /**
      * List các option
@@ -38,7 +40,7 @@ type InputProps = TextInputProps & {
         id: string | number;
         value: string;
     }[];
-};
+}
 const InputOption = ({
     containerStyle,
     errorStyle,
@@ -48,13 +50,14 @@ const InputOption = ({
     touched,
     required,
     title,
+    placeholder = 'Select an option',
     options,
-}: InputProps) => {
+}: IProps) => {
     const openModal = () => {
         openModalOption({
             data: options,
-            callback: item => setValue('ticketType', item.id),
-            title: 'Select ticket type',
+            callback: item => setValue(item),
+            title: placeholder,
             selectedId: value,
         });
     };
@@ -72,7 +75,7 @@ const InputOption = ({
                 onPress={openModal}
             >
                 <TextNormal style={[styles.inputStyle, !textValue && { color: '#999' }]}>
-                    {textValue || '--Select type--'}
+                    {textValue || `--${placeholder}--`}
                 </TextNormal>
                 <Icon type="feather" name={'chevron-down'} size={22} color="#999" />
             </Pressable>

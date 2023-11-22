@@ -145,7 +145,7 @@ const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean 
     const sub = useAppSelector(state => state.cart.cart_sub_total);
 
     const toCheckout = () => {
-        console.log('Checkout');
+        navigate('CheckoutNavigator');
     };
 
     const toShopping = () => {

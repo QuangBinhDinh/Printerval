@@ -80,6 +80,7 @@ const ModalOption = () => {
                     style={{ width: '100%', height: scrollHeight }}
                     showsVerticalScrollIndicator={false}
                     bounces={false}
+                    removeClippedSubviews
                 >
                     <View style={{ height: 10 }} />
                     {data.map((item, index) => (

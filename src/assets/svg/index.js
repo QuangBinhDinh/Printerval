@@ -21,6 +21,12 @@ import ShareIcon from './share.svg';
 import ExchangeLogo from './exchange.svg';
 import ReportFlag from './report.svg';
 import SuccessIcon from './success.svg';
+import CheckoutMapActive from './checkout-map-active.svg';
+import CheckoutMap from './checkout-map-default.svg';
+import CheckoutPaymentActive from './checkout-payment-active.svg';
+import CheckoutPayment from './checkout-payment.svg';
+import CheckoutFinishActive from './checkout-finish-active.svg';
+import CheckoutFinish from './checkout-finish-default.svg';
 
 export {
     User,
@@ -46,4 +52,10 @@ export {
     ExchangeLogo,
     ReportFlag,
     SuccessIcon,
+    CheckoutMapActive,
+    CheckoutMap,
+    CheckoutPaymentActive,
+    CheckoutPayment,
+    CheckoutFinishActive,
+    CheckoutFinish,
 };

@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { RootState } from '@store/store';
 import { getVersion, isPinOrFingerprintSet } from 'react-native-device-info';
 import { SERVICE_DEBUG } from './constant';
-import { Slug } from '@type/common';
+import { Country, Slug } from '@type/common';
 
 const GLOBAL_URL = 'https://glob.api.printerval.com/';
 
@@ -92,6 +92,10 @@ export const api = createApi({
             query: () => ({ url: `payment-info?token=megaads@123456` }),
             transformResponse: res => res.result,
         }),
+        fetchCountries: build.query<Country[], void>({
+            query: () => ({ url: `country?page_size=-1&embeds=provinces` }),
+            transformResponse: res => res.result,
+        }),
     }),
     tagTypes: ['Cart'],
 });
@@ -138,5 +142,5 @@ export const globalApi = createApi({
     endpoints: build => ({}),
 });
 
-export const { useLazyFetchSlugQuery, useLazyFetchPaymentConfigQuery } = api;
+export const { useLazyFetchSlugQuery, useLazyFetchPaymentConfigQuery, useLazyFetchCountriesQuery } = api;
 export const { usePostImageMutation } = domainApi;

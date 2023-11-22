@@ -152,7 +152,7 @@ const CreateTicket = () => {
                 <InputOption
                     title="Ticket type"
                     value={values.ticketType}
-                    setValue={setFieldValue}
+                    setValue={opt => setFieldValue('ticketType', opt.id)}
                     options={ticketTypes}
                     error={errors.ticketType}
                     touched={touched.ticketType}

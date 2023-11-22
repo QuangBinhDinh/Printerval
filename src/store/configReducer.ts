@@ -1,4 +1,6 @@
+import { api } from '@api/service';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Country } from '@type/common';
 
 interface ConfigState {
     /**
@@ -10,6 +12,8 @@ interface ConfigState {
         rate: number;
         rateCount: number;
     };
+
+    countries: Country[];
 }
 const initialState: ConfigState = {
     invalidPrintBack: null,
@@ -18,6 +22,7 @@ const initialState: ConfigState = {
         rate: 0,
         rateCount: 0,
     },
+    countries: [],
 };
 
 /**
@@ -38,6 +43,15 @@ const config = createSlice({
         setAppRating: (state, action) => {
             state.appRating = action.payload;
         },
+    },
+    extraReducers: builder => {
+        builder.addMatcher(api.endpoints.fetchCountries.matchFulfilled, (state, { payload }) => {
+            state.countries = payload.map(item => ({
+                ...item,
+                value: item.nicename,
+                provinces: item.provinces.map(i => ({ ...i, value: i.name })),
+            }));
+        });
     },
 });
 

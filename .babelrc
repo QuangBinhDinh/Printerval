@@ -41,7 +41,8 @@
             "@auth": "./src/module/auth",
             "@user": "./src/module/user",
             "@product": "./src/module/product",
-            "@cart": "./src/module/cart"
+            "@cart": "./src/module/cart",
+            "@checkout": "./src/module/checkout"
           }
         }
       ],

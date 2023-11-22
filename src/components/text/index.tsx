@@ -1,3 +1,4 @@
+import { Icon } from '@rneui/base';
 import { normalize } from '@rneui/themed';
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, TextProps, View, ViewStyle } from 'react-native';
@@ -48,10 +49,10 @@ const RadioText = ({
     >
         <View
             style={{
-                height: 20,
-                width: 20,
+                height: 22,
+                width: 22,
                 borderRadius: 20,
-                borderWidth: 1.5,
+                borderWidth: 2,
                 justifyContent: 'center',
                 alignItems: 'center',
             }}
@@ -62,4 +63,36 @@ const RadioText = ({
     </Pressable>
 );
 
-export { TextSemiBold, TextNormal, RadioText };
+const CheckboxText = ({
+    selected,
+    title,
+    containerStyle,
+    onPress,
+}: {
+    selected: boolean;
+    title: string;
+    containerStyle?: StyleProp<ViewStyle>;
+    onPress: any;
+}) => (
+    <Pressable
+        style={[{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }, containerStyle]}
+        onPress={onPress}
+        hitSlop={10}
+    >
+        <View
+            style={{
+                height: 24,
+                width: 24,
+                borderRadius: 6,
+                borderWidth: 2,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            {selected && <Icon type="feather" name="check" color={'#444'} size={18} />}
+        </View>
+        <TextNormal style={{ marginLeft: 8, marginTop: 2 }}>{title}</TextNormal>
+    </Pressable>
+);
+
+export { TextSemiBold, TextNormal, RadioText, CheckboxText };

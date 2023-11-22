@@ -152,16 +152,20 @@ export interface Country {
     id: number;
     iso: string;
     name: string;
+    value: string;
     nicename: string;
     numcode: number;
     phonecode: number;
     has_postal_code: number;
+
+    provinces: Province[];
 }
 
 export interface Province {
     id: number;
     name: string;
     country_id: number;
+    value: string;
 }
 
 export interface ShippingAddress {
