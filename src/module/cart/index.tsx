@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lightColor } from '@styles/color';
 import HeaderScreen from '@components/HeaderScreen';
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
-import { useAppSelector } from '@store/hook';
+import { useAppDispatch, useAppSelector } from '@store/hook';
 import { useFetchCartQuery, useGetPreviewDesignMutation, useRemoveCartItemMutation } from './service';
 import { CartItem } from '@type/common';
 import CartItemCard from './component/CartItemCard';
@@ -142,6 +142,7 @@ export default CartScreen;
 const CartBottom = ({ subTotal, isEmpty }: { subTotal: number; isEmpty: boolean }) => {
     const insets = useSafeAreaInsets();
     const cartLoading = useSelector(fetchSelector);
+    const dispatch = useAppDispatch();
     const sub = useAppSelector(state => state.cart.cart_sub_total);
 
     const toCheckout = () => {

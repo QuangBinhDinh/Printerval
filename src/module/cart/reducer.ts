@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CartItem, ShippingAddress } from '@type/common';
+import { CartItem, ShipInfo, ShippingAddress } from '@type/common';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { api } from '@api/service';
 import { cartEndpoints } from './service';
 import { userDomain } from '@user/service';
+import { checkoutEndpoint } from '@checkout/service';
+import moment from 'moment';
 
 interface PaymentConfig {
     public_key: string;
@@ -21,9 +23,32 @@ interface Cart {
 
     cart_sub_total: number;
 
+    /**
+     * Shipping address được sử dụng để checkout
+     */
     defaultAddress: ShippingAddress | null;
 
+    /**
+     * Thông tin liên quan đến payment (phí ship, etc )
+     */
     paymentConfig: PaymentConfig;
+
+    rawShipping: ShipInfo[];
+
+    transfromShipping: ShipInfo[];
+
+    /**
+     * Index option shipping đang được chọn
+     */
+    shippingConfigIndex: number[];
+
+    /**
+     * Thông tin mã giảm giá
+     */
+    promotion: {
+        promotion_code: string;
+        discount: number;
+    };
 }
 
 const initialState: Cart = {
@@ -34,6 +59,17 @@ const initialState: Cart = {
     defaultAddress: null,
 
     paymentConfig: null,
+
+    rawShipping: [],
+
+    transfromShipping: [],
+
+    shippingConfigIndex: [],
+
+    promotion: {
+        promotion_code: '',
+        discount: 0,
+    },
 };
 
 const cart = createSlice({
@@ -47,6 +83,12 @@ const cart = createSlice({
 
         setDefaultAddress: (state, { payload }: PayloadAction<ShippingAddress>) => {
             state.defaultAddress = payload;
+        },
+
+        setShippingOption: (state, { payload }: PayloadAction<{ index: number; newValue: number }>) => {
+            const { index, newValue } = payload;
+            var newConfig = state.shippingConfigIndex.map((item, i) => (i == index ? newValue : item));
+            state.shippingConfigIndex = newConfig;
         },
     },
     extraReducers: builder => {
@@ -65,6 +107,53 @@ const cart = createSlice({
 
                 state.cart_sub_total = new_sub_total;
             }
+        });
+
+        builder.addMatcher(checkoutEndpoint.fetchCartCheckout.matchFulfilled, (state, { payload }) => {
+            state.items = payload.items;
+
+            if (payload.items.length >= 0 && !!state.paymentConfig) {
+                var new_sub_total = payload.items.reduce((prev, next) => {
+                    let design_fee = 0;
+                    if (next.configurations?.includes('buy_design')) {
+                        design_fee += state.paymentConfig.design_fee;
+                        if (next.is_include_design_fee) design_fee += state.paymentConfig.design_include_fee;
+                    }
+                    return prev + next.price * next.quantity + design_fee;
+                }, 0);
+
+                state.cart_sub_total = new_sub_total;
+            }
+        });
+
+        builder.addMatcher(checkoutEndpoint.fetchShippingInfo.matchFulfilled, (state, { payload }) => {
+            const curDate = new Date();
+
+            var apply_config_ids = Object.keys(payload[0].shipping_info[0].apply_config_item).map(num => Number(num));
+
+            //format lại thời gian dự kiến của từng loại shipping
+            var new_ship_info = payload.map(item => {
+                var id_list = item.cart_item_id;
+                var new_cart = state.items.filter(i => id_list.includes(i.id));
+
+                var shipping_options = item.shipping_info.map(info => {
+                    var firstDate = moment(curDate).add(info.shipping_min_time, 'd').format('MMM. D');
+                    var secondDate = moment(curDate).add(info.shipping_max_time, 'd').format('MMM. D');
+                    return {
+                        ...info,
+                        title: info.name_shipping + ' shipping from ' + info.location,
+                        min_date: firstDate,
+                        max_date: secondDate,
+                    };
+                });
+                return { ...item, cart_list: new_cart, shipping_info: shipping_options };
+            });
+
+            var transformed = buildNewShipping(apply_config_ids, new_ship_info);
+
+            state.rawShipping = new_ship_info;
+            state.transfromShipping = transformed;
+            state.shippingConfigIndex = new Array<number>(new_ship_info.length).fill(0);
         });
 
         //set thông tin payment config
@@ -98,3 +187,34 @@ const cart = createSlice({
 });
 
 export default cart;
+
+/**
+ * Build lại phí ship của shipping info
+ * @param config_item_id list id shipping option (list key của apply_config_item)
+ * @param old_shipping shipping info trả về từ api
+ * @returns
+ */
+export const buildNewShipping = (config_item_id: number[], old_shipping: ShipInfo[]) => {
+    var new_shipping = old_shipping.map((item, index) => {
+        if (index == 0) return item;
+
+        var shipping_info = item.shipping_info.map(method => {
+            let new_shipping_fee = method.shipping_fee;
+            for (const [key, applyItem] of Object.entries(method.apply_config_item)) {
+                if (config_item_id.includes(Number(key))) {
+                    new_shipping_fee =
+                        new_shipping_fee -
+                        Number.parseFloat(applyItem.default_shipping_fee) +
+                        Number.parseFloat(applyItem.default_adding_item); // thay đổi giá ship
+                }
+            }
+            return { ...method, shipping_fee: new_shipping_fee };
+        });
+        return {
+            ...item,
+            shipping_info,
+        };
+    });
+
+    return new_shipping;
+};

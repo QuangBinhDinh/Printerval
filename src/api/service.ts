@@ -97,7 +97,7 @@ export const api = createApi({
             transformResponse: res => res.result,
         }),
     }),
-    tagTypes: ['Cart'],
+    tagTypes: ['Cart', 'CartCheckout'],
 });
 
 export const domainApi = createApi({

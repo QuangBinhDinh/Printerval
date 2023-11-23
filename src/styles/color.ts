@@ -4,7 +4,7 @@ export const lightColor = {
     primaryBold: 'rgba(25, 18, 79, 1)',
     secondary: '#FF7300',
     grayout: '#999999',
-    lightBlack: '#333333',
+    black: '#444444',
     price: '#C52C29',
     yellowstar: '#FFBA49',
     error: '#FF3A3A',

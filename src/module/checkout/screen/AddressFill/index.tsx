@@ -13,6 +13,7 @@ import FancyButton from '@components/FancyButton';
 import { lightColor } from '@styles/color';
 import { SCREEN_WIDTH } from '@util/index';
 import { shadowTop } from '@styles/shadow';
+import { navigate } from '@navigation/service';
 
 const initialValues = {
     firstName: '',
@@ -95,6 +96,7 @@ const AddressFill = () => {
         validationSchema,
         onSubmit: async input => {
             console.log(input);
+            navigate('CheckoutPreview');
         },
     });
 

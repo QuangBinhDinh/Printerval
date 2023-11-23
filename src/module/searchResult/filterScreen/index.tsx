@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         lineHeight: 21,
         marginTop: 16,
-        color: lightColor.lightBlack,
+        color: lightColor.black,
     },
     rowContent: { flexDirection: 'row', flexWrap: 'wrap', width: '100%' },
     textItem: {

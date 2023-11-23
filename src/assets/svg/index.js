@@ -27,6 +27,8 @@ import CheckoutPaymentActive from './checkout-payment-active.svg';
 import CheckoutPayment from './checkout-payment.svg';
 import CheckoutFinishActive from './checkout-finish-active.svg';
 import CheckoutFinish from './checkout-finish-default.svg';
+import BuyCoffee from './buy-me-coffee.svg';
+import CouponLogo from './coupon.svg';
 
 export {
     User,
@@ -58,4 +60,6 @@ export {
     CheckoutPayment,
     CheckoutFinishActive,
     CheckoutFinish,
+    BuyCoffee,
+    CouponLogo,
 };

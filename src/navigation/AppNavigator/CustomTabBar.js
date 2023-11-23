@@ -82,10 +82,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                         >
                             {options.tabBarIcon({ focused: isFocused })}
                             <TextNormal
-                                style={[
-                                    styles.label,
-                                    { color: isFocused ? lightColor.secondary : lightColor.lightBlack },
-                                ]}
+                                style={[styles.label, { color: isFocused ? lightColor.secondary : lightColor.black }]}
                             >
                                 {label}
                             </TextNormal>

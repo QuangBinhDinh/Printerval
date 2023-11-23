@@ -184,3 +184,58 @@ export interface ShippingAddress {
     province_id: number;
     zip_code: string;
 }
+
+export interface ShipInfo {
+    /**
+     *Id của item trong cart (thuộc 1 loại shipping)
+     */
+    cart_item_id: number[];
+
+    key: string;
+
+    /**
+     *Cart list (1 loại ship)
+     */
+    cart_list: CartItem[];
+
+    /**
+     * Thông tin các loại hình thức ship
+     */
+    shipping_info: ShipMethod[];
+}
+
+/**
+ * Thông tin phương thức ship
+ */
+export interface ShipMethod {
+    apply_config_item: {
+        [key: number]: {
+            id: number;
+            warehouse_config_id: number;
+            default_adding_item: string;
+            default_shipping_fee: string;
+            fee_if_limit: string;
+            fee_limit: string;
+            tax: string;
+            shipping_max_time: number;
+            shipping_min_time: number;
+        };
+    };
+    id: number;
+    shipping_fee: number;
+    shipping_max_time: number;
+    shipping_min_time: number;
+    name_shipping: string;
+    type: string;
+    location: string;
+
+    /**
+     * Thời gian dự kiến ship nhanh nhất
+     */
+    min_date: string;
+
+    /**
+     * Thời gian dự kiến ship muộn nhất
+     */
+    max_date: string;
+}

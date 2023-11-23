@@ -4,18 +4,23 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 import { StyleSheet, View } from 'react-native';
 import AddressFill from './screen/AddressFill';
-import { CheckoutFinish, CheckoutMap, CheckoutPayment } from '@assets/svg';
+import { CheckoutFinish, CheckoutMap, CheckoutMapActive, CheckoutPayment } from '@assets/svg';
+import { useAppSelector } from '@store/hook';
+import CheckoutPreview from './screen/CheckoutPreview';
 
 const Stack = createStackNavigator();
 
 const CheckoutScreen = () => {
+    const addressList = useAppSelector(state => state.auth.addressBook);
+    const empty = addressList.length == 0;
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Checkout" />
             <View style={{ flex: 1 }}>
                 <View style={styles.stepContainer}>
                     <View style={styles.stepInner}>
-                        <CheckoutMap width={24} height={24} />
+                        <CheckoutMapActive width={24} height={24} />
                         <View style={styles.lineView}>
                             {[1, 2, 3, 4, 5].map(item => (
                                 <View key={item} style={styles.dot} />
@@ -37,7 +42,8 @@ const CheckoutScreen = () => {
                             ...TransitionPresets.SlideFromRightIOS,
                         }}
                     >
-                        <Stack.Screen name="AddressFill" component={AddressFill} />
+                        {empty && <Stack.Screen name="AddressFill" component={AddressFill} />}
+                        <Stack.Screen name="CheckoutPreview" component={CheckoutPreview} />
                     </Stack.Navigator>
                 </View>
             </View>
