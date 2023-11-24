@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 import moment from 'moment';
 import Store from '@store/store';
 import { Stringifiable } from 'query-string';
-import { ShippingAddress } from '@type/common';
+import { BillingAddress, ShippingAddress } from '@type/common';
 import { Nullable } from '@type/base';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -162,8 +162,19 @@ const primitiveObj = (obj: any) => {
 const getAddressText = (item: Nullable<ShippingAddress>) => {
     if (!item) return '';
 
-    let address = item.country.nicename + ', ';
+    let address = item.country?.nicename + ', ';
     if (item.province?.name) address = address + item.province.name + ', ';
+    if (item.city_name) address = address + item.city_name + ', ';
+    if (item.address) address = address + item.address;
+
+    return address;
+};
+
+const getBillingText = (item: Nullable<BillingAddress>) => {
+    if (!item) return '';
+
+    let address = item.country_name + ', ';
+    if (item.state_name) address = address + item.state_name + ', ';
     if (item.city_name) address = address + item.city_name + ', ';
     if (item.address) address = address + item.address;
 
@@ -184,4 +195,5 @@ export {
     shuffleArray,
     primitiveObj,
     getAddressText,
+    getBillingText,
 };

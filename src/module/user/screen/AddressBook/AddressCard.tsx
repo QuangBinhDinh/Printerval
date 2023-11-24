@@ -17,7 +17,7 @@ const AddressCard = ({ item, index }: IProps) => {
     const dispatch = useAppDispatch();
 
     const addressText = useMemo(() => {
-        let address = item.country.nicename + ', ';
+        let address = item.country?.nicename + ', ';
         if (item.province?.name) address = address + item.province.name + ', ';
         if (item.city_name) address = address + item.city_name + ', ';
         if (item.address) address = address + item.address;

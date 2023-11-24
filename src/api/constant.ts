@@ -8,4 +8,5 @@ export const SERVICE_DEBUG: string[] = [
     'addAllToCart',
     'fetchCartCheckout',
     'fetchShippingInfo',
+    'fetchAddressFirstTime',
 ];

@@ -1,17 +1,26 @@
 import { TextNormal, TextSemiBold } from '@components/text';
 import { useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
-import { getAddressText } from '@util/index';
+import { getAddressText, getBillingText } from '@util/index';
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon } from '@rneui/base';
+import { navigate } from '@navigation/service';
 
 const AddressView = () => {
     const shipAddress = useAppSelector(state => state.cart.defaultAddress);
+    const billAddress = useAppSelector(state => state.cart.billAddress);
 
-    const editShipAddress = () => {};
+    const editShipAddress = () => {
+        navigate('EditShipAddress');
+    };
 
-    const editBillAddress = () => {};
+    const editBillAddress = () => {
+        navigate('EditBillAddress');
+    };
+
+    const billingName = billAddress?.name || 'Billing address';
+    const billingDetail = getBillingText(billAddress) || 'Billing address matches shipping address';
 
     return (
         <View style={{ width: '100%' }}>
@@ -28,10 +37,10 @@ const AddressView = () => {
 
             <Pressable style={styles.addressCard} onPress={editBillAddress}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <TextSemiBold style={{ color: lightColor.black, lineHeight: 20 }}>Billing address</TextSemiBold>
+                    <TextSemiBold style={{ color: lightColor.black, lineHeight: 20 }}>{billingName}</TextSemiBold>
                     <Icon type="feather" name="edit" size={20} color={lightColor.secondary} />
                 </View>
-                <TextNormal style={styles.addressText}>Billing address matches shipping address</TextNormal>
+                <TextNormal style={styles.addressText}>{billingDetail}</TextNormal>
             </Pressable>
         </View>
     );

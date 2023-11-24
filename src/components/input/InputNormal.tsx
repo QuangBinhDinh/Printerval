@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
         fontSize: 11,
         lineHeight: 13,
         color: lightColor.error,
-        marginTop: 2,
+        marginTop: 4,
     },
 });

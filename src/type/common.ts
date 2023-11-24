@@ -171,18 +171,29 @@ export interface Province {
 export interface ShippingAddress {
     address: string;
     city_name: string;
-    country: Country;
-    country_id: number;
+    country?: Nullable<Country>;
+    country_id?: Nullable<number>;
 
-    customer_id: number;
     full_name: string;
     id: number;
     optional_address: string;
     phone: string | number;
 
-    province: Province;
-    province_id: number;
+    province?: Nullable<Province>;
+    province_id?: Nullable<number>;
     zip_code: string;
+}
+
+export interface BillingAddress {
+    name: string;
+    address: string;
+    country: string | number;
+    country_name?: string;
+    state_name: string;
+    city_name: string;
+    zip_code: string;
+    optional_address?: string;
+    //province: any;
 }
 
 export interface ShipInfo {

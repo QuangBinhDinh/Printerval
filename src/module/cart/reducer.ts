@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CartItem, ShipInfo, ShippingAddress } from '@type/common';
+import { BillingAddress, CartItem, CheckoutAddress, ShipInfo, ShippingAddress } from '@type/common';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { api } from '@api/service';
 import { cartEndpoints } from './service';
@@ -28,6 +28,16 @@ interface Cart {
      * Shipping address được sử dụng để checkout
      */
     defaultAddress: ShippingAddress | null;
+
+    /**
+     * 1 số info khác khi checkout
+     */
+    additionalInfo: {
+        email: string;
+        delivery_note: string;
+    };
+
+    billAddress: BillingAddress | null;
 
     /**
      * Thông tin liên quan đến payment (phí ship, etc )
@@ -102,6 +112,20 @@ const cart = createSlice({
 
         setDefaultAddress: (state, { payload }: PayloadAction<ShippingAddress>) => {
             state.defaultAddress = payload;
+        },
+
+        setCheckoutAddress: (
+            state,
+            {
+                payload,
+            }: PayloadAction<{ address: ShippingAddress; additional: { email: string; delivery_note: string } }>,
+        ) => {
+            state.defaultAddress = payload.address;
+            state.additionalInfo = payload.additional;
+        },
+
+        setBillAddress: (state, { payload }: PayloadAction<BillingAddress>) => {
+            state.billAddress = payload;
         },
 
         setShippingOption: (state, { payload }: PayloadAction<{ index: number; newValue: number }>) => {
@@ -211,6 +235,7 @@ const cart = createSlice({
         });
 
         //set default address nếu chưa có, hoặc có nhưng trong addressBook không có address này
+        //nếu không thoả mãn vẫn giữ nguyên address lưu ở cache
         builder.addMatcher(userDomain.fetchAddressFirstTime.matchFulfilled, (state, { payload }) => {
             if (payload.length > 0) {
                 if (

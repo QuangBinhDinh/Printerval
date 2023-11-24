@@ -35,6 +35,8 @@ import CreateTicket from '@product/screen/CreateTicket';
 import ModalOption from '@components/input/ModalOption';
 import AddressBook from '@user/screen/AddressBook';
 import CheckoutScreen from '@checkout/index';
+import EditShipping from '@checkout/screen/EditAddress/EditShipping';
+import EditBilling from '@checkout/screen/EditAddress/EditBilling';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -123,6 +125,8 @@ const Router = () => {
                 <Stack.Screen name="AddressBook" component={AddressBook} />
 
                 <Stack.Screen name="CheckoutNavigator" component={CheckoutScreen} />
+                <Stack.Screen name="EditShipAddress" component={EditShipping} />
+                <Stack.Screen name="EditBillAddress" component={EditBilling} />
             </Stack.Navigator>
         </NavigationContainer>
     );
