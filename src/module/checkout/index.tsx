@@ -4,15 +4,19 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 import { StyleSheet, View } from 'react-native';
 import AddressFill from './screen/AddressFill';
-import { CheckoutFinish, CheckoutMap, CheckoutMapActive, CheckoutPayment } from '@assets/svg';
+import { CheckoutFinish, CheckoutMap, CheckoutMapActive, CheckoutPayment, CheckoutPaymentActive } from '@assets/svg';
 import { useAppSelector } from '@store/hook';
 import CheckoutPreview from './screen/CheckoutPreview';
+import PaymentMethod from './screen/PaymentMethod';
+import { navigationRef } from '@navigation/service';
 
 const Stack = createStackNavigator();
 
 const CheckoutScreen = () => {
     const addressList = useAppSelector(state => state.auth.addressBook);
     const empty = addressList.length == 0;
+
+    const screenName = navigationRef.getCurrentRoute()?.name;
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -26,7 +30,11 @@ const CheckoutScreen = () => {
                                 <View key={item} style={styles.dot} />
                             ))}
                         </View>
-                        <CheckoutPayment width={24} height={24} />
+                        {screenName == 'PaymentMethod' ? (
+                            <CheckoutPaymentActive width={24} height={24} />
+                        ) : (
+                            <CheckoutPayment width={24} height={24} />
+                        )}
                         <View style={styles.lineView}>
                             {[1, 2, 3, 4, 5].map(item => (
                                 <View key={item} style={styles.dot} />
@@ -44,6 +52,7 @@ const CheckoutScreen = () => {
                     >
                         {empty && <Stack.Screen name="AddressFill" component={AddressFill} />}
                         <Stack.Screen name="CheckoutPreview" component={CheckoutPreview} />
+                        <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
                     </Stack.Navigator>
                 </View>
             </View>
@@ -56,7 +65,7 @@ export default CheckoutScreen;
 const styles = StyleSheet.create({
     stepContainer: {
         width: '100%',
-        height: 76,
+        height: 70,
         justifyContent: 'center',
         alignItems: 'center',
     },

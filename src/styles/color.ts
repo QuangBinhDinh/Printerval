@@ -9,7 +9,7 @@ export const lightColor = {
     yellowstar: '#FFBA49',
     error: '#FF3A3A',
     bluesky: '#2792CE',
-    borderGray: '#e1e1e1',
+    borderGray: '#E8E8E8',
 
     //use for background
     lightbg: '#fafafa',

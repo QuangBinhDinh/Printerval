@@ -23,7 +23,7 @@ const CheckoutCart = () => {
                 var selectOption = item.shipping_info[selectedIndex];
 
                 return (
-                    <View style={styles.shipSection} key={item.key}>
+                    <View style={[styles.shipSection, index == 0 && { marginTop: 0 }]} key={item.key}>
                         {item.cart_list.map(i => (
                             <CheckoutItem key={i.id} item={i} />
                         ))}

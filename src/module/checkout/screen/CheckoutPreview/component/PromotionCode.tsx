@@ -67,6 +67,7 @@ const PromotionCode = () => {
                         onChangeText={setText}
                         style={styles.input}
                         placeholder="Enter promotion code"
+                        placeholderTextColor={'#999'}
                     />
                 </View>
                 <Pressable style={styles.applyButton}>
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
         borderBottomColor: lightColor.borderGray,
     },
     input: {
-        fontSize: normalize(15),
+        fontSize: normalize(14),
         fontFamily: 'Poppins-Regular',
         height: '100%',
         flex: 1,

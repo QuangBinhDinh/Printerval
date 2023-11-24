@@ -6,6 +6,7 @@ import { cartEndpoints } from './service';
 import { userDomain } from '@user/service';
 import { checkoutEndpoint } from '@checkout/service';
 import moment from 'moment';
+import { sumBy } from 'lodash';
 
 interface PaymentConfig {
     public_key: string;
@@ -49,6 +50,19 @@ interface Cart {
         promotion_code: string;
         discount: number;
     };
+
+    shippingFee: number;
+
+    /**
+     * Số tiền tip
+     *
+     * LƯU Ý: có 2 loại tip là tip theo percent và tips cộng thẳng !!
+     */
+    tipsAmount: {
+        amount: number;
+
+        isPercent: boolean;
+    };
 }
 
 const initialState: Cart = {
@@ -70,6 +84,11 @@ const initialState: Cart = {
         promotion_code: '',
         discount: 0,
     },
+
+    tipsAmount: {
+        amount: 0,
+        isPercent: false,
+    },
 };
 
 const cart = createSlice({
@@ -87,8 +106,25 @@ const cart = createSlice({
 
         setShippingOption: (state, { payload }: PayloadAction<{ index: number; newValue: number }>) => {
             const { index, newValue } = payload;
+
+            //mảng option shipping mới ,lưu trữ các index đang đc chọn
             var newConfig = state.shippingConfigIndex.map((item, i) => (i == index ? newValue : item));
+
+            var new_shipping_fee = state.transfromShipping.reduce(
+                (prev, next, index) => prev + next.shipping_info[newConfig[index]].shipping_fee,
+                0,
+            );
+
             state.shippingConfigIndex = newConfig;
+            state.shippingFee = new_shipping_fee;
+        },
+
+        setTipsAmount: (state, { payload }: PayloadAction<{ value: number; percent: boolean }>) => {
+            var newTips = {
+                amount: payload.value,
+                isPercent: payload.percent,
+            };
+            state.tipsAmount = newTips;
         },
     },
     extraReducers: builder => {
@@ -151,9 +187,13 @@ const cart = createSlice({
 
             var transformed = buildNewShipping(apply_config_ids, new_ship_info);
 
+            //tính tổng phí ship dựa vào option shipping đầu tiên của từng đơn
+            var shipping_fee = sumBy(transformed, item => item.shipping_info[0].shipping_fee);
+
             state.rawShipping = new_ship_info;
             state.transfromShipping = transformed;
             state.shippingConfigIndex = new Array<number>(new_ship_info.length).fill(0);
+            state.shippingFee = shipping_fee;
         });
 
         //set thông tin payment config

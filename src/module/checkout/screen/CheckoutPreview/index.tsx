@@ -8,26 +8,30 @@ import CheckoutCart from './component/CheckoutCart';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ModalOptionShipping from './component/ModalOptionShipping';
 import PromotionCode from './component/PromotionCode';
-import TipSelection from './component/TipSelection';
+import TipSelection, { showTipsError } from './component/TipSelection';
 import FancyButton from '@components/FancyButton';
-import { TextSemiBold } from '@components/text';
+import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH } from '@util/index';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { navigate } from '@navigation/service';
 
 const CheckoutPreview = () => {
     const insets = useSafeAreaInsets();
 
     const { token, userInfo } = useAppSelector(state => state.auth);
     const shipAddress = useAppSelector(state => state.cart.defaultAddress);
-
-    const { transfromShipping } = useAppSelector(state => state.cart);
+    const tips = useAppSelector(state => state.cart.tipsAmount);
 
     const [fetchCart, { isLoading: l1 }] = useLazyFetchCartCheckoutQuery();
     const [fetchShipping, { isLoading: l2 }] = useLazyFetchShippingInfoQuery();
 
-    const toPayment = () => {};
+    const toPayment = () => {
+        if (tips.amount == -1) {
+            showTipsError();
+        } else navigate('PaymentMethod');
+    };
 
     useEffect(() => {
         const prepare = async () => {
@@ -45,11 +49,16 @@ const CheckoutPreview = () => {
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
+                enableOnAndroid
+                enableResetScrollToCoords={false}
+                extraHeight={50}
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 18 }}
             >
                 <AddressView />
+
+                <TextSemiBold style={{ fontSize: 18, color: '#444', marginTop: 32 }}>Order review</TextSemiBold>
 
                 <CheckoutCart />
 
@@ -96,6 +105,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         overflow: 'hidden',
         backgroundColor: lightColor.secondary,
-        marginTop: 32,
+        marginTop: 48,
     },
 });

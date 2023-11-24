@@ -29,6 +29,11 @@ import CheckoutFinishActive from './checkout-finish-active.svg';
 import CheckoutFinish from './checkout-finish-default.svg';
 import BuyCoffee from './buy-me-coffee.svg';
 import CouponLogo from './coupon.svg';
+import Maestro from './payment/Maestro.svg';
+import Mastercard from './payment/Mastercard.svg';
+import PaypalLogo from './payment/PayPal.svg';
+import StripeLogo from './payment/Stripe.svg';
+import Visa from './payment/Visa.svg';
 
 export {
     User,
@@ -62,4 +67,9 @@ export {
     CheckoutFinish,
     BuyCoffee,
     CouponLogo,
+    Mastercard,
+    Maestro,
+    PaypalLogo,
+    StripeLogo,
+    Visa,
 };
