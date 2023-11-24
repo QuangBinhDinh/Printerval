@@ -34,6 +34,8 @@ import Mastercard from './payment/Mastercard.svg';
 import PaypalLogo from './payment/PayPal.svg';
 import StripeLogo from './payment/Stripe.svg';
 import Visa from './payment/Visa.svg';
+import CheckoutSuccess from './checkout-success.svg';
+import CheckoutFailure from './checkout-failure.svg';
 
 export {
     User,
@@ -72,4 +74,6 @@ export {
     PaypalLogo,
     StripeLogo,
     Visa,
+    CheckoutFailure,
+    CheckoutSuccess,
 };

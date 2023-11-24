@@ -1,12 +1,11 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import InputNormal from '@components/input/InputNormal';
-import { CheckboxText, RadioText, TextSemiBold } from '@components/text';
+import { CheckboxText, TextSemiBold } from '@components/text';
 import InputOption from '@components/input/InputOption';
-import { createSelector } from '@reduxjs/toolkit';
 import { useAppSelector } from '@store/hook';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FancyButton from '@components/FancyButton';

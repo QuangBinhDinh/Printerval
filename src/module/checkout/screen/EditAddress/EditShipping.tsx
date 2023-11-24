@@ -1,6 +1,6 @@
 import HeaderScreen from '@components/HeaderScreen';
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -16,6 +16,7 @@ import { SCREEN_WIDTH } from '@util/index';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
+import ModalSelectAddress, { openAddressBook } from './ModalSelectAddress';
 
 const initialValues = {
     full_name: '',
@@ -92,31 +93,35 @@ const EditShipping = () => {
         },
     });
 
+    //lấy address từ 1 địa chỉ và fill vào form input
+    const fillAddress = useCallback((item: ShippingAddress) => {
+        const { full_name, phone, province, country, city_name, optional_address, zip_code, address } = item;
+        setValues({
+            full_name,
+            phone: phone.toString(),
+            email: userInfo?.email || '',
+            country: {
+                id: country?.id || 226,
+                value: country?.nicename || 'United States',
+            },
+            province: {
+                id: province?.id || -1,
+                value: province?.name || '',
+            },
+            address,
+            optional_address: optional_address || '',
+            zip_code,
+            city_name,
+            delivery_note: '',
+        });
+    }, []);
+
     const provinces = countries.find(item => item.id == values.country.id)?.provinces || [];
     const [provinceErr, setProvinceErr] = useState('');
 
     useEffect(() => {
         if (selectedAddress) {
-            const { full_name, phone, province, country, city_name, optional_address, zip_code, address } =
-                selectedAddress;
-            setValues({
-                full_name,
-                phone: phone.toString(),
-                email: userInfo?.email || '',
-                country: {
-                    id: country?.id || 226,
-                    value: country?.nicename || 'United States',
-                },
-                province: {
-                    id: province?.id || -1,
-                    value: province?.name || '',
-                },
-                address,
-                optional_address: optional_address || '',
-                zip_code,
-                city_name,
-                delivery_note: '',
-            });
+            fillAddress(selectedAddress);
         }
     }, []);
 
@@ -126,10 +131,14 @@ const EditShipping = () => {
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 //showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 16 }}
+                contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 24 }}
                 enableOnAndroid
                 enableResetScrollToCoords={false}
             >
+                <Pressable style={{ marginBottom: 12 }} onPress={openAddressBook}>
+                    <TextSemiBold>Fill from address book</TextSemiBold>
+                </Pressable>
+
                 <InputNormal
                     title="Full name"
                     value={values.full_name}
@@ -231,6 +240,8 @@ const EditShipping = () => {
                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
                 </FancyButton>
             </View>
+
+            <ModalSelectAddress callback={fillAddress} />
         </View>
     );
 };

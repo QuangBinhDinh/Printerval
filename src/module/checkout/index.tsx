@@ -4,11 +4,20 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 import { StyleSheet, View } from 'react-native';
 import AddressFill from './screen/AddressFill';
-import { CheckoutFinish, CheckoutMap, CheckoutMapActive, CheckoutPayment, CheckoutPaymentActive } from '@assets/svg';
+import {
+    CheckoutFinish,
+    CheckoutFinishActive,
+    CheckoutMap,
+    CheckoutMapActive,
+    CheckoutPayment,
+    CheckoutPaymentActive,
+} from '@assets/svg';
 import { useAppSelector } from '@store/hook';
 import CheckoutPreview from './screen/CheckoutPreview';
 import PaymentMethod from './screen/PaymentMethod';
 import { navigationRef } from '@navigation/service';
+import CheckoutSuccessScreen from './screen/CheckoutResult/SuccessScreen';
+import CheckoutFailureScreen from './screen/CheckoutResult/FailureScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +25,7 @@ const CheckoutScreen = () => {
     const addressList = useAppSelector(state => state.auth.addressBook);
     const empty = addressList.length == 0;
 
-    const screenName = navigationRef.getCurrentRoute()?.name;
+    const screenName = navigationRef.getCurrentRoute()?.name || '';
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -30,7 +39,7 @@ const CheckoutScreen = () => {
                                 <View key={item} style={styles.dot} />
                             ))}
                         </View>
-                        {screenName == 'PaymentMethod' ? (
+                        {['PaymentMethod', 'CheckoutFailure', 'CheckoutSuccess'].includes(screenName) ? (
                             <CheckoutPaymentActive width={24} height={24} />
                         ) : (
                             <CheckoutPayment width={24} height={24} />
@@ -40,7 +49,11 @@ const CheckoutScreen = () => {
                                 <View key={item} style={styles.dot} />
                             ))}
                         </View>
-                        <CheckoutFinish width={24} height={24} />
+                        {screenName == 'CheckoutSuccess' ? (
+                            <CheckoutFinishActive width={24} height={24} />
+                        ) : (
+                            <CheckoutFinish width={24} height={24} />
+                        )}
                     </View>
                 </View>
                 <View style={{ flex: 1 }}>
@@ -53,6 +66,8 @@ const CheckoutScreen = () => {
                         {empty && <Stack.Screen name="AddressFill" component={AddressFill} />}
                         <Stack.Screen name="CheckoutPreview" component={CheckoutPreview} />
                         <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
+                        <Stack.Screen name="CheckoutSuccess" component={CheckoutSuccessScreen} />
+                        <Stack.Screen name="CheckoutFailure" component={CheckoutFailureScreen} />
                     </Stack.Navigator>
                 </View>
             </View>

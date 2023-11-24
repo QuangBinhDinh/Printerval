@@ -10,19 +10,30 @@ import { SCREEN_WIDTH } from '@util/index';
 
 interface IProps {
     title: string;
+
+    /**
+     * Callback gọi khi quay lại màn trước
+     */
     onBack?: any;
+
+    /**
+     * Hide mũi tên quay lại , dùng để ngăn user quay lại màn trước
+     */
+    disableBack?: boolean;
 }
 
-const HeaderScreen = ({ title, onBack }: IProps) => {
+const HeaderScreen = ({ title, onBack, disableBack }: IProps) => {
     const insets = useSafeAreaInsets();
     const back = () => {
-        if (onBack) onBack();
-        goBack();
+        if (!disableBack) {
+            if (onBack) onBack();
+            goBack();
+        }
     };
     return (
         <View style={[styles.container, shadow, { height: 46 + insets.top / 1.25, paddingTop: insets.top / 1.25 }]}>
             <Pressable style={styles.iconBack} hitSlop={15} onPress={back}>
-                <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />
+                {!disableBack && <Icon type="antdesign" name="arrowleft" size={22} color={lightColor.secondary} />}
             </Pressable>
             <TextNormal
                 style={{ fontSize: 16, color: lightColor.primaryBold, marginTop: 3, width: '80%' }}

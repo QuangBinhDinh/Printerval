@@ -3,13 +3,10 @@ import React, { memo, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { TextSemiBold, TextNormal } from '@components/text';
-import { ShipMethod, ShippingAddress } from '@type/common';
+import { ShippingAddress } from '@type/common';
 import { lightColor } from '@styles/color';
-import { formatPrice } from '@util/index';
-import { Icon } from '@rneui/base';
 import EventEmitter from '../../../../EventEmitter';
 import { useAppDispatch, useAppSelector } from '@store/hook';
-import cart from '@cart/reducer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { debounce } from 'lodash';
 
@@ -42,7 +39,7 @@ const ModalSelectAddress = ({ callback }: IProps) => {
         var address = addressList.find(i => i.id == value);
         if (address) {
             callback(address);
-            debounce(() => setVisible(false), 150)();
+            debounce(() => setVisible(false), 200)();
         }
     };
 

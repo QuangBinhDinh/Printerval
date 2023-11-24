@@ -10,6 +10,7 @@ import FancyButton from '@components/FancyButton';
 import { formatPrice } from '@util/index';
 import PaymentOption from './PaymentOption';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { navigate } from '@navigation/service';
 
 const PaymentMethod = () => {
     const insets = useSafeAreaInsets();
@@ -47,7 +48,9 @@ const PaymentMethod = () => {
 
     const total = cart_sub_total + shippingFee - promotion.discount + transaction_fee + tips_fee;
 
-    const IWillHaveOrder = () => {};
+    const IWillHaveOrder = () => {
+        navigate('CheckoutSuccess');
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
