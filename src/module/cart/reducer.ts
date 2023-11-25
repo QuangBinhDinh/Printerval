@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { BillingAddress, CartItem, CheckoutAddress, ShipInfo, ShippingAddress } from '@type/common';
+import { BillingAddress, CartItem, ShipInfo, ShippingAddress } from '@type/common';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { api } from '@api/service';
 import { cartEndpoints } from './service';
@@ -108,6 +108,12 @@ const cart = createSlice({
         resetCart: state => {
             state.items = [];
             state.cart_sub_total = 0;
+            state.defaultAddress = null;
+            state.rawShipping = [];
+            state.transfromShipping = [];
+            state.promotion = initialState.promotion;
+            state.tipsAmount = initialState.tipsAmount;
+            state.shippingConfigIndex = [];
         },
 
         setDefaultAddress: (state, { payload }: PayloadAction<ShippingAddress>) => {

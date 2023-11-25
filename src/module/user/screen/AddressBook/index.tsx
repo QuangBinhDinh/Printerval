@@ -12,6 +12,8 @@ import { shadowTop } from '@styles/shadow';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FancyButton from '@components/FancyButton';
 import { TextSemiBold } from '@components/text';
+import { useFetchAddressBookQuery } from '@user/service';
+import { useAppSelector } from '@store/hook';
 
 const addressSelector = createSelector(
     [(state: RootState) => state.auth.addressBook, (state: RootState) => state.cart.defaultAddress],
@@ -26,8 +28,12 @@ const addressSelector = createSelector(
     },
 );
 const AddressBook = () => {
-    const data = useSelector(addressSelector);
     const insets = useSafeAreaInsets();
+
+    //const data = useSelector(addressSelector);
+
+    const accessToken = useAppSelector(state => state.auth.accessToken);
+    const { data } = useFetchAddressBookQuery(accessToken || '');
 
     const renderItem = ({ item, index }: { item: ShippingAddress; index: number }) => (
         <AddressCard item={item} index={index} />
@@ -38,7 +44,7 @@ const AddressBook = () => {
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Address book" />
             <FlatList
-                data={data}
+                data={data || []}
                 renderItem={renderItem}
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}

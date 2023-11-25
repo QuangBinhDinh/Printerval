@@ -23,6 +23,8 @@ const UserLogged = () => {
 
         InteractionManager.runAfterInteractions(async () => {
             dispatch(auth.actions.logout());
+            dispatch(cart.actions.resetCart());
+
             const id = await getUniqueId();
             dispatch(auth.actions.setCustomerToken(`${id}-${Date.now()}`));
 

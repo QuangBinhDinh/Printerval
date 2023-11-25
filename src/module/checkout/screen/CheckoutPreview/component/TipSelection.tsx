@@ -123,10 +123,10 @@ const TipSelection = () => {
     useEffect(() => {
         if (tip.value == -1) {
             transY.value = withTiming(INPUT_HEIGHT, { duration: 250 });
-            setError(false);
             setCustomTip('');
         } else {
             transY.value = withTiming(0, { duration: 250 });
+            setError(false);
         }
         dispatch(cart.actions.setTipsAmount({ value: tip.value, percent: tip.percent }));
     }, [tip]);

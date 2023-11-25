@@ -22,8 +22,7 @@ import CheckoutFailureScreen from './screen/CheckoutResult/FailureScreen';
 const Stack = createStackNavigator();
 
 const CheckoutScreen = () => {
-    const addressList = useAppSelector(state => state.auth.addressBook);
-    const empty = addressList.length == 0;
+    const address = useAppSelector(state => state.cart.defaultAddress);
 
     const screenName = navigationRef.getCurrentRoute()?.name || '';
 
@@ -63,7 +62,7 @@ const CheckoutScreen = () => {
                             ...TransitionPresets.SlideFromRightIOS,
                         }}
                     >
-                        {empty && <Stack.Screen name="AddressFill" component={AddressFill} />}
+                        {!address && <Stack.Screen name="AddressFill" component={AddressFill} />}
                         <Stack.Screen name="CheckoutPreview" component={CheckoutPreview} />
                         <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
                         <Stack.Screen name="CheckoutSuccess" component={CheckoutSuccessScreen} />
