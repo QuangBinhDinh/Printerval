@@ -17,6 +17,8 @@ import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
 import { usePostAddressMutation } from '@user/service';
 import { validatePhone } from '@util/index';
+import { showMessage } from '@components/popup/BottomMessage';
+import { getErrorMessage } from '@api/service';
 
 const initialValues = {
     full_name: '',
@@ -149,6 +151,7 @@ const AddressFill = () => {
                     });
                 } catch (e) {
                     console.log(e);
+                    showMessage(getErrorMessage(e));
                 }
             }
         },

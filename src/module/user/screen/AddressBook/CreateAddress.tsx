@@ -21,6 +21,7 @@ import { useLazyFetchAddressBookQuery, usePostAddressMutation } from '@user/serv
 import { showMessage } from '@components/popup/BottomMessage';
 import cart from '@cart/reducer';
 import { validatePhone } from '@util/index';
+import { getErrorMessage } from '@api/service';
 
 const initialValues = {
     full_name: '',
@@ -111,7 +112,7 @@ const CreateAddress = () => {
                     goBack();
                 } catch (e) {
                     console.log(e);
-                    showMessage('Error occured!');
+                    showMessage(getErrorMessage(e));
                 }
             }
         },
@@ -150,7 +151,7 @@ const CreateAddress = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <HeaderScreen title="Add new address"></HeaderScreen>
+            <HeaderScreen title={`${editAddress ? 'Edit' : 'Add'} new address`} />
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 //showsVerticalScrollIndicator={false}
@@ -258,7 +259,7 @@ const CreateAddress = () => {
                     {l1 || l2 ? (
                         <ActivityIndicator color={'white'} size={'small'} />
                     ) : (
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Submit</TextSemiBold>
                     )}
                 </FancyButton>
             </View>

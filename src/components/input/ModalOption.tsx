@@ -48,7 +48,7 @@ const ModalOption = () => {
         if (callback) callback(item);
         debounce(() => {
             setVisible(false);
-        }, 250)();
+        }, 150)();
     };
 
     useEffect(() => {

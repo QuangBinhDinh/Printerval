@@ -19,6 +19,8 @@ import cart from '@cart/reducer';
 import ModalSelectAddress, { openAddressBook } from './ModalSelectAddress';
 import { validatePhone } from '@util/index';
 import { useLazyFetchShippingInfoQuery } from '@checkout/service';
+import { showMessage } from '@components/popup/BottomMessage';
+import { getErrorMessage } from '@api/service';
 
 const initialValues = {
     full_name: '',
@@ -95,14 +97,18 @@ const EditShipping = () => {
                     email: input.email,
                 };
 
-                var res = await fetchShipping({
-                    token,
-                    customerId: userInfo.id,
-                    location_id: country?.id || 226,
-                }).unwrap();
+                try {
+                    var res = await fetchShipping({
+                        token,
+                        customerId: userInfo.id,
+                        location_id: country?.id || 226,
+                    }).unwrap();
 
-                dispatch(cart.actions.setCheckoutAddress({ address, additional }));
-                goBack();
+                    dispatch(cart.actions.setCheckoutAddress({ address, additional }));
+                    goBack();
+                } catch (e) {
+                    showMessage(getErrorMessage(e));
+                }
             }
         },
     });
