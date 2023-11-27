@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { ProductFilterArgs } from '@searchResult/service';
-import { Product } from '@type/common';
+import { Product, ShippingAddress } from '@type/common';
 
 type RootStackParams = {
     SubCollection: {
@@ -46,6 +46,9 @@ type RootStackParams = {
     BlogScreen: {
         postId: number;
     };
+    CreateAddress: {
+        editAddress?: ShippingAddress;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -57,3 +60,4 @@ export type StyleGuideRouteProp = RouteProp<RootStackParams, 'StyleGuide'>;
 export type CreateReviewRouteProp = RouteProp<RootStackParams, 'CreateReview'>;
 export type ReportProductRouteProp = RouteProp<RootStackParams, 'ReportProduct'>;
 export type BlogScreenRouteProp = RouteProp<RootStackParams, 'BlogScreen'>;
+export type CreateAddressRouteProp = RouteProp<RootStackParams, 'CreateAddress'>;

@@ -12,7 +12,7 @@ const extendedDomain = domainApi.injectEndpoints({
 
         fetchAddressBook: build.query<ShippingAddress[], string>({
             query: accessToken => ({ url: `user/api/address-book?api_token=${accessToken}&dt=${Date.now()}` }),
-            providesTags: ['Address'],
+            //providesTags: ['Address'],
             transformResponse: res => res.result,
         }),
 
@@ -22,7 +22,7 @@ const extendedDomain = domainApi.injectEndpoints({
                 method: 'post',
                 body: body.address,
             }),
-            invalidatesTags: ['Address'],
+            //invalidatesTags: ['Address'],
         }),
 
         deleteAddress: build.mutation<any, { id: number; api_token: string }>({
@@ -31,7 +31,7 @@ const extendedDomain = domainApi.injectEndpoints({
                 method: 'delete',
                 params: args,
             }),
-            invalidatesTags: ['Address'],
+            //invalidatesTags: ['Address'],
         }),
     }),
 });

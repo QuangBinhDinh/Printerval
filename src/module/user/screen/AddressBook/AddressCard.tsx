@@ -1,10 +1,13 @@
 import cart from '@cart/reducer';
+import { showMessage } from '@components/popup/BottomMessage';
 import { TextNormal, TextSemiBold } from '@components/text';
+import { navigate } from '@navigation/service';
 import { Icon } from '@rneui/base';
-import { useAppDispatch } from '@store/hook';
+import { useAppDispatch, useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
 import { shadow } from '@styles/shadow';
 import { ShippingAddress } from '@type/common';
+import { useDeleteAddressMutation, useLazyFetchAddressBookQuery } from '@user/service';
 import React, { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -12,9 +15,16 @@ interface IProps {
     item: ShippingAddress;
 
     index: number;
+
+    removeAddress: any;
 }
-const AddressCard = ({ item, index }: IProps) => {
+const AddressCard = ({ item, index, removeAddress }: IProps) => {
     const dispatch = useAppDispatch();
+    const [postDelete] = useDeleteAddressMutation();
+    const [fetchAddress] = useLazyFetchAddressBookQuery();
+
+    const accessToken = useAppSelector(state => state.auth.accessToken);
+    const defaultAddress = useAppSelector(state => state.cart.defaultAddress);
 
     const addressText = useMemo(() => {
         let address = item.country?.nicename + ', ';
@@ -28,6 +38,26 @@ const AddressCard = ({ item, index }: IProps) => {
     const setAsDefault = () => {
         dispatch(cart.actions.setDefaultAddress(item));
     };
+
+    const deleteAddress = async () => {
+        if (defaultAddress?.id == item.id) {
+            showMessage('Cannot delete default address');
+        } else if (accessToken) {
+            removeAddress(item.id);
+            showMessage('Address is deleted');
+            try {
+                var res = await postDelete({ api_token: accessToken, id: item.id }).unwrap();
+                fetchAddress(accessToken);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    };
+
+    const editAddress = () => {
+        navigate('CreateAddress', { editAddress: item });
+    };
+
     return (
         <View style={[styles.container, index == 0 && { backgroundColor: 'white' }, index == 0 && shadow]}>
             <View style={styles.header}>
@@ -40,10 +70,10 @@ const AddressCard = ({ item, index }: IProps) => {
                             </TextNormal>
                         </Pressable>
                     )}
-                    <Pressable hitSlop={10} style={{ marginRight: 16 }}>
+                    <Pressable hitSlop={10} style={{ marginRight: 16 }} onPress={editAddress}>
                         <Icon type="feather" name="edit" size={20} color={lightColor.secondary} />
                     </Pressable>
-                    <Pressable hitSlop={10} style={{}}>
+                    <Pressable hitSlop={10} style={{}} onPress={deleteAddress}>
                         <Icon type="feather" name="trash-2" size={20} color={'#444'} />
                     </Pressable>
                 </View>
