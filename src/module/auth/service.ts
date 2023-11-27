@@ -1,4 +1,5 @@
 import { api, domainApi } from '@api/service';
+import { OrderBody, OrderResponseSuccess } from '@checkout/type';
 import { User } from '@type/common';
 
 export interface LoginArgs {
@@ -24,6 +25,19 @@ export interface RegisterArgs {
     password_confirmation: string;
 }
 
+const extendedApi = api.injectEndpoints({
+    endpoints: build => ({
+        createOrder: build.mutation<OrderResponseSuccess, OrderBody>({
+            query: body => ({
+                url: 'api/order?service_token=megaads@123',
+                method: 'post',
+                body,
+                header: { token: body.token_user_query },
+            }),
+        }),
+    }),
+});
+
 const extendedDomain = domainApi.injectEndpoints({
     endpoints: build => ({
         postLogin: build.mutation<{ access_token: string; customer: User }, LoginArgs>({
@@ -38,4 +52,11 @@ const extendedDomain = domainApi.injectEndpoints({
     }),
 });
 
-export const { usePostLoginMutation, usePostLoginSocialMutation, useCreateAccountMutation } = extendedDomain;
+export const {
+    usePostLoginMutation,
+    usePostLoginSocialMutation,
+    useCreateAccountMutation,
+    endpoints: authDomain,
+} = extendedDomain;
+
+export const { useCreateOrderMutation } = extendedApi;

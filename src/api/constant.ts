@@ -10,4 +10,5 @@ export const SERVICE_DEBUG: string[] = [
     'fetchShippingInfo',
     'fetchAddressBook',
     'postPromotionCode',
+    'createOrder',
 ];

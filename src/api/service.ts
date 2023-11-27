@@ -144,3 +144,29 @@ export const globalApi = createApi({
 
 export const { useLazyFetchSlugQuery, useLazyFetchPaymentConfigQuery, useLazyFetchCountriesQuery } = api;
 export const { usePostImageMutation } = domainApi;
+
+/**
+ * Handle error response của Printerval, trả về 1 message duy nhất
+ *
+ * Có thể còn nhiều case khác nữa
+ * @param err
+ * @returns
+ */
+export const getErrorMessage = (err: any) => {
+    let errMsg = 'Unknown error';
+
+    var message = err.message;
+    if (!!message) {
+        if (Array.isArray(message)) {
+            errMsg = JSON.stringify(message[0]);
+        } else if (typeof message == 'object') {
+            var valueList = Object.values(message);
+            if (valueList.length > 0) {
+                errMsg = JSON.stringify(valueList[0]);
+            }
+        } else if (typeof message == 'string') {
+            errMsg = message;
+        }
+    } else errMsg = JSON.stringify(err);
+    return errMsg.slice(0, 150);
+};

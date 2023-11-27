@@ -16,6 +16,7 @@ import { navigate, goBack } from '@navigation/service';
 import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
 import { usePostAddressMutation } from '@user/service';
+import { validatePhone } from '@util/index';
 
 const initialValues = {
     full_name: '',
@@ -55,7 +56,10 @@ const initialValues = {
 const validationSchema = yup.object().shape({
     full_name: yup.string().required('Enter a first name'),
     // lastName: yup.string().required('Enter a last name'),
-    phone: yup.string().required('Enter a phone'),
+    phone: yup
+        .string()
+        .required('Enter a phone')
+        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
     email: yup.string().required('Enter an email').email(),
 
     address: yup.string().required('Enter an address'),

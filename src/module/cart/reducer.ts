@@ -7,6 +7,7 @@ import { userDomain } from '@user/service';
 import { checkoutEndpoint } from '@checkout/service';
 import moment from 'moment';
 import { sumBy } from 'lodash';
+import { authDomain } from '@auth/service';
 
 interface PaymentConfig {
     public_key: string;
@@ -83,6 +84,11 @@ const initialState: Cart = {
     defaultAddress: null,
 
     paymentConfig: null,
+
+    additionalInfo: {
+        email: '',
+        delivery_note: '',
+    },
 
     rawShipping: [],
 
@@ -257,6 +263,20 @@ const cart = createSlice({
             } else {
                 state.defaultAddress = null;
             }
+        });
+
+        //email mặc định khi checkout là email của user!
+        builder.addMatcher(authDomain.postLogin.matchFulfilled, (state, { payload }) => {
+            state.additionalInfo = {
+                email: payload.customer.email,
+                delivery_note: '',
+            };
+        });
+        builder.addMatcher(authDomain.postLoginSocial.matchFulfilled, (state, { payload }) => {
+            state.additionalInfo = {
+                email: payload.customer.email,
+                delivery_note: '',
+            };
         });
     },
 });

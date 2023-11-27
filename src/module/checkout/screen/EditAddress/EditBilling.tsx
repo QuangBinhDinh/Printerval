@@ -151,6 +151,7 @@ const EditBilling = () => {
                     touched={touched.zip_code}
                     required
                 />
+                <View style={{ height: 100 }} />
             </KeyboardAwareScrollView>
 
             <View

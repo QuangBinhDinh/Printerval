@@ -20,6 +20,7 @@ import { CreateAddressRouteProp } from '@navigation/navigationRoute';
 import { useLazyFetchAddressBookQuery, usePostAddressMutation } from '@user/service';
 import { showMessage } from '@components/popup/BottomMessage';
 import cart from '@cart/reducer';
+import { validatePhone } from '@util/index';
 
 const initialValues = {
     full_name: '',
@@ -41,7 +42,10 @@ const initialValues = {
 
 const validationSchema = yup.object().shape({
     full_name: yup.string().required('Enter a first name'),
-    phone: yup.string().required('Enter a phone'),
+    phone: yup
+        .string()
+        .required('Enter a phone')
+        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
     address: yup.string().required('Enter an address'),
     optional_address: yup.string(),
     city_name: yup.string().required('Enter a city/suburb'),
@@ -61,11 +65,6 @@ const CreateAddress = () => {
 
     const [postAddress, { isLoading: l1 }] = usePostAddressMutation();
     const [fetchAddress, { isFetching: l2 }] = useLazyFetchAddressBookQuery();
-
-    // useEffect(() => {
-    //     console.log('Posting', l1);
-    //     console.log('Fetching', l2);
-    // }, [l1, l2]);
 
     const [isDefault, setAsDefault] = useState(false);
 

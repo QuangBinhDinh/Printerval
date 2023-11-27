@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
 import ModalSelectAddress, { openAddressBook } from './ModalSelectAddress';
+import { validatePhone } from '@util/index';
 
 const initialValues = {
     full_name: '',
@@ -41,7 +42,10 @@ const initialValues = {
 const validationSchema = yup.object().shape({
     full_name: yup.string().required('Enter a first name'),
 
-    phone: yup.string().required('Enter a phone'),
+    phone: yup
+        .string()
+        .required('Enter a phone')
+        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
     email: yup.string().required('Enter an email').email(),
 
     address: yup.string().required('Enter an address'),

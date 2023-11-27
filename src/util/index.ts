@@ -181,6 +181,17 @@ const getBillingText = (item: Nullable<BillingAddress>) => {
     return address;
 };
 
+/**
+ * check số điện thoại hợp lệ
+ * @param num
+ * @returns
+ */
+const validatePhone = (num: string) => {
+    if (num.length < 6 || num.length > 20) return false;
+    var re = /^[+]?[0-9]{1,14}?$/;
+    return re.test(num);
+};
+
 export {
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
@@ -196,4 +207,5 @@ export {
     primitiveObj,
     getAddressText,
     getBillingText,
+    validatePhone,
 };
