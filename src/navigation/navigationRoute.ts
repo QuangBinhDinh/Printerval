@@ -49,6 +49,9 @@ type RootStackParams = {
     CreateAddress: {
         editAddress?: ShippingAddress;
     };
+    CheckoutSuccess: {
+        orderCode: string;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -61,3 +64,4 @@ export type CreateReviewRouteProp = RouteProp<RootStackParams, 'CreateReview'>;
 export type ReportProductRouteProp = RouteProp<RootStackParams, 'ReportProduct'>;
 export type BlogScreenRouteProp = RouteProp<RootStackParams, 'BlogScreen'>;
 export type CreateAddressRouteProp = RouteProp<RootStackParams, 'CreateAddress'>;
+export type CheckoutSuccessRouteProp = RouteProp<RootStackParams, 'CheckoutSuccess'>;

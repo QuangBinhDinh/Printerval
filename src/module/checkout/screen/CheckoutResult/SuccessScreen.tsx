@@ -10,9 +10,12 @@ import { shadowTop } from '@styles/shadow';
 import { navigate } from '@navigation/service';
 import { usePreventGoBack } from '@navigation/customHook';
 import { normalize } from '@rneui/themed';
+import { useRoute } from '@react-navigation/native';
+import { CheckoutSuccessRouteProp } from '@navigation/navigationRoute';
 
 const CheckoutSuccessScreen = () => {
     const insets = useSafeAreaInsets();
+    const { params: { orderCode } = {} } = useRoute<CheckoutSuccessRouteProp>();
 
     const copyCode = () => {};
 
@@ -29,7 +32,7 @@ const CheckoutSuccessScreen = () => {
 
             <Pressable style={styles.orderCodeView} onPress={copyCode}>
                 <TextSemiBold style={{ fontSize: 20, lineHeight: 24, color: lightColor.secondary, marginTop: 2 }}>
-                    #ID123456
+                    {orderCode || '#ORDERCODE'}
                 </TextSemiBold>
             </Pressable>
 

@@ -16,6 +16,7 @@ import { BillingAddress } from '@type/common';
 import { useCreateOrderMutation } from '@auth/service';
 import { alertError } from '@components/popup/PopupError';
 import { getErrorMessage } from '@api/service';
+import PaypalWebview, { openPaypal } from '../PaypalWebview';
 
 const PaymentMethod = () => {
     const insets = useSafeAreaInsets();
@@ -26,6 +27,9 @@ const PaymentMethod = () => {
 
     //Loading payment
     const [processing, setProcessing] = useState(false);
+
+    //Order code của thanh toán này
+    const [orderCode, setOrderCode] = useState('');
 
     const { token } = useAppSelector(state => state.auth);
     const { cart_sub_total, shippingFee, paymentConfig, promotion, tipsAmount, additionalInfo, billAddress } =
@@ -106,8 +110,11 @@ const PaymentMethod = () => {
         setProcessing(true);
         try {
             const { redirect, order } = await postOrder(buildData).unwrap();
+            setOrderCode(order.code);
+
             if (typeof redirect == 'string') {
                 //luồng paypal
+                openPaypal(redirect);
             } else {
             }
         } catch (e) {
@@ -171,6 +178,8 @@ const PaymentMethod = () => {
 
                 <View style={{ height: 16 + insets.bottom / 2 }} />
             </ScrollView>
+
+            <PaypalWebview orderCode={orderCode} />
         </View>
     );
 };
