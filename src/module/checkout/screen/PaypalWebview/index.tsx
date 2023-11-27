@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { InteractionManager, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, InteractionManager, Pressable, StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
 import EventEmitter from '../../../../EventEmitter';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@util/index';
@@ -20,6 +20,12 @@ const PaypalWebview = ({ orderCode }: IProps) => {
     const open = (url: string) => {
         setVisible(true);
         setUrl(url);
+    };
+    const onCloseWithAlert = () => {
+        Alert.alert('Cancel payment', 'Are you sure to cancel this payment?', [
+            { text: 'No', style: 'cancel' },
+            { text: 'Yes', style: 'destructive', onPress: onClose },
+        ]);
     };
 
     const onClose = () => {
@@ -59,8 +65,9 @@ const PaypalWebview = ({ orderCode }: IProps) => {
             useNativeDriver
             hideModalContentWhileAnimating
             isVisible={visible}
-            onBackdropPress={onClose}
-            onBackButtonPress={onClose}
+            onBackdropPress={onCloseWithAlert}
+            onBackButtonPress={onCloseWithAlert}
+            statusBarTranslucent
             style={{
                 justifyContent: 'flex-end',
                 margin: 0,
@@ -68,7 +75,7 @@ const PaypalWebview = ({ orderCode }: IProps) => {
         >
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Pressable hitSlop={10} onPress={onClose}>
+                    <Pressable hitSlop={10} onPress={onCloseWithAlert}>
                         <Icon type="antdesign" name="close" size={20} color={'#444'} />
                     </Pressable>
                 </View>

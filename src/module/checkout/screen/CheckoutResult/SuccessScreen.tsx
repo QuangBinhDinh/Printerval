@@ -12,15 +12,26 @@ import { usePreventGoBack } from '@navigation/customHook';
 import { normalize } from '@rneui/themed';
 import { useRoute } from '@react-navigation/native';
 import { CheckoutSuccessRouteProp } from '@navigation/navigationRoute';
+import { useAppDispatch } from '@store/hook';
+import cart from '@cart/reducer';
+import { api } from '@api/service';
 
 const CheckoutSuccessScreen = () => {
     const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
     const { params: { orderCode } = {} } = useRoute<CheckoutSuccessRouteProp>();
 
     const copyCode = () => {};
 
     const continueShopping = () => {
+        dispatch(cart.actions.resetCart());
+        dispatch(api.util.invalidateTags(['Cart', 'CartCheckout']));
         navigate('HomeScreen');
+    };
+
+    const toTrackOrder = () => {
+        dispatch(cart.actions.resetCart());
+        dispatch(api.util.invalidateTags(['Cart', 'CartCheckout']));
     };
 
     usePreventGoBack();
@@ -37,7 +48,10 @@ const CheckoutSuccessScreen = () => {
             </Pressable>
 
             <TextNormal style={{ marginTop: normalize(24) }}>
-                You can always track your order <TextNormal style={{ color: lightColor.secondary }}>here</TextNormal>
+                You can always track your order{' '}
+                <TextNormal style={{ color: lightColor.secondary }} onPress={toTrackOrder}>
+                    here
+                </TextNormal>
             </TextNormal>
 
             <View

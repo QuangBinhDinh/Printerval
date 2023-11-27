@@ -1,6 +1,6 @@
 import HeaderScreen from '@components/HeaderScreen';
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -18,6 +18,7 @@ import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
 import ModalSelectAddress, { openAddressBook } from './ModalSelectAddress';
 import { validatePhone } from '@util/index';
+import { useLazyFetchShippingInfoQuery } from '@checkout/service';
 
 const initialValues = {
     full_name: '',
@@ -62,15 +63,18 @@ const EditShipping = () => {
 
     const countries = useAppSelector(state => state.config.countries);
     const selectedAddress = useAppSelector(state => state.cart.defaultAddress);
-    const userInfo = useAppSelector(state => state.auth.userInfo);
+    const { userInfo, token } = useAppSelector(state => state.auth);
+
+    const [fetchShipping, { isFetching }] = useLazyFetchShippingInfoQuery();
 
     const { submitForm, errors, values, setFieldValue, resetForm, touched, setValues } = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: input => {
+        onSubmit: async input => {
             if (provinces.length > 0 && input.province.id == -1) {
                 setProvinceErr('Enter a state/province');
             } else {
+                if (!userInfo) return;
                 var country = countries.find(i => i.id == input.country.id);
                 var province = provinces.find(i => i.id == input.province.id);
 
@@ -90,6 +94,12 @@ const EditShipping = () => {
                     delivery_note: input.delivery_note,
                     email: input.email,
                 };
+
+                var res = await fetchShipping({
+                    token,
+                    customerId: userInfo.id,
+                    location_id: country?.id || 226,
+                }).unwrap();
 
                 dispatch(cart.actions.setCheckoutAddress({ address, additional }));
                 goBack();
@@ -241,7 +251,11 @@ const EditShipping = () => {
                 ]}
             >
                 <FancyButton style={styles.button} backgroundColor={lightColor.secondary} onPress={submitForm}>
-                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                    {isFetching ? (
+                        <ActivityIndicator color={'white'} size={'small'} />
+                    ) : (
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                    )}
                 </FancyButton>
             </View>
 

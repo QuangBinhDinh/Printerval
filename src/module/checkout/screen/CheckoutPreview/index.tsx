@@ -25,7 +25,7 @@ const CheckoutPreview = () => {
     const tips = useAppSelector(state => state.cart.tipsAmount);
 
     const [fetchCart, { isLoading: l1 }] = useLazyFetchCartCheckoutQuery();
-    const [fetchShipping, { isLoading: l2 }] = useLazyFetchShippingInfoQuery();
+    const [fetchShipping, { isLoading: l2, isFetching: l3 }] = useLazyFetchShippingInfoQuery();
 
     const toPayment = () => {
         if (tips.amount == -1) {
@@ -45,7 +45,7 @@ const CheckoutPreview = () => {
         prepare();
     }, []);
 
-    if (l1 || l2) return <LoadingCheckout />;
+    if (l1 || l2 || l3) return <LoadingCheckout />;
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
@@ -65,6 +65,8 @@ const CheckoutPreview = () => {
                 <PromotionCode />
 
                 <TipSelection />
+
+                {/* <TestComp /> */}
 
                 <FancyButton style={styles.button} backgroundColor={lightColor.secondary} onPress={toPayment}>
                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
