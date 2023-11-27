@@ -70,6 +70,10 @@ const PaymentMethod = () => {
                         <TextSemiBold style={{ color: '#444' }}>{formatPrice(cart_sub_total)}</TextSemiBold>
                     </View>
                     <View style={styles.row}>
+                        <TextNormal style={styles.textGray}>Discount</TextNormal>
+                        <TextSemiBold style={{ color: '#444' }}>-{formatPrice(promotion.discount)}</TextSemiBold>
+                    </View>
+                    <View style={styles.row}>
                         <TextNormal style={styles.textGray}>Shipping fee</TextNormal>
                         <TextSemiBold style={{ color: '#444' }}>{formatPrice(shippingFee)}</TextSemiBold>
                     </View>

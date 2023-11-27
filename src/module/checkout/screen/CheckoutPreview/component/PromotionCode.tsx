@@ -1,7 +1,7 @@
 import { CouponLogo } from '@assets/svg';
 import { TextNormal, TextSemiBold } from '@components/text';
-import React, { memo, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import React, { memo, useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/base';
 import { lightColor } from '@styles/color';
 import * as yup from 'yup';
@@ -16,12 +16,27 @@ import Animated, {
     Extrapolation,
     withTiming,
 } from 'react-native-reanimated';
+import { usePostPromotionCodeMutation } from '@checkout/service';
+import { useAppDispatch, useAppSelector } from '@store/hook';
+import { sumBy } from 'lodash';
+import cart from '@cart/reducer';
 
-const INPUT_HEIGHT = 40;
+const INPUT_HEIGHT = 44;
 
 const PromotionCode = () => {
+    const dispatch = useAppDispatch();
+    const [postCode, { isLoading }] = usePostPromotionCodeMutation();
+    const { cart_sub_total, items, defaultAddress, shippingConfigIndex, transfromShipping } = useAppSelector(
+        state => state.cart,
+    );
+
     const [isExpand, setExpand] = useState(false);
+
     const [text, setText] = useState('');
+    const [codeStatus, setStatus] = useState({
+        msg: '',
+        status: 'none',
+    });
 
     const transY = useSharedValue(0);
     const animStyle = useAnimatedStyle(() => ({
@@ -32,6 +47,60 @@ const PromotionCode = () => {
         }),
     }));
 
+    const applyCode = async () => {
+        if (!defaultAddress) return;
+        if (text.trim() == '') {
+            setStatus({
+                msg: 'Code cannot be empty',
+                status: 'fail',
+            });
+            return;
+        }
+
+        let selected_ship = transfromShipping[0].shipping_info[shippingConfigIndex[0]];
+        //TH tách đơn
+        if (transfromShipping.length > 1) {
+            var checked = selected_ship.name_shipping;
+            if (
+                transfromShipping.every(
+                    (item, index) => item.shipping_info[shippingConfigIndex[index]].name_shipping == checked,
+                )
+            ) {
+                //nếu như option shipping của các đơn đều giống nhau ==> skip
+            } else {
+                // set shipping là standard
+                selected_ship = transfromShipping[0].shipping_info[0];
+            }
+        }
+
+        var body = {
+            code: text,
+            amount: cart_sub_total,
+            quantity: sumBy(items, i => i.quantity),
+            products: items.map(i => ({ price: i.price * i.quantity, id: i.product_id, quantity: i.quantity })),
+            shipping_fee: selected_ship.shipping_fee,
+            shipping_type: selected_ship.name_shipping,
+            phone: defaultAddress.phone,
+        };
+
+        try {
+            var res = await postCode(body).unwrap();
+            if (res.status == 'successful') {
+                setStatus({
+                    msg: 'Apply code successful',
+                    status: 'success',
+                });
+                dispatch(cart.actions.setPromotion({ promotion_code: text, discount: res.result }));
+            }
+        } catch (e: any) {
+            dispatch(cart.actions.setPromotion({ promotion_code: '', discount: 0 }));
+            setStatus({
+                msg: e.message || 'Unknown error',
+                status: 'fail',
+            });
+        }
+    };
+
     const toogle = () => {
         if (!isExpand) {
             setExpand(true);
@@ -41,6 +110,7 @@ const PromotionCode = () => {
             transY.value = withTiming(0, { duration: 250 });
         }
     };
+
     return (
         <View style={{ marginTop: 32, width: '100%' }}>
             <Pressable
@@ -61,7 +131,13 @@ const PromotionCode = () => {
             </Pressable>
 
             <Animated.View style={[styles.rowInput, animStyle]}>
-                <View style={styles.inputView}>
+                <View
+                    style={[
+                        styles.inputView,
+                        codeStatus.status == 'success' && { borderBottomColor: lightColor.success },
+                        codeStatus.status == 'fail' && { borderBottomColor: lightColor.error },
+                    ]}
+                >
                     <TextInput
                         value={text}
                         onChangeText={setText}
@@ -70,10 +146,24 @@ const PromotionCode = () => {
                         placeholderTextColor={'#999'}
                     />
                 </View>
-                <Pressable style={styles.applyButton}>
-                    <TextSemiBold style={{ color: 'white', fontSize: 13 }}>Apply</TextSemiBold>
+                <Pressable style={styles.applyButton} onPress={applyCode}>
+                    {isLoading ? (
+                        <ActivityIndicator color={'white'} size={'small'} />
+                    ) : (
+                        <TextSemiBold style={{ color: 'white', fontSize: 13 }}>Apply</TextSemiBold>
+                    )}
                 </Pressable>
             </Animated.View>
+            {codeStatus.status != 'none' && isExpand && (
+                <TextNormal
+                    style={[
+                        styles.errorText,
+                        { color: codeStatus.status == 'success' ? lightColor.success : lightColor.error },
+                    ]}
+                >
+                    {codeStatus.msg}
+                </TextNormal>
+            )}
         </View>
     );
 };
@@ -108,5 +198,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: lightColor.secondary,
         borderRadius: 6,
+    },
+    errorText: {
+        fontSize: 12,
+        marginTop: 3,
     },
 });

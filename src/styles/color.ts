@@ -8,6 +8,8 @@ export const lightColor = {
     price: '#C52C29',
     yellowstar: '#FFBA49',
     error: '#FF3A3A',
+    success: '#32B53B',
+    warning: '##EAC846',
     bluesky: '#2792CE',
     borderGray: '#E8E8E8',
 

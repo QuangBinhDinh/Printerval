@@ -9,4 +9,5 @@ export const SERVICE_DEBUG: string[] = [
     'createAccount',
     'fetchShippingInfo',
     'fetchAddressBook',
+    'postPromotionCode',
 ];

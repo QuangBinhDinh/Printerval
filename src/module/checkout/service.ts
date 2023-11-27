@@ -1,6 +1,6 @@
 import { api, domainApi } from '@api/service';
 import { CartItem, ShipInfo } from '@type/common';
-import { ShippingInfoArgs } from './type';
+import { ApplyCodeBody, ShippingInfoArgs } from './type';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -18,8 +18,22 @@ const extendedApi = api.injectEndpoints({
     }),
 });
 
+const extendedDomain = domainApi.injectEndpoints({
+    endpoints: build => ({
+        postPromotionCode: build.mutation<
+            { status: string; message: string; result: number; discountPercent: string },
+            ApplyCodeBody
+        >({
+            query: body => ({ url: 'discount/apply-code', body, method: 'post' }),
+        }),
+    }),
+});
+
 export const {
     useLazyFetchCartCheckoutQuery,
     useLazyFetchShippingInfoQuery,
+
     endpoints: checkoutEndpoint,
 } = extendedApi;
+
+export const { usePostPromotionCodeMutation } = extendedDomain;

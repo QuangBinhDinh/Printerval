@@ -156,6 +156,10 @@ const cart = createSlice({
             };
             state.tipsAmount = newTips;
         },
+
+        setPromotion: (state, { payload }: PayloadAction<{ promotion_code: string; discount: number }>) => {
+            state.promotion = payload;
+        },
     },
     extraReducers: builder => {
         builder.addMatcher(cartEndpoints.fetchCart.matchFulfilled, (state, { payload }) => {
