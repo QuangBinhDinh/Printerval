@@ -38,6 +38,7 @@ import CheckoutScreen from '@checkout/index';
 import EditShipping from '@checkout/screen/EditAddress/EditShipping';
 import EditBilling from '@checkout/screen/EditAddress/EditBilling';
 import CreateAddress from '@user/screen/AddressBook/CreateAddress';
+import ListOrderScreen from '@user/screen/ListOrder';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -125,6 +126,7 @@ const Router = () => {
                 <Stack.Screen name="BlogScreen" component={BlogScreen} />
                 <Stack.Screen name="AddressBook" component={AddressBook} />
                 <Stack.Screen name="CreateAddress" component={CreateAddress} />
+                <Stack.Screen name="ListOrderScreen" component={ListOrderScreen} />
 
                 <Stack.Screen name="CheckoutNavigator" component={CheckoutScreen} />
                 <Stack.Screen name="EditShipAddress" component={EditShipping} />
