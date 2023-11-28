@@ -32,7 +32,7 @@ const PaymentMethod = () => {
     const [orderCode, setOrderCode] = useState('');
 
     const { token } = useAppSelector(state => state.auth);
-    const { cart_sub_total, shippingFee, paymentConfig, promotion, tipsAmount, additionalInfo, billAddress } =
+    const { cart_sub_total, shippingFee, paymentConfig, promotion, tipsAmount, additionalInfo, billAddress, giftInfo } =
         useAppSelector(state => state.cart);
     const shipAddress = useAppSelector(state => state.cart.defaultAddress);
     const { stripe_fee_percent, paypal_fee_percent } = paymentConfig;
@@ -69,6 +69,7 @@ const PaymentMethod = () => {
     const IWillHaveOrder = async () => {
         if (!shipAddress) return;
 
+        const isGift = !!giftInfo.name && !!giftInfo.phone;
         var buildData: OrderBody = {
             name: shipAddress.full_name,
             phone: shipAddress.phone,
@@ -90,6 +91,7 @@ const PaymentMethod = () => {
             delivery_note: additionalInfo?.delivery_note,
             token_user_query: token,
             checkout_source: 'app',
+            ...(isGift && { giftInfo: JSON.stringify(giftInfo) }),
         };
 
         let new_bill_address: BillingAddress = {

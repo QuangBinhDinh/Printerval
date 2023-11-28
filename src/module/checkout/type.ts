@@ -55,6 +55,11 @@ export interface OrderBody {
     token_user_query: string;
 
     checkout_source: string;
+
+    /**
+     * Stringfy object thông tin người đc gift
+     */
+    giftInfo?: string;
 }
 
 export interface OrderResponseSuccess {

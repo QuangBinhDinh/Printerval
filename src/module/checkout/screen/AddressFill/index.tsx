@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -21,8 +21,8 @@ import { showMessage } from '@components/popup/BottomMessage';
 import { getErrorMessage } from '@api/service';
 
 const initialValues = {
-    full_name: '',
-
+    first_name: '',
+    last_name: '',
     phone: '',
     email: '',
     country: {
@@ -40,59 +40,9 @@ const initialValues = {
     zip_code: '',
     delivery_note: '',
 
-    // isCustomBill: false,
-
-    // billName: '',
-    // billCountry: {
-    //     id: -1,
-    //     value: '',
-    // },
-    // billAddress: '',
-    // billProvince: {
-    //     id: null,
-    //     value: '',
-    // },
-    // billZipcode: '',
+    recipient_name: '',
+    recipient_phone: '',
 };
-
-const validationSchema = yup.object().shape({
-    full_name: yup.string().required('Enter a first name'),
-    // lastName: yup.string().required('Enter a last name'),
-    phone: yup
-        .string()
-        .required('Enter a phone')
-        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
-    email: yup.string().required('Enter an email').email(),
-
-    address: yup.string().required('Enter an address'),
-    optional_address: yup.string(),
-    city_name: yup.string().required('Enter a city/suburb'),
-    // state_name: yup.string().required(),
-    zip_code: yup.string().required('Enter a zip/postal code'),
-    delivery_note: yup.string(),
-
-    // isCustomBill: yup.boolean(),
-
-    // billName: yup.string().when('isCustomBill', {
-    //     is: (x: boolean) => !!x,
-    //     then: schema => schema.required('Enter a name'),
-    // }),
-    // billCountry: yup.object().when('isCustomBill', {
-    //     is: (x: boolean) => !!x,
-    //     then: schema =>
-    //         schema.shape({
-    //             id: yup.number().moreThan(-1).required('Select a country'),
-    //         }),
-    // }),
-    // billAddress: yup.string().when('isCustomBill', {
-    //     is: (x: boolean) => !!x,
-    //     then: schema => schema.required('Enter an address'),
-    // }),
-    // billZipcode: yup.string().when('isCustomBill', {
-    //     is: (x: boolean) => !!x,
-    //     then: schema => schema.required('Enter a Zip/Postal code'),
-    // }),
-});
 
 const AddressFill = () => {
     const countries = useAppSelector(state => state.config.countries);
@@ -105,60 +55,97 @@ const AddressFill = () => {
 
     const [isSendFriend, setSendFriend] = useState(false);
 
+    const validationSchema = useMemo(
+        () =>
+            yup.object().shape({
+                first_name: yup.string().required('Enter a first name'),
+                last_name: yup.string().required('Enter a last name'),
+                phone: yup
+                    .string()
+                    .required('Enter a phone')
+                    .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
+                email: yup.string().required('Enter an email').email(),
+
+                address: yup.string().required('Enter an address'),
+                optional_address: yup.string(),
+                city_name: yup.string().required('Enter a city/suburb'),
+
+                country: yup.object().shape({
+                    id: yup.number().moreThan(-1, 'Country cannot be empty'),
+                }),
+                province: yup.object().when('country', {
+                    is: (country: any) => {
+                        var selected = countries.find(c => c.id == country.id);
+                        return !!selected && selected.provinces.length > 0;
+                    },
+                    then: schema =>
+                        schema.shape({
+                            id: yup.number().moreThan(-1, 'Province cannot be empty'),
+                        }),
+                }),
+
+                zip_code: yup.string().required('Enter a zip/postal code'),
+                delivery_note: yup.string(),
+            }),
+        [],
+    );
+
     const { submitForm, errors, values, setFieldValue, resetForm, touched } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async input => {
-            if (provinces.length > 0 && input.province.id == -1) {
-                setProvinceErr('Enter a state/province');
-            } else {
-                var country = countries.find(i => i.id == input.country.id);
-                var province = provinces.find(i => i.id == input.province.id);
+            var country = countries.find(i => i.id == input.country.id);
+            var province = provinces.find(i => i.id == input.province.id);
+            var full_name = input.first_name + input.last_name;
 
-                var address: ShippingAddress = {
-                    id: -1,
-                    full_name: input.full_name,
-                    phone: input.phone,
-                    address: input.address,
-                    optional_address: input.optional_address,
-                    city_name: input.city_name,
-                    zip_code: input.zip_code,
-                    ...(!!country && { country, country_id: country.id }),
-                    ...(!!province && { province, province_id: province.id }),
-                };
+            var address: ShippingAddress = {
+                id: -1,
+                full_name,
+                phone: input.phone,
+                address: input.address,
+                optional_address: input.optional_address,
+                city_name: input.city_name,
+                zip_code: input.zip_code,
+                ...(!!country && { country, country_id: country.id }),
+                ...(!!province && { province, province_id: province.id }),
+            };
 
-                var additional = {
-                    delivery_note: input.delivery_note,
-                    email: input.email,
-                };
+            var additional = {
+                delivery_note: input.delivery_note,
+                email: input.email,
+            };
 
-                navigate('CheckoutPreview');
-                dispatch(cart.actions.setCheckoutAddress({ address, additional }));
+            navigate('CheckoutPreview');
+            dispatch(
+                cart.actions.setCheckoutAddress({
+                    address,
+                    additional,
+                    ...(isSendFriend && { giftInfo: { name: input.recipient_name, phone: input.recipient_phone } }),
+                }),
+            );
 
-                try {
-                    postAddress({
-                        address: {
-                            full_name: address.full_name,
-                            phone: address.phone,
-                            zip_code: address.zip_code,
-                            country_id: address.country_id || '',
-                            province_id: address.province_id || '',
-                            city_name: address.city_name,
-                            optional_address: address.optional_address,
-                            address: address.address,
-                        },
-                        api_token: accessToken || '',
-                    });
-                } catch (e) {
-                    console.log(e);
-                    showMessage(getErrorMessage(e));
-                }
+            try {
+                postAddress({
+                    address: {
+                        full_name: address.full_name,
+                        phone: address.phone,
+                        zip_code: address.zip_code,
+                        country_id: address.country_id || '',
+                        province_id: address.province_id || '',
+                        city_name: address.city_name,
+                        optional_address: address.optional_address,
+                        address: address.address,
+                    },
+                    api_token: accessToken || '',
+                });
+            } catch (e) {
+                console.log(e);
+                showMessage(getErrorMessage(e));
             }
         },
     });
 
     const provinces = countries.find(item => item.id == values.country.id)?.provinces || [];
-    const [provinceErr, setProvinceErr] = useState('');
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -171,21 +158,21 @@ const AddressFill = () => {
             >
                 <TextSemiBold style={styles.sectionTitle}>Billing information</TextSemiBold>
                 <InputNormal
-                    title="Full name"
-                    value={values.full_name}
-                    onChangeText={text => setFieldValue('full_name', text)}
-                    error={errors.full_name}
-                    touched={touched.full_name}
+                    title="First name"
+                    value={values.first_name}
+                    onChangeText={text => setFieldValue('first_name', text)}
+                    error={errors.first_name}
+                    touched={touched.first_name}
                     required
                 />
-                {/* <InputNormal
+                <InputNormal
                     title="Last name"
-                    value={values.lastName}
-                    onChangeText={text => setFieldValue('lastName', text)}
-                    error={errors.lastName}
-                    touched={touched.lastName}
+                    value={values.last_name}
+                    onChangeText={text => setFieldValue('last_name', text)}
+                    error={errors.last_name}
+                    touched={touched.last_name}
                     required
-                /> */}
+                />
                 <InputNormal
                     title="Phone"
                     value={values.phone}
@@ -211,6 +198,26 @@ const AddressFill = () => {
                     title="Send to your friend"
                     containerStyle={{ marginBottom: 8, marginTop: 0 }}
                 />
+                {isSendFriend && (
+                    <>
+                        <InputNormal
+                            title="Recipient's full name"
+                            value={values.recipient_name}
+                            onChangeText={text => setFieldValue('recipient_name', text)}
+                            error={errors.recipient_name}
+                            touched={touched.recipient_name}
+                        />
+                        <InputNormal
+                            title="Recipient's phone"
+                            value={values.recipient_phone}
+                            onChangeText={text => setFieldValue('recipient_phone', text)}
+                            error={errors.recipient_phone}
+                            touched={touched.recipient_phone}
+                            keyboardType="numeric"
+                        />
+                    </>
+                )}
+
                 <InputOption
                     title="Country/ Region"
                     value={values.country.id}
@@ -218,6 +225,7 @@ const AddressFill = () => {
                     options={countries}
                     error={errors.country?.id}
                     touched={touched.country?.id}
+                    required
                 />
 
                 <InputNormal
@@ -252,6 +260,7 @@ const AddressFill = () => {
                         options={provinces}
                         error={errors.province?.id}
                         touched={touched.province?.id}
+                        required
                     />
                 )}
                 <InputNormal

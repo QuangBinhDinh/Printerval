@@ -79,7 +79,7 @@ const ModalOptionShipping = () => {
             }}
         >
             <View style={styles.container}>
-                <View style={{ flexDirection: 'row', width: '100%', marginTop: 24 }}>
+                <View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
                     <TextSemiBold style={{ color: 'black', fontSize: 15 }}>{'Shipping method'}</TextSemiBold>
                 </View>
 

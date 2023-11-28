@@ -41,6 +41,14 @@ interface Cart {
     billAddress: BillingAddress | null;
 
     /**
+     * Thông tin người được tặng quà
+     */
+    giftInfo: {
+        name: string;
+        phone: string;
+    };
+
+    /**
      * Thông tin liên quan đến payment (phí ship, etc )
      */
     paymentConfig: PaymentConfig;
@@ -83,6 +91,13 @@ const initialState: Cart = {
 
     defaultAddress: null,
 
+    giftInfo: {
+        name: '',
+        phone: '',
+    },
+
+    billAddress: null,
+
     paymentConfig: null,
 
     additionalInfo: {
@@ -118,6 +133,7 @@ const cart = createSlice({
             state.cart_sub_total = 0;
             state.defaultAddress = null;
             state.billAddress = null;
+            state.giftInfo = initialState.giftInfo;
             state.rawShipping = [];
             state.transfromShipping = [];
             state.promotion = initialState.promotion;
@@ -135,10 +151,17 @@ const cart = createSlice({
             state,
             {
                 payload,
-            }: PayloadAction<{ address: ShippingAddress; additional: { email: string; delivery_note: string } }>,
+            }: PayloadAction<{
+                address: ShippingAddress;
+                additional: { email: string; delivery_note: string };
+                giftInfo?: { name: string; phone: string };
+            }>,
         ) => {
             state.defaultAddress = payload.address;
             state.additionalInfo = payload.additional;
+            if (payload.giftInfo) {
+                state.giftInfo = payload.giftInfo;
+            }
         },
 
         setBillAddress: (state, { payload }: PayloadAction<BillingAddress>) => {

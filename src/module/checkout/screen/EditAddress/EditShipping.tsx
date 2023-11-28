@@ -9,7 +9,7 @@ import InputNormal from '@components/input/InputNormal';
 import InputOption from '@components/input/InputOption';
 import { useAppDispatch, useAppSelector } from '@store/hook';
 import FancyButton from '@components/FancyButton';
-import { TextSemiBold } from '@components/text';
+import { CheckboxText, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
 import { SCREEN_WIDTH } from '@util/index';
@@ -23,7 +23,8 @@ import { showMessage } from '@components/popup/BottomMessage';
 import { getErrorMessage } from '@api/service';
 
 const initialValues = {
-    full_name: '',
+    first_name: '',
+    last_name: '',
     phone: '',
     email: '',
     country: {
@@ -40,6 +41,9 @@ const initialValues = {
 
     zip_code: '',
     delivery_note: '',
+
+    recipient_name: '',
+    recipient_phone: '',
 };
 
 const EditShipping = () => {
@@ -49,14 +53,18 @@ const EditShipping = () => {
     const countries = useAppSelector(state => state.config.countries);
     const selectedAddress = useAppSelector(state => state.cart.defaultAddress);
     const { email } = useAppSelector(state => state.cart.additionalInfo);
+    const giftInfo = useAppSelector(state => state.cart.giftInfo);
     const { userInfo, token } = useAppSelector(state => state.auth);
 
     const [fetchShipping, { isFetching }] = useLazyFetchShippingInfoQuery();
 
+    const [isSendFriend, setSendFriend] = useState(false);
+
     const validationSchema = useMemo(
         () =>
             yup.object().shape({
-                full_name: yup.string().required('Enter a first name'),
+                first_name: yup.string().required('Enter a first name'),
+                last_name: yup.string().required('Enter a last name'),
                 phone: yup
                     .string()
                     .required('Enter a phone')
@@ -93,10 +101,11 @@ const EditShipping = () => {
             if (!userInfo) return;
             var country = countries.find(i => i.id == input.country.id);
             var province = provinces.find(i => i.id == input.province.id);
+            var full_name = input.first_name + input.last_name;
 
             var address: ShippingAddress = {
                 id: -1,
-                full_name: input.full_name,
+                full_name,
                 phone: input.phone,
                 address: input.address,
                 optional_address: input.optional_address,
@@ -118,7 +127,13 @@ const EditShipping = () => {
                     location_id: country?.id || 226,
                 }).unwrap();
 
-                dispatch(cart.actions.setCheckoutAddress({ address, additional }));
+                dispatch(
+                    cart.actions.setCheckoutAddress({
+                        address,
+                        additional,
+                        ...(isSendFriend && { giftInfo: { name: input.recipient_name, phone: input.recipient_phone } }),
+                    }),
+                );
                 goBack();
             } catch (e) {
                 showMessage(getErrorMessage(e));
@@ -127,10 +142,13 @@ const EditShipping = () => {
     });
 
     //lấy address từ 1 địa chỉ và fill vào form input
-    const fillAddress = useCallback((item: ShippingAddress) => {
+    const fillAddress = useCallback((item: ShippingAddress, giftInfo: { name: string; phone: string }) => {
         const { full_name, phone, province, country, city_name, optional_address, zip_code, address } = item;
+
+        const [first, last] = full_name.split(' ');
         setValues({
-            full_name,
+            first_name: first,
+            last_name: last || '',
             phone: phone.toString(),
             email,
             country: {
@@ -146,6 +164,8 @@ const EditShipping = () => {
             zip_code,
             city_name,
             delivery_note: '',
+            recipient_name: giftInfo.name,
+            recipient_phone: giftInfo.phone,
         });
     }, []);
 
@@ -153,7 +173,7 @@ const EditShipping = () => {
 
     useEffect(() => {
         if (selectedAddress) {
-            fillAddress(selectedAddress);
+            fillAddress(selectedAddress, giftInfo);
         }
     }, []);
 
@@ -172,11 +192,19 @@ const EditShipping = () => {
                 </Pressable>
 
                 <InputNormal
-                    title="Full name"
-                    value={values.full_name}
-                    onChangeText={text => setFieldValue('full_name', text)}
-                    error={errors.full_name}
-                    touched={touched.full_name}
+                    title="First name"
+                    value={values.first_name}
+                    onChangeText={text => setFieldValue('first_name', text)}
+                    error={errors.first_name}
+                    touched={touched.first_name}
+                    required
+                />
+                <InputNormal
+                    title="Last name"
+                    value={values.last_name}
+                    onChangeText={text => setFieldValue('last_name', text)}
+                    error={errors.last_name}
+                    touched={touched.last_name}
                     required
                 />
                 <InputNormal
@@ -196,6 +224,32 @@ const EditShipping = () => {
                     touched={touched.email}
                     required
                 />
+                <CheckboxText
+                    selected={isSendFriend}
+                    onPress={() => setSendFriend(!isSendFriend)}
+                    title="Send to your friend"
+                    containerStyle={{ marginBottom: 8, marginTop: 0 }}
+                />
+                {isSendFriend && (
+                    <>
+                        <InputNormal
+                            title="Recipient's full name"
+                            value={values.recipient_name}
+                            onChangeText={text => setFieldValue('recipient_name', text)}
+                            error={errors.recipient_name}
+                            touched={touched.recipient_name}
+                        />
+                        <InputNormal
+                            title="Recipient's phone"
+                            value={values.recipient_phone}
+                            onChangeText={text => setFieldValue('recipient_phone', text)}
+                            error={errors.recipient_phone}
+                            touched={touched.recipient_phone}
+                            keyboardType="numeric"
+                        />
+                    </>
+                )}
+
                 <InputOption
                     title="Country/ Region"
                     value={values.country.id}
