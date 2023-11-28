@@ -91,7 +91,7 @@ const EditBilling = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <HeaderScreen title="Edit shipping address" />
+            <HeaderScreen title="Edit billing address" />
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 //showsVerticalScrollIndicator={false}
@@ -174,7 +174,7 @@ const EditBilling = () => {
                 ]}
             >
                 <FancyButton style={styles.button} backgroundColor={lightColor.secondary} onPress={submitForm}>
-                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                    <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Change</TextSemiBold>
                 </FancyButton>
             </View>
         </View>

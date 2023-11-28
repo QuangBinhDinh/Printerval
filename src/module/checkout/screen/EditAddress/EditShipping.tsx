@@ -328,12 +328,16 @@ const EditShipping = () => {
                     {isFetching ? (
                         <ActivityIndicator color={'white'} size={'small'} />
                     ) : (
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Update</TextSemiBold>
                     )}
                 </FancyButton>
             </View>
 
-            <ModalSelectAddress callback={fillAddress} />
+            <ModalSelectAddress
+                callback={address => {
+                    fillAddress(address, { name: values.recipient_name, phone: values.recipient_phone });
+                }}
+            />
         </View>
     );
 };

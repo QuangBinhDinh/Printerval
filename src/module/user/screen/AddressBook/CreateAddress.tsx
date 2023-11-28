@@ -273,7 +273,9 @@ const CreateAddress = () => {
                     {l1 || l2 ? (
                         <ActivityIndicator color={'white'} size={'small'} />
                     ) : (
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Submit</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>
+                            {editAddress ? 'Update' : 'Create'}
+                        </TextSemiBold>
                     )}
                 </FancyButton>
             </View>

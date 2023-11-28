@@ -174,7 +174,7 @@ const PaymentMethod = () => {
                     {processing ? (
                         <ActivityIndicator color={'white'} size={'small'} />
                     ) : (
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Continue</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Place Order Now</TextSemiBold>
                     )}
                 </FancyButton>
 
