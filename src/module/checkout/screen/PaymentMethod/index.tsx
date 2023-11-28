@@ -118,14 +118,13 @@ const PaymentMethod = () => {
                 //luồng paypal
                 openPaypal(redirect);
             } else {
+                //navigate('CheckoutSuccess');
             }
         } catch (e) {
             alertError(getErrorMessage(e));
         } finally {
             setProcessing(false);
         }
-
-        //navigate('CheckoutSuccess');
     };
 
     return (

@@ -28,7 +28,7 @@ const CheckoutScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <HeaderScreen title="Checkout" />
+            <HeaderScreen title="Checkout" disableBack={screenName == 'CheckoutSuccess'} />
             <View style={{ flex: 1 }}>
                 <View style={styles.stepContainer}>
                     <View style={styles.stepInner}>
