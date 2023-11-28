@@ -1,5 +1,5 @@
 import HeaderScreen from '@components/HeaderScreen';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
@@ -42,73 +42,86 @@ const initialValues = {
     delivery_note: '',
 };
 
-const validationSchema = yup.object().shape({
-    full_name: yup.string().required('Enter a first name'),
-
-    phone: yup
-        .string()
-        .required('Enter a phone')
-        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
-    email: yup.string().required('Enter an email').email(),
-
-    address: yup.string().required('Enter an address'),
-    optional_address: yup.string(),
-    city_name: yup.string().required('Enter a city/suburb'),
-    // state_name: yup.string().required(),
-    zip_code: yup.string().required('Enter a zip/postal code'),
-    delivery_note: yup.string(),
-});
-
 const EditShipping = () => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
 
     const countries = useAppSelector(state => state.config.countries);
     const selectedAddress = useAppSelector(state => state.cart.defaultAddress);
+    const { email } = useAppSelector(state => state.cart.additionalInfo);
     const { userInfo, token } = useAppSelector(state => state.auth);
 
     const [fetchShipping, { isFetching }] = useLazyFetchShippingInfoQuery();
+
+    const validationSchema = useMemo(
+        () =>
+            yup.object().shape({
+                full_name: yup.string().required('Enter a first name'),
+                phone: yup
+                    .string()
+                    .required('Enter a phone')
+                    .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
+                email: yup.string().required('Enter an email').email(),
+                address: yup.string().required('Enter an address'),
+                optional_address: yup.string(),
+                city_name: yup.string().required('Enter a city/suburb'),
+
+                country: yup.object().shape({
+                    id: yup.number().moreThan(-1, 'Country cannot be empty'),
+                }),
+                province: yup.object().when('country', {
+                    is: (country: any) => {
+                        var selected = countries.find(c => c.id == country.id);
+                        return !!selected && selected.provinces.length > 0;
+                    },
+                    then: schema =>
+                        schema.shape({
+                            id: yup.number().moreThan(-1, 'Province cannot be empty'),
+                        }),
+                }),
+
+                zip_code: yup.string().required('Enter a zip/postal code'),
+                delivery_note: yup.string(),
+            }),
+        [],
+    );
 
     const { submitForm, errors, values, setFieldValue, resetForm, touched, setValues } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async input => {
-            if (provinces.length > 0 && input.province.id == -1) {
-                setProvinceErr('Enter a state/province');
-            } else {
-                if (!userInfo) return;
-                var country = countries.find(i => i.id == input.country.id);
-                var province = provinces.find(i => i.id == input.province.id);
+            if (!userInfo) return;
+            var country = countries.find(i => i.id == input.country.id);
+            var province = provinces.find(i => i.id == input.province.id);
 
-                var address: ShippingAddress = {
-                    id: -1,
-                    full_name: input.full_name,
-                    phone: input.phone,
-                    address: input.address,
-                    optional_address: input.optional_address,
-                    city_name: input.city_name,
-                    zip_code: input.zip_code,
-                    ...(!!country && { country, country_id: country.id }),
-                    ...(!!province && { province, province_id: province.id }),
-                };
-                //console.log(address)
-                var additional = {
-                    delivery_note: input.delivery_note,
-                    email: input.email,
-                };
+            var address: ShippingAddress = {
+                id: -1,
+                full_name: input.full_name,
+                phone: input.phone,
+                address: input.address,
+                optional_address: input.optional_address,
+                city_name: input.city_name,
+                zip_code: input.zip_code,
+                ...(!!country && { country, country_id: country.id }),
+                ...(!!province && { province, province_id: province.id }),
+            };
+            //console.log(address)
+            var additional = {
+                delivery_note: input.delivery_note,
+                email: input.email,
+            };
 
-                try {
-                    var res = await fetchShipping({
-                        token,
-                        customerId: userInfo.id,
-                        location_id: country?.id || 226,
-                    }).unwrap();
+            try {
+                var res = await fetchShipping({
+                    token,
+                    customerId: userInfo.id,
+                    location_id: country?.id || 226,
+                }).unwrap();
 
-                    dispatch(cart.actions.setCheckoutAddress({ address, additional }));
-                    goBack();
-                } catch (e) {
-                    showMessage(getErrorMessage(e));
-                }
+                dispatch(cart.actions.setCheckoutAddress({ address, additional }));
+                goBack();
+            } catch (e) {
+                showMessage(getErrorMessage(e));
             }
         },
     });
@@ -119,7 +132,7 @@ const EditShipping = () => {
         setValues({
             full_name,
             phone: phone.toString(),
-            email: userInfo?.email || '',
+            email,
             country: {
                 id: country?.id || 226,
                 value: country?.nicename || 'United States',
@@ -137,7 +150,6 @@ const EditShipping = () => {
     }, []);
 
     const provinces = countries.find(item => item.id == values.country.id)?.provinces || [];
-    const [provinceErr, setProvinceErr] = useState('');
 
     useEffect(() => {
         if (selectedAddress) {
@@ -194,6 +206,7 @@ const EditShipping = () => {
                     options={countries}
                     error={errors.country?.id}
                     touched={touched.country?.id}
+                    searchable
                 />
 
                 <InputNormal
@@ -226,8 +239,9 @@ const EditShipping = () => {
                         placeholder="Select state/province"
                         setValue={opt => setFieldValue('province', opt)}
                         options={provinces}
-                        error={provinceErr}
-                        touched={values.province.id == -1}
+                        error={errors.province?.id}
+                        touched={touched.province?.id}
+                        searchable
                     />
                 )}
                 <InputNormal

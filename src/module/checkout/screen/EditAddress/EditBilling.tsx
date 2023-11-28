@@ -1,5 +1,5 @@
 import HeaderScreen from '@components/HeaderScreen';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
@@ -33,51 +33,61 @@ const initialValues = {
     zip_code: '',
 };
 
-const validationSchema = yup.object().shape({
-    name: yup.string().required('Enter a name'),
-    address: yup.string().required('Enter an address'),
-    zip_code: yup.string().required('Enter a zip/postal code'),
-    city_name: yup.string().required('Enter a city'),
-    country: yup.object().shape({
-        id: yup.number().moreThan(-1, 'Country cannot be empty'),
-    }),
-});
-
 const EditBilling = () => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
 
     const countries = useAppSelector(state => state.config.countries);
 
+    const validationSchema = useMemo(
+        () =>
+            yup.object().shape({
+                name: yup.string().required('Enter a name'),
+                address: yup.string().required('Enter an address'),
+                zip_code: yup.string().required('Enter a zip/postal code'),
+                city_name: yup.string().required('Enter a city'),
+
+                country: yup.object().shape({
+                    id: yup.number().moreThan(-1, 'Country cannot be empty'),
+                }),
+                province: yup.object().when('country', {
+                    is: (country: any) => {
+                        var selected = countries.find(c => c.id == country.id);
+                        return !!selected && selected.provinces.length > 0;
+                    },
+                    then: schema =>
+                        schema.shape({
+                            id: yup.number().moreThan(-1, 'Province cannot be empty'),
+                        }),
+                }),
+            }),
+        [],
+    );
+
     const { submitForm, errors, values, setFieldValue, resetForm, touched, setValues } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: input => {
-            if (provinces.length > 0 && input.province.id == -1) {
-                setProvinceErr('Enter a state/province');
-            } else {
-                var country = countries.find(i => i.id == input.country.id);
-                var province = provinces.find(i => i.id == input.province.id);
+            var country = countries.find(i => i.id == input.country.id);
+            var province = provinces.find(i => i.id == input.province.id);
 
-                var address: BillingAddress = {
-                    name: input.name,
-                    address: input.address,
-                    country: country?.id || '',
-                    country_name: country?.name || '',
-                    state_name: province?.name || '',
-                    city_name: input.city_name,
-                    zip_code: input.zip_code,
-                    optional_address: input.optional_address,
-                };
+            var address: BillingAddress = {
+                name: input.name,
+                address: input.address,
+                country: country?.id || '',
+                country_name: country?.name || '',
+                state_name: province?.name || '',
+                city_name: input.city_name,
+                zip_code: input.zip_code,
+                optional_address: input.optional_address,
+            };
 
-                dispatch(cart.actions.setBillAddress(address));
-                goBack();
-            }
+            dispatch(cart.actions.setBillAddress(address));
+            goBack();
         },
     });
 
     const provinces = countries.find(item => item.id == values.country.id)?.provinces || [];
-    const [provinceErr, setProvinceErr] = useState('');
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -108,6 +118,7 @@ const EditBilling = () => {
                     options={countries}
                     error={errors.country?.id}
                     touched={touched.country?.id}
+                    searchable
                 />
                 <InputNormal
                     title="Address"
@@ -139,8 +150,9 @@ const EditBilling = () => {
                         placeholder="Select state/province"
                         setValue={opt => setFieldValue('province', opt)}
                         options={provinces}
-                        error={provinceErr}
-                        touched={values.province.id == -1}
+                        error={errors.province?.id}
+                        touched={touched.province?.id}
+                        searchable
                     />
                 )}
                 <InputNormal

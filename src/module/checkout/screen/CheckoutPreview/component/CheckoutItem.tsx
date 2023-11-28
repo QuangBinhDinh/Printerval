@@ -6,7 +6,7 @@ import FastImage from 'react-native-fast-image';
 import { cdnImageV2 } from '@util/cdnV2';
 import { TextNormal, TextSemiBold } from '@components/text';
 import he from 'he';
-import { DESIGN_RATIO, formatPrice } from '@util/index';
+import { DESIGN_RATIO, formatPrice, primitiveObj } from '@util/index';
 import { normalize } from '@rneui/themed';
 
 const CheckoutItem = ({ item }: { item: CartItem }) => {
@@ -28,6 +28,21 @@ const CheckoutItem = ({ item }: { item: CartItem }) => {
         return name;
     }, [item]);
 
+    const customText = useMemo(() => {
+        if (!item.configurations) return '';
+
+        const configObj = primitiveObj(JSON.parse(item.configurations));
+        const { buy_design, design_fee, previewUrl, ...config } = configObj || {};
+
+        const text = Object.entries(config)
+            .map(([key, value]) => {
+                if (key == 'print_location') return `Print location: ${value}`;
+                return `${key}: ${value}`;
+            })
+            .join('; ');
+        return text;
+    }, [item]);
+
     return (
         <View style={{ width: '100%', marginTop: 16, flexDirection: 'row' }}>
             <FastImage style={styles.img} source={{ uri: cdnImageV2(item.image_url) }} resizeMode="cover" />
@@ -36,11 +51,18 @@ const CheckoutItem = ({ item }: { item: CartItem }) => {
                 <TextNormal style={styles.textTitle} numberOfLines={2}>
                     {he.decode(productName)}
                 </TextNormal>
+
                 <TextNormal style={styles.textVariant}>{nameVariant}</TextNormal>
+
+                {!!customText && <TextNormal style={styles.textVariant}>{customText}</TextNormal>}
+
                 <TextNormal style={styles.textQty}>Qty: {item.quantity}</TextNormal>
+
                 <TextNormal style={styles.textPrice}>
                     {formatPrice(item.price)}{' '}
-                    <TextNormal style={{ color: lightColor.grayout, textDecorationLine: 'line-through' }}></TextNormal>
+                    {Number(item.high_price) > 0 && (
+                        <TextNormal style={styles.textOldprice}>{formatPrice(item.high_price)}</TextNormal>
+                    )}
                 </TextNormal>
             </View>
         </View>
@@ -58,7 +80,8 @@ const styles = StyleSheet.create({
         backgroundColor: lightColor.lightbg,
     },
     textTitle: { color: lightColor.primary, lineHeight: 16, fontSize: 13 },
-    textVariant: { fontSize: 13, color: '#999', lineHeight: 16, marginTop: 4 },
-    textQty: { fontSize: 13, color: '#444', lineHeight: 16, marginTop: 4 },
-    textPrice: { fontSize: 13, color: lightColor.price, lineHeight: 16, marginTop: 4 },
+    textVariant: { fontSize: 13, color: '#999', lineHeight: 17, marginTop: 4 },
+    textQty: { fontSize: 13, color: '#444', lineHeight: 16, marginTop: 6 },
+    textPrice: { fontSize: 13, color: lightColor.price, lineHeight: 16, marginTop: 6 },
+    textOldprice: { fontSize: 13, color: lightColor.grayout, lineHeight: 16, textDecorationLine: 'line-through' },
 });

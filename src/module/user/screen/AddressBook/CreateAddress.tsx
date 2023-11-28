@@ -1,5 +1,5 @@
 import HeaderScreen from '@components/HeaderScreen';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
@@ -41,20 +41,6 @@ const initialValues = {
     zip_code: '',
 };
 
-const validationSchema = yup.object().shape({
-    full_name: yup.string().required('Enter a first name'),
-    phone: yup
-        .string()
-        .required('Enter a phone')
-        .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
-    address: yup.string().required('Enter an address'),
-    optional_address: yup.string(),
-    city_name: yup.string().required('Enter a city/suburb'),
-    // state_name: yup.string().required(),
-    zip_code: yup.string().required('Enter a zip/postal code'),
-    delivery_note: yup.string(),
-});
-
 const CreateAddress = () => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
@@ -69,51 +55,77 @@ const CreateAddress = () => {
 
     const [isDefault, setAsDefault] = useState(false);
 
+    const validationSchema = useMemo(
+        () =>
+            yup.object().shape({
+                full_name: yup.string().required('Enter a first name'),
+                phone: yup
+                    .string()
+                    .required('Enter a phone')
+                    .test('phone-validation', 'Invalid phone number', value => validatePhone(value)),
+                address: yup.string().required('Enter an address'),
+                optional_address: yup.string(),
+                city_name: yup.string().required('Enter a city/suburb'),
+
+                country: yup.object().shape({
+                    id: yup.number().moreThan(-1, 'Country cannot be empty'),
+                }),
+                province: yup.object().when('country', {
+                    is: (country: any) => {
+                        var selected = countries.find(c => c.id == country.id);
+                        return !!selected && selected.provinces.length > 0;
+                    },
+                    then: schema =>
+                        schema.shape({
+                            id: yup.number().moreThan(-1, 'Province cannot be empty'),
+                        }),
+                }),
+                zip_code: yup.string().required('Enter a zip/postal code'),
+                delivery_note: yup.string(),
+            }),
+        [],
+    );
     const { submitForm, errors, values, setFieldValue, resetForm, touched, setValues } = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async input => {
-            if (provinces.length > 0 && input.province.id == -1) {
-                setProvinceErr('Enter a state/province');
-            } else {
-                var country = countries.find(i => i.id == input.country.id);
-                var province = provinces.find(i => i.id == input.province.id);
-                var msg = editAddress ? 'Address is changed' : 'New address is added';
+            var country = countries.find(i => i.id == input.country.id);
+            var province = provinces.find(i => i.id == input.province.id);
+            var msg = editAddress ? 'Address is changed' : 'New address is added';
 
-                if (!accessToken) return;
-                try {
-                    var res = await postAddress({
-                        api_token: accessToken,
-                        address: {
-                            full_name: input.full_name,
-                            phone: input.phone,
-                            zip_code: input.zip_code,
-                            country_id: country?.id || '',
-                            province_id: province?.id || '',
-                            city_name: input.city_name,
-                            optional_address: input.optional_address,
-                            address: input.address,
-                            ...(editAddress && { id: editAddress.id }),
-                        },
-                    }).unwrap();
-                    var res2 = await fetchAddress(accessToken).unwrap();
-                    //console.log(res2);
+            if (!accessToken) return;
+            try {
+                var res = await postAddress({
+                    api_token: accessToken,
+                    address: {
+                        full_name: input.full_name,
+                        phone: input.phone,
+                        zip_code: input.zip_code,
+                        country_id: country?.id || '',
+                        province_id: province?.id || '',
+                        city_name: input.city_name,
+                        optional_address: input.optional_address,
+                        address: input.address,
+                        ...(editAddress && { id: editAddress.id }),
+                    },
+                }).unwrap();
+                var res2 = await fetchAddress(accessToken).unwrap();
+                //console.log(res2);
 
-                    if (!!defaultAddress && defaultAddress.id == editAddress?.id) {
-                        var new_selected = res2.find(i => i.id == defaultAddress.id);
-                        if (new_selected) {
-                            dispatch(cart.actions.setDefaultAddress(new_selected));
-                        }
-                    } else if (isDefault) {
-                        dispatch(cart.actions.setDefaultAddress(res2[0]));
+                if (!!defaultAddress && defaultAddress.id == editAddress?.id) {
+                    var new_selected = res2.find(i => i.id == defaultAddress.id);
+                    if (new_selected) {
+                        dispatch(cart.actions.setDefaultAddress(new_selected));
                     }
-
-                    showMessage(msg);
-                    goBack();
-                } catch (e) {
-                    console.log(e);
-                    showMessage(getErrorMessage(e));
+                } else if (isDefault) {
+                    dispatch(cart.actions.setDefaultAddress(res2[0]));
                 }
+
+                showMessage(msg);
+                goBack();
+            } catch (e) {
+                console.log(e);
+                showMessage(getErrorMessage(e));
             }
         },
     });
@@ -187,6 +199,7 @@ const CreateAddress = () => {
                     options={countries}
                     error={errors.country?.id}
                     touched={touched.country?.id}
+                    searchable
                 />
 
                 <InputNormal
@@ -219,8 +232,9 @@ const CreateAddress = () => {
                         placeholder="Select state/province"
                         setValue={opt => setFieldValue('province', opt)}
                         options={provinces}
-                        error={provinceErr}
-                        touched={values.province.id == -1}
+                        error={errors.province?.id}
+                        touched={touched.province?.id}
+                        searchable
                     />
                 )}
                 <InputNormal

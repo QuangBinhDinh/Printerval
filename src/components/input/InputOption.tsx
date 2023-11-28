@@ -40,6 +40,11 @@ interface IProps {
         id: string | number;
         value: string;
     }[];
+
+    /**
+     * Có hiển thị thanh search kết quả không
+     */
+    searchable?: boolean;
 }
 const InputOption = ({
     containerStyle,
@@ -52,6 +57,7 @@ const InputOption = ({
     title,
     placeholder = 'Select an option',
     options,
+    searchable,
 }: IProps) => {
     const openModal = () => {
         openModalOption({
@@ -59,6 +65,7 @@ const InputOption = ({
             callback: item => setValue(item),
             title: placeholder,
             selectedId: value,
+            searchable: searchable || false,
         });
     };
 

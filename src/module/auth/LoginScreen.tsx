@@ -88,7 +88,7 @@ const LoginScreen = () => {
                     <Pressable style={styles.loginButton} onPress={submitForm}>
                         <TextSemiBold style={{ fontSize: 18 * RATIO, color: 'white' }}>LOG IN</TextSemiBold>
                     </Pressable>
-                    <Pressable hitSlop={10} onPress={() => navigate('ForgotPass')}>
+                    <Pressable hitSlop={10} onPress={() => navigate('ForgotPass')} style={{ alignSelf: 'baseline' }}>
                         <TextNormal style={styles.forgotText}>Forgot Password</TextNormal>
                     </Pressable>
 
