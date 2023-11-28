@@ -15,6 +15,7 @@ import { TextSemiBold } from '@components/text';
 import { useFetchAddressBookQuery } from '@user/service';
 import { useAppSelector } from '@store/hook';
 import { navigate } from '@navigation/service';
+import PopupRemoveAddress from './PopupRemoveAddress';
 
 const addressSelector = createSelector(
     [(state: RootState) => state.auth.addressBook, (state: RootState) => state.cart.defaultAddress],
@@ -82,6 +83,8 @@ const AddressBook = () => {
                     <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Add new address</TextSemiBold>
                 </FancyButton>
             </View>
+
+            <PopupRemoveAddress />
         </View>
     );
 };

@@ -10,6 +10,7 @@ import { ShippingAddress } from '@type/common';
 import { useDeleteAddressMutation, useLazyFetchAddressBookQuery } from '@user/service';
 import React, { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { askBeforeRemove } from './PopupRemoveAddress';
 
 interface IProps {
     item: ShippingAddress;
@@ -43,14 +44,16 @@ const AddressCard = ({ item, index, removeAddress }: IProps) => {
         if (defaultAddress?.id == item.id) {
             showMessage('Cannot delete default address');
         } else if (accessToken) {
-            removeAddress(item.id);
-            showMessage('Address is deleted');
-            try {
-                var res = await postDelete({ api_token: accessToken, id: item.id }).unwrap();
-                fetchAddress(accessToken);
-            } catch (e) {
-                console.log(e);
-            }
+            askBeforeRemove(async () => {
+                removeAddress(item.id);
+                showMessage('Address is deleted');
+                try {
+                    var res = await postDelete({ api_token: accessToken, id: item.id }).unwrap();
+                    fetchAddress(accessToken);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
         }
     };
 
