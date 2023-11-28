@@ -142,6 +142,20 @@ const cart = createSlice({
             state.shippingConfigIndex = [];
             state.additionalInfo.delivery_note = '';
         },
+        resetCartAfterCheckout: state => {
+            state.items = [];
+            state.cart_sub_total = 0;
+            // state.defaultAddress = null;
+            // state.billAddress = null;
+            state.giftInfo = initialState.giftInfo;
+            state.rawShipping = [];
+            state.transfromShipping = [];
+            state.promotion = initialState.promotion;
+            state.tipsAmount = initialState.tipsAmount;
+            state.shippingFee = 0;
+            state.shippingConfigIndex = [];
+            state.additionalInfo.delivery_note = '';
+        },
 
         setDefaultAddress: (state, { payload }: PayloadAction<ShippingAddress>) => {
             state.defaultAddress = payload;

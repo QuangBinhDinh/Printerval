@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FancyButton from '@components/FancyButton';
 import { shadowTop } from '@styles/shadow';
 import { navigate } from '@navigation/service';
-import { usePreventGoBack } from '@navigation/customHook';
+import { useFocus, usePreventGoBack } from '@navigation/customHook';
 import { normalize } from '@rneui/themed';
 import { useRoute } from '@react-navigation/native';
 import { CheckoutSuccessRouteProp } from '@navigation/navigationRoute';
@@ -24,15 +24,15 @@ const CheckoutSuccessScreen = () => {
     const copyCode = () => {};
 
     const continueShopping = () => {
-        dispatch(cart.actions.resetCart());
-        dispatch(api.util.invalidateTags(['Cart', 'CartCheckout']));
         navigate('HomeScreen');
     };
 
-    const toTrackOrder = () => {
-        dispatch(cart.actions.resetCart());
+    const toTrackOrder = () => {};
+
+    useFocus(() => {
+        dispatch(cart.actions.resetCartAfterCheckout());
         dispatch(api.util.invalidateTags(['Cart', 'CartCheckout']));
-    };
+    });
 
     usePreventGoBack();
     return (

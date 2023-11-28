@@ -96,7 +96,7 @@ const AddressFill = () => {
         onSubmit: async input => {
             var country = countries.find(i => i.id == input.country.id);
             var province = provinces.find(i => i.id == input.province.id);
-            var full_name = input.first_name + input.last_name;
+            var full_name = input.first_name + ' ' + input.last_name;
 
             var address: ShippingAddress = {
                 id: -1,

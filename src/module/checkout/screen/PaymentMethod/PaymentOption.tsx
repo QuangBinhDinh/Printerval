@@ -1,26 +1,43 @@
 import { TextNormal } from '@components/text';
 import { lightColor } from '@styles/color';
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon } from '@rneui/base';
 import { shadow } from '@styles/shadow';
 import { useAppSelector } from '@store/hook';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { CheckoutPaymentActive, Maestro, Mastercard, PaypalLogo, StripeLogo, Visa } from '@assets/svg';
+import { CardField } from '@stripe/stripe-react-native';
+import { Details } from '@stripe/stripe-react-native/lib/typescript/src/types/components/CardFieldInput';
 
 const DURATION = 250;
 
-const STRIPE_HEIGHT = 200;
+const STRIPE_HEIGHT = 215;
 
 const PAYPAL_HEIGHT = 95;
 
 interface IProps {
+    /**
+     * Phương thức thanh toán đc chọn
+     */
     payMethod: string;
 
     setPayment: any;
+
+    /**
+     * Thông tin thẻ
+     * @param x
+     * @returns
+     */
+    setCard: (x: Details | null) => void;
+
+    /**
+     * Có hiển thị lỗi hay không
+     */
+    cardError: boolean;
 }
 
-const PaymentOption = ({ payMethod, setPayment }: IProps) => {
+const PaymentOption = ({ payMethod, setPayment, setCard, cardError }: IProps) => {
     const { stripe_fee_percent, paypal_fee_percent } = useAppSelector(state => state.cart.paymentConfig);
 
     const stripeHeight = useSharedValue(STRIPE_HEIGHT);
@@ -42,6 +59,10 @@ const PaymentOption = ({ payMethod, setPayment }: IProps) => {
     const paypalStyle = useAnimatedStyle(() => ({
         height: paypalHeight.value,
     }));
+
+    const selectPaypal = () => {
+        setPayment('paypal');
+    };
 
     return (
         <View style={{ width: '100%' }}>
@@ -87,11 +108,28 @@ const PaymentOption = ({ payMethod, setPayment }: IProps) => {
                         <StripeLogo />
                     </View>
                 </View>
+
+                <View style={{ width: '100%', marginTop: 8 }}>
+                    <CardField
+                        postalCodeEnabled={false}
+                        placeholders={{
+                            number: '4242 4242 4242 4242',
+                        }}
+                        cardStyle={styles.cardStyle}
+                        style={[styles.cardDetail, cardError && { borderColor: lightColor.error }]}
+                        onCardChange={card => {
+                            setCard(card);
+                        }}
+                    />
+                </View>
+                {cardError && payMethod == 'stripe' && (
+                    <TextNormal style={styles.error}>Please enter a valid card</TextNormal>
+                )}
             </Animated.View>
 
             <Pressable
                 style={[styles.optionView, payMethod == 'paypal' && [{ backgroundColor: 'white' }, shadow]]}
-                onPress={() => setPayment('paypal')}
+                onPress={selectPaypal}
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={styles.logo}>
@@ -157,6 +195,19 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: lightColor.borderGray,
     },
+    cardDetail: {
+        width: '100%',
+        height: 50,
+        marginTop: 10,
+    },
+    cardStyle: {
+        backgroundColor: '#FFFFFF',
+        textColor: '#000000',
+        placeholderColor: '#dcdcdc',
+        borderColor: lightColor.borderGray,
+        borderWidth: 1,
+        borderRadius: 6,
+    },
 
     content: {
         width: '100%',
@@ -178,4 +229,6 @@ const styles = StyleSheet.create({
         lineHeight: 16,
         marginTop: 8,
     },
+
+    error: { fontSize: 11, lineHeight: 13, color: lightColor.error, marginTop: 4 },
 });

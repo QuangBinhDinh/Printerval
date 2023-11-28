@@ -6,9 +6,10 @@ import { TextNormal, TextSemiBold } from '../text';
 import { lightColor } from '@styles/color';
 import { Icon } from '@rneui/base';
 import { debounce } from 'lodash';
+import { normalize } from '@rneui/themed';
 
 const EVENT_NAME = 'open_pop_up_error';
-const DURATION = 1500;
+const DURATION = 2250;
 
 const PopupSuccess = () => {
     const [visible, setVisible] = useState(false);
@@ -47,12 +48,12 @@ const PopupSuccess = () => {
                 <Icon
                     type="material-icon"
                     name="error-outline"
-                    size={40}
+                    size={normalize(40)}
                     color={lightColor.secondary}
-                    style={{ marginTop: 38 }}
+                    style={{ marginTop: 16 }}
                 />
-                <TextSemiBold style={styles.title}>Error!</TextSemiBold>
-                <TextNormal style={styles.content}>{title}</TextNormal>
+                <TextSemiBold style={styles.title}>Error</TextSemiBold>
+                <TextNormal style={styles.content}>{title.slice(0, 100)}</TextNormal>
             </View>
         </Modal>
     );
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         width: 280,
-        height: 206,
+        paddingVertical: 16,
         borderRadius: 10,
         alignItems: 'center',
     },
@@ -76,11 +77,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: lightColor.secondary,
         lineHeight: 24,
-        marginTop: 24,
+        marginTop: 20,
     },
     content: {
-        marginTop: 26,
+        marginTop: 20,
         fontSize: 16,
+        lineHeight: 22,
         textAlign: 'center',
         width: '90%',
     },

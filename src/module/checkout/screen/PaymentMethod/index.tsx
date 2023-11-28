@@ -1,29 +1,51 @@
 import { TextNormal, TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
-import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Icon } from '@rneui/base';
-import { shadow } from '@styles/shadow';
+import React, { useMemo, useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useAppSelector } from '@store/hook';
 import { capitalize } from 'lodash';
 import FancyButton from '@components/FancyButton';
 import { formatPrice } from '@util/index';
 import PaymentOption from './PaymentOption';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { navigate } from '@navigation/service';
 import { OrderBody } from '@checkout/type';
 import { BillingAddress } from '@type/common';
 import { useCreateOrderMutation } from '@auth/service';
 import { alertError } from '@components/popup/PopupError';
 import { getErrorMessage } from '@api/service';
 import PaypalWebview, { openPaypal } from '../PaypalWebview';
+import { IS_PRODUCT } from '../../../../App';
+import { StripeProvider, confirmPayment } from '@stripe/stripe-react-native';
+import { Details } from '@stripe/stripe-react-native/lib/typescript/src/types/components/CardFieldInput';
+import { navigate } from '@navigation/service';
+import { showMessage } from '@components/popup/BottomMessage';
 
 const PaymentMethod = () => {
     const insets = useSafeAreaInsets();
 
     const [postOrder] = useCreateOrderMutation();
 
+    const [orderPressed, setPress] = useState(false);
+
     const [payMethod, setPayment] = useState<'stripe' | 'paypal'>('stripe');
+
+    //thông tin thẻ thanh toán
+    const [cardDetail, setCard] = useState<Details | null>(null);
+    const validCardNumber = useMemo(() => {
+        let isValid = true;
+        //show lỗi khi đã nhấn nút thanh toán
+        if (orderPressed) {
+            if (!cardDetail) isValid = false;
+            else {
+                const { complete, validCVC, validExpiryDate, validNumber } = cardDetail;
+                if (!complete) isValid = false;
+                else if (validNumber != 'Valid' || validCVC != 'Valid' || validExpiryDate != 'Valid') {
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
+    }, [cardDetail, orderPressed]);
 
     //Loading payment
     const [processing, setProcessing] = useState(false);
@@ -35,7 +57,10 @@ const PaymentMethod = () => {
     const { cart_sub_total, shippingFee, paymentConfig, promotion, tipsAmount, additionalInfo, billAddress, giftInfo } =
         useAppSelector(state => state.cart);
     const shipAddress = useAppSelector(state => state.cart.defaultAddress);
-    const { stripe_fee_percent, paypal_fee_percent } = paymentConfig;
+    const { stripe_fee_percent, paypal_fee_percent, public_key, test_public_key } = paymentConfig;
+
+    //key thanh toán qua stripe
+    const stripe_key = IS_PRODUCT ? public_key : test_public_key;
 
     //phí giao dịch qua cổng thanh toán
     const transaction_fee = useMemo(() => {
@@ -67,7 +92,12 @@ const PaymentMethod = () => {
     const total = cart_sub_total + shippingFee - promotion.discount + transaction_fee + tips_fee;
 
     const IWillHaveOrder = async () => {
+        setPress(true);
+        console.log(cardDetail);
         if (!shipAddress) return;
+        if (payMethod == 'stripe' && !validCardNumber) {
+            return;
+        }
 
         const isGift = !!giftInfo.name && !!giftInfo.phone;
         var buildData: OrderBody = {
@@ -118,7 +148,18 @@ const PaymentMethod = () => {
                 //luồng paypal
                 openPaypal(redirect);
             } else {
-                //navigate('CheckoutSuccess');
+                //luồng stripe
+                const { error, paymentIntent } = await confirmPayment(redirect.payment_intent, {
+                    paymentMethodType: 'Card',
+                });
+                if (error) {
+                    //console.log('Error stripe', error);
+                    alertError(error.localizedMessage || 'Undefined error from stripe');
+                } else if (paymentIntent) {
+                    navigate('CheckoutSuccess', { orderCode: order.code });
+                } else {
+                    alertError('Fatal error occur');
+                }
             }
         } catch (e) {
             alertError(getErrorMessage(e));
@@ -128,87 +169,79 @@ const PaymentMethod = () => {
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <ScrollView
-                style={{ flex: 1 }}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 16 }}
-            >
-                <TextSemiBold style={{ fontSize: 18, color: lightColor.black }}>Payment method</TextSemiBold>
+        <StripeProvider publishableKey={stripe_key}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollView
+                    style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 16 }}
+                >
+                    <TextSemiBold style={{ fontSize: 18, color: lightColor.black }}>Payment method</TextSemiBold>
 
-                <PaymentOption payMethod={payMethod} setPayment={setPayment} />
+                    <PaymentOption
+                        payMethod={payMethod}
+                        setPayment={setPayment}
+                        cardError={!validCardNumber}
+                        setCard={setCard}
+                    />
 
-                <View style={{ marginTop: 24 }}>
-                    <TextSemiBold style={{ fontSize: 18, color: '#444', marginBottom: 8 }}>Order summary</TextSemiBold>
-                    <View style={styles.row}>
-                        <TextNormal style={styles.textGray}>Subtotal</TextNormal>
-                        <TextSemiBold style={{ color: '#444' }}>{formatPrice(cart_sub_total)}</TextSemiBold>
-                    </View>
-                    {promotion.discount > 0 && (
+                    <View style={{ marginTop: 24 }}>
+                        <TextSemiBold style={{ fontSize: 18, color: '#444', marginBottom: 8 }}>
+                            Order summary
+                        </TextSemiBold>
                         <View style={styles.row}>
-                            <TextNormal style={styles.textGray}>Discount</TextNormal>
-                            <TextSemiBold style={{ color: '#444' }}>-{formatPrice(promotion.discount)}</TextSemiBold>
+                            <TextNormal style={styles.textGray}>Subtotal</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(cart_sub_total)}</TextSemiBold>
                         </View>
-                    )}
-                    <View style={styles.row}>
-                        <TextNormal style={styles.textGray}>Shipping fee</TextNormal>
-                        <TextSemiBold style={{ color: '#444' }}>{formatPrice(shippingFee)}</TextSemiBold>
-                    </View>
-                    <View style={styles.row}>
-                        <TextNormal style={styles.textGray}>{`${capitalize(payMethod)}'s Transaction fee`}</TextNormal>
-                        <TextSemiBold style={{ color: '#444' }}>{formatPrice(transaction_fee)}</TextSemiBold>
-                    </View>
-                    <View style={styles.row}>
-                        <TextNormal style={styles.textGray}>Tips</TextNormal>
-                        <TextSemiBold style={{ color: '#444' }}>{formatPrice(tips_fee)}</TextSemiBold>
+                        {promotion.discount > 0 && (
+                            <View style={styles.row}>
+                                <TextNormal style={styles.textGray}>Discount</TextNormal>
+                                <TextSemiBold style={{ color: '#444' }}>
+                                    -{formatPrice(promotion.discount)}
+                                </TextSemiBold>
+                            </View>
+                        )}
+                        <View style={styles.row}>
+                            <TextNormal style={styles.textGray}>Shipping fee</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(shippingFee)}</TextSemiBold>
+                        </View>
+                        <View style={styles.row}>
+                            <TextNormal style={styles.textGray}>{`${capitalize(
+                                payMethod,
+                            )}'s Transaction fee`}</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(transaction_fee)}</TextSemiBold>
+                        </View>
+                        <View style={styles.row}>
+                            <TextNormal style={styles.textGray}>Tips</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(tips_fee)}</TextSemiBold>
+                        </View>
+
+                        <View style={[styles.row, { borderBottomWidth: 0 }]}>
+                            <TextNormal>Total</TextNormal>
+                            <TextSemiBold style={{ color: lightColor.price }}>{formatPrice(total)}</TextSemiBold>
+                        </View>
                     </View>
 
-                    <View style={[styles.row, { borderBottomWidth: 0 }]}>
-                        <TextNormal>Total</TextNormal>
-                        <TextSemiBold style={{ color: lightColor.price }}>{formatPrice(total)}</TextSemiBold>
-                    </View>
-                </View>
+                    <FancyButton style={styles.button} backgroundColor={lightColor.secondary} onPress={IWillHaveOrder}>
+                        {processing ? (
+                            <ActivityIndicator color={'white'} size={'small'} />
+                        ) : (
+                            <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Place Order Now</TextSemiBold>
+                        )}
+                    </FancyButton>
 
-                <FancyButton style={styles.button} backgroundColor={lightColor.secondary} onPress={IWillHaveOrder}>
-                    {processing ? (
-                        <ActivityIndicator color={'white'} size={'small'} />
-                    ) : (
-                        <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Place Order Now</TextSemiBold>
-                    )}
-                </FancyButton>
+                    <View style={{ height: 16 + insets.bottom / 2 }} />
+                </ScrollView>
 
-                <View style={{ height: 16 + insets.bottom / 2 }} />
-            </ScrollView>
-
-            <PaypalWebview orderCode={orderCode} />
-        </View>
+                <PaypalWebview orderCode={orderCode} />
+            </View>
+        </StripeProvider>
     );
 };
 
 export default PaymentMethod;
 
 const styles = StyleSheet.create({
-    optionView: {
-        height: 68,
-        width: '100%',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        marginTop: 24,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 6,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    logo: {
-        width: 64,
-        height: 38,
-        backgroundColor: 'white',
-        borderRadius: 6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 16,
-    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
