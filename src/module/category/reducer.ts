@@ -1,4 +1,4 @@
-import { MAX_SEARCH_HISTORY } from '@constant/index';
+import { MAX_PROD_HISTORY, MAX_SEARCH_HISTORY } from '@constant/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from '@type/common';
 import { uniq, uniqBy } from 'lodash';
@@ -50,7 +50,7 @@ const category = createSlice({
         setProdHistory: (state, action: PayloadAction<Partial<Product>>) => {
             var tempProd = [...state.productHistory];
             tempProd.unshift(action.payload);
-            state.productHistory = uniqBy(tempProd, i => i.id).slice(0, MAX_SEARCH_HISTORY);
+            state.productHistory = uniqBy(tempProd, i => i.id).slice(0, MAX_PROD_HISTORY);
         },
     },
 });

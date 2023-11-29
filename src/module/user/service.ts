@@ -1,6 +1,6 @@
 import { api, domainApi } from '@api/service';
 import { ShippingAddress } from '@type/common';
-import { OrderItemResponse, ShippingAddressArgs } from './type';
+import { OrderDetail, OrderItemResponse, ShippingAddressArgs } from './type';
 
 const extendedApi = api.injectEndpoints({
     endpoints: build => ({
@@ -14,8 +14,9 @@ const extendedApi = api.injectEndpoints({
             keepUnusedDataFor: 1,
         }),
 
-        trackingOrder: build.mutation<any, { email: string; orderId: string }>({
+        trackingOrder: build.query<OrderDetail, { email: string; orderId: string }>({
             query: body => ({ url: 'track-order', method: 'post', body }),
+            transformResponse: res => ({ ...res.data, items: res.data.order.items.concat(res.data.childOrder) }),
         }),
     }),
 });
@@ -54,7 +55,7 @@ const extendedDomain = domainApi.injectEndpoints({
     }),
 });
 
-export const { useFetchOrderHistoryQuery, useTrackingOrderMutation } = extendedApi;
+export const { useFetchOrderHistoryQuery, useTrackingOrderQuery } = extendedApi;
 
 export const {
     useFetchAddressBookQuery,

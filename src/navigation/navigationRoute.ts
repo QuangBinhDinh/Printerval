@@ -56,6 +56,7 @@ type RootStackParams = {
     OrderDetail: {
         email: string;
         orderCode: string;
+        status: string;
     };
 };
 

@@ -1,4 +1,5 @@
 import { TextNormal, TextSemiBold } from '@components/text';
+import { navigate } from '@navigation/service';
 import { lightColor } from '@styles/color';
 import { OrderItemResponse, OrderProduct } from '@user/type';
 import { cdnImageV2 } from '@util/cdnV2';
@@ -35,7 +36,10 @@ const OrderItem = ({ data }: { data: OrderItemResponse }) => {
         return text.trim();
     }, [item]);
 
-    const toDetailOrder = () => {};
+    const toDetailOrder = () => {
+        //console.log(data);
+        navigate('OrderDetail', { email: data?.customer?.email, orderCode: data.code, status: data.status }, data.code);
+    };
 
     return (
         <View style={{ width: '100%' }}>

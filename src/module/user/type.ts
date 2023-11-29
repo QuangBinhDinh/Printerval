@@ -1,4 +1,5 @@
 import { User } from '@type/common';
+import { Use } from 'react-native-svg';
 
 export interface ShippingAddressArgs {
     full_name: string;
@@ -34,5 +35,44 @@ export interface OrderItemResponse {
 
     status: string;
 
+    items: OrderProduct[];
+}
+
+export interface OrderDetail {
+    amount: string;
+    order: {
+        //Billing address info
+        billingAddress: {
+            name: string;
+            address: string;
+            country: any;
+            state_name: string;
+            zip_code: string;
+            city_name: string;
+        };
+
+        //Shipping address info
+        state_name: string;
+        city_name: string;
+        note: string;
+        delivery_address: string;
+        country: any;
+        zip_code: string;
+
+        shipping_fee: string;
+        shipping_info: string;
+        shipping_type: string;
+        payment_type: string;
+
+        transaction_fee: string;
+        transaction_id: string;
+        tips: string;
+        discount: string;
+
+        customer: User;
+        created_at: string;
+    };
+
+    designByOrderItem: any[];
     items: OrderProduct[];
 }
