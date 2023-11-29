@@ -40,6 +40,7 @@ import EditBilling from '@checkout/screen/EditAddress/EditBilling';
 import CreateAddress from '@user/screen/AddressBook/CreateAddress';
 import ListOrderScreen from '@user/screen/ListOrder';
 import OrderDetail from '@user/screen/OrderDetail';
+import LandingPage from '@home/screen/LandingPage';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -107,6 +108,7 @@ const Router = () => {
                         return [url];
                     }}
                 />
+                <Stack.Screen name="LandingPage" component={LandingPage} />
                 <Stack.Screen name="CartNavigator" component={CartScreen} />
                 <Stack.Screen name="SearchResult" component={SearchResult} />
                 <Stack.Screen name="ProductCategory" component={ProductCategory} />

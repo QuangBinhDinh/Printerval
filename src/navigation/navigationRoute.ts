@@ -12,6 +12,8 @@ type RootStackParams = {
         keyword: string;
         title: string;
         tag_id: number;
+
+        [x: string]: any;
     };
     FilterScreen: {
         currentFilter: Partial<ProductFilterArgs>;
