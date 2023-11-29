@@ -38,7 +38,7 @@ const CheckoutPreview = () => {
             if (!userInfo) return;
             try {
                 await fetchCart({ token, customerId: userInfo.id });
-                await fetchShipping({ token, customerId: userInfo.id, location_id: shipAddress?.id || 226 });
+                await fetchShipping({ token, customerId: userInfo.id, location_id: shipAddress?.country_id || 226 });
             } catch (e) {}
         };
 

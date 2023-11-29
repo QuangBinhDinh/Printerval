@@ -52,6 +52,11 @@ type RootStackParams = {
     CheckoutSuccess: {
         orderCode: string;
     };
+
+    OrderDetail: {
+        email: string;
+        orderCode: string;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -65,3 +70,4 @@ export type ReportProductRouteProp = RouteProp<RootStackParams, 'ReportProduct'>
 export type BlogScreenRouteProp = RouteProp<RootStackParams, 'BlogScreen'>;
 export type CreateAddressRouteProp = RouteProp<RootStackParams, 'CreateAddress'>;
 export type CheckoutSuccessRouteProp = RouteProp<RootStackParams, 'CheckoutSuccess'>;
+export type OrderDetailRouteProp = RouteProp<RootStackParams, 'OrderDetail'>;

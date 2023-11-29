@@ -76,7 +76,7 @@ const EditBilling = () => {
                 address: input.address,
                 country: country?.id || '',
                 country_name: country?.name || '',
-                state_name: province?.name || '',
+                ...(!!province?.name && { state_name: province.name }),
                 city_name: input.city_name,
                 zip_code: input.zip_code,
                 optional_address: input.optional_address,

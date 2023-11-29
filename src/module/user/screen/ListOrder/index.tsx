@@ -20,8 +20,6 @@ const ListOrderScreen = () => {
 
     const renderItem = ({ item }: { item: OrderItemResponse }) => <OrderItem data={item} />;
 
-    console.log('Order history', total);
-
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Order list" />

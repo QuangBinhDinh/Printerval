@@ -21,7 +21,7 @@ const addressSelector = createSelector(
     [(state: RootState) => state.auth.addressBook, (state: RootState) => state.cart.defaultAddress],
     (list, selected) => {
         var newList = [...list];
-        if (selected) {
+        if (selected && selected.id != -1) {
             var temp = newList.filter(i => i.id != selected.id);
             temp.unshift(selected);
             newList = [...temp];
@@ -32,7 +32,6 @@ const addressSelector = createSelector(
 const AddressBook = () => {
     const insets = useSafeAreaInsets();
     // const accessToken = useAppSelector(state => state.auth.accessToken);
-    const defaultAddress = useAppSelector(state => state.cart.defaultAddress);
 
     const addressList = useSelector(addressSelector);
 
@@ -53,19 +52,14 @@ const AddressBook = () => {
 
     useEffect(() => {
         //sắp xếp default address luôn ở trên cùng
-        var newList = [...addressList];
-        if (defaultAddress) {
-            var temp = newList.filter(i => i.id != defaultAddress.id);
-            temp.unshift(defaultAddress);
-            newList = [...temp];
-        }
-        setData(newList);
-    }, [addressList, defaultAddress]);
+        setData(addressList);
+    }, [addressList]);
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title="Address book" />
             <FlatList
-                data={data}
+                data={addressList}
                 renderItem={renderItem}
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}

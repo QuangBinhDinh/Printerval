@@ -1,7 +1,7 @@
 import { api } from '@api/service';
 import { CartWhite } from '@assets/svg';
 import FancyButton from '@components/FancyButton';
-import { TextNormal } from '@components/text';
+import { TextNormal, TextSemiBold } from '@components/text';
 import { useAppDispatch, useAppSelector } from '@store/hook';
 import { lightColor } from '@styles/color';
 import { shadowTop } from '@styles/shadow';
@@ -14,6 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const CustomTabBar = ({ state, descriptors, navigation }) => {
     const insets = useSafeAreaInsets();
     const accessToken = useAppSelector(state => state.auth.accessToken);
+    const cartList = useAppSelector(state => state.cart.items);
+
     const dispatch = useAppDispatch();
     return (
         <View>
@@ -66,6 +68,13 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                                 >
                                     <View style={styles.cartInner}>
                                         <CartWhite width={24} height={24} />
+                                        {cartList.length > 0 && (
+                                            <View style={styles.qtyView}>
+                                                <TextSemiBold style={{ fontSize: 10, color: lightColor.secondary }}>
+                                                    {cartList.length}
+                                                </TextSemiBold>
+                                            </View>
+                                        )}
                                     </View>
                                 </FancyButton>
                             </View>
@@ -129,5 +138,16 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    qtyView: {
+        width: 16,
+        height: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 16,
+        backgroundColor: 'white',
+        position: 'absolute',
+        top: 4,
+        right: 5,
     },
 });

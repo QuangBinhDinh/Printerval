@@ -31,7 +31,6 @@ const CheckoutSuccessScreen = () => {
 
     useFocus(() => {
         dispatch(cart.actions.resetCartAfterCheckout());
-        dispatch(api.util.invalidateTags(['Cart', 'CartCheckout']));
     });
 
     usePreventGoBack();

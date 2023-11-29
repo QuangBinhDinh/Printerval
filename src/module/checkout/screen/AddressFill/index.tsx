@@ -15,7 +15,7 @@ import { shadowTop } from '@styles/shadow';
 import { navigate, goBack } from '@navigation/service';
 import { ShippingAddress } from '@type/common';
 import cart from '@cart/reducer';
-import { usePostAddressMutation } from '@user/service';
+import { useLazyFetchAddressBookQuery, usePostAddressMutation } from '@user/service';
 import { validatePhone } from '@util/index';
 import { showMessage } from '@components/popup/BottomMessage';
 import { getErrorMessage } from '@api/service';
@@ -52,6 +52,7 @@ const AddressFill = () => {
     const dispatch = useAppDispatch();
 
     const [postAddress] = usePostAddressMutation();
+    const [fetchAddress] = useLazyFetchAddressBookQuery();
 
     const [isSendFriend, setSendFriend] = useState(false);
 
@@ -116,16 +117,8 @@ const AddressFill = () => {
             };
 
             navigate('CheckoutPreview');
-            dispatch(
-                cart.actions.setCheckoutAddress({
-                    address,
-                    additional,
-                    ...(isSendFriend && { giftInfo: { name: input.recipient_name, phone: input.recipient_phone } }),
-                }),
-            );
-
             try {
-                postAddress({
+                const res = await postAddress({
                     address: {
                         full_name: address.full_name,
                         phone: address.phone,
@@ -137,11 +130,18 @@ const AddressFill = () => {
                         address: address.address,
                     },
                     api_token: accessToken || '',
-                });
-            } catch (e) {
-                console.log(e);
-                showMessage(getErrorMessage(e));
-            }
+                }).unwrap();
+
+                fetchAddress(accessToken || '');
+            } catch (e) {}
+
+            dispatch(
+                cart.actions.setCheckoutAddress({
+                    address,
+                    additional,
+                    ...(isSendFriend && { giftInfo: { name: input.recipient_name, phone: input.recipient_phone } }),
+                }),
+            );
         },
     });
 

@@ -52,7 +52,8 @@ const EditShipping = () => {
 
     const countries = useAppSelector(state => state.config.countries);
     const selectedAddress = useAppSelector(state => state.cart.defaultAddress);
-    const { email } = useAppSelector(state => state.cart.additionalInfo);
+
+    const { email, delivery_note } = useAppSelector(state => state.cart.additionalInfo);
     const giftInfo = useAppSelector(state => state.cart.giftInfo);
     const { userInfo, token } = useAppSelector(state => state.auth);
 
@@ -104,7 +105,7 @@ const EditShipping = () => {
             var full_name = input.first_name + ' ' + input.last_name;
 
             var address: ShippingAddress = {
-                id: -1,
+                id: selectedAddress?.id || -1,
                 full_name,
                 phone: input.phone,
                 address: input.address,
@@ -163,7 +164,7 @@ const EditShipping = () => {
             optional_address: optional_address || '',
             zip_code,
             city_name,
-            delivery_note: '',
+            delivery_note,
             recipient_name: giftInfo.name,
             recipient_phone: giftInfo.phone,
         });

@@ -189,7 +189,7 @@ export interface BillingAddress {
     address: string;
     country: string | number;
     country_name: string;
-    state_name: string;
+    state_name?: string;
     city_name: string;
     zip_code: string;
     optional_address?: string;

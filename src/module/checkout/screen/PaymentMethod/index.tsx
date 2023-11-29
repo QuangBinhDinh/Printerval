@@ -129,7 +129,7 @@ const PaymentMethod = () => {
             address: shipAddress.address,
             country: shipAddress.country_id || '',
             country_name: shipAddress.country?.name || '',
-            state_name: shipAddress.province?.name || '',
+            ...(!!shipAddress.province?.name && { state_name: shipAddress.province.name }),
             city_name: shipAddress.city_name,
             zip_code: shipAddress.zip_code,
             optional_address: shipAddress.optional_address,
