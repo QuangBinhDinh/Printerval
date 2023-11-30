@@ -10,6 +10,7 @@ import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { OrderProduct } from '@user/type';
 import { cdnImageV2 } from '@util/cdnV2';
 import FastImage from 'react-native-fast-image';
+import { sumBy } from 'lodash';
 
 const OrderDetail = () => {
     const {
@@ -17,7 +18,7 @@ const OrderDetail = () => {
     } = useRoute<OrderDetailRouteProp>();
 
     const { data, isLoading } = useTrackingOrderQuery({ email, orderId: orderCode });
-    const { amount, items, order } = data || {};
+    const { items, order } = data || {};
 
     console.log('data', data);
 
@@ -32,6 +33,32 @@ const OrderDetail = () => {
 
         return text;
     }, [order]);
+
+    const shippingAddressText = useMemo(() => {
+        let text = '';
+
+        if (order) {
+            text = text + order.country.nicename + ',';
+            if (order.state_name) text = text + order.state_name + ', ';
+            text = text + order.city_name + ', ' + order.delivery_address;
+        }
+        return text;
+    }, [order]);
+
+    const design_fee = useMemo(() => {
+        if (!items) return 0;
+
+        var configArr = items.map(prod => (prod.configurations ? JSON.parse(prod.configurations) : { design_fee: 0 }));
+        return sumBy(configArr, item => (item.design_fee ? Number.parseFloat(item.design_fee) : 0));
+    }, [items]);
+
+    const subTotalPrice = useMemo(() => {
+        if (!data || !order) return 0;
+
+        return (
+            Number(data.amount) - Number(order.other_fee) - Number(order.shipping_fee) - Number(order.tips) - design_fee
+        );
+    }, [data, order]);
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -74,7 +101,59 @@ const OrderDetail = () => {
                             />
                             <TextSemiBold style={styles.sectionTitle}>Shipping info</TextSemiBold>
                         </View>
+                        <TextSemiBold style={{ color: lightColor.secondary }}>{order.customer.full_name}</TextSemiBold>
+                        <TextNormal style={{ lineHeight: 21, marginTop: 3 }}>{shippingAddressText}</TextNormal>
+                        <TextNormal style={{ lineHeight: 21, marginTop: 3 }}>{order.customer.phone}</TextNormal>
+                        <TextNormal style={{ lineHeight: 21, marginTop: 3 }}>{order.customer.email}</TextNormal>
                     </View>
+
+                    <View style={{ marginTop: 32, paddingHorizontal: 18 }}>
+                        <View style={styles.rowPrice}>
+                            <TextNormal style={styles.textGray2}>Subtotal</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(subTotalPrice)}</TextSemiBold>
+                        </View>
+
+                        <View style={styles.rowPrice}>
+                            <TextNormal style={styles.textGray2}>Shipping fee</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(order.shipping_fee)}</TextSemiBold>
+                        </View>
+
+                        <View style={styles.rowPrice}>
+                            <TextNormal style={styles.textGray2}>Other fee</TextNormal>
+                            <TextSemiBold style={{ color: '#444' }}>{formatPrice(order.other_fee)}</TextSemiBold>
+                        </View>
+
+                        {design_fee > 0 && (
+                            <View style={styles.rowPrice}>
+                                <TextNormal style={styles.textGray2}>Design fee</TextNormal>
+                                <TextSemiBold style={{ color: '#444' }}>{formatPrice(design_fee)}</TextSemiBold>
+                            </View>
+                        )}
+
+                        {!!order.shipping_info && (
+                            <View style={styles.rowPrice}>
+                                <TextNormal style={styles.textGray2}>Shipping info</TextNormal>
+                                <TextSemiBold style={{ color: '#444', textAlign: 'right', width: '60%' }}>
+                                    {order.shipping_info}
+                                </TextSemiBold>
+                            </View>
+                        )}
+                        {Number.parseInt(order.tips) > 0 && (
+                            <View style={styles.rowPrice}>
+                                <TextNormal style={styles.textGray2}>Tip</TextNormal>
+                                <TextSemiBold style={{ color: '#444' }}>{formatPrice(order.tips)}</TextSemiBold>
+                            </View>
+                        )}
+
+                        <View style={[styles.rowPrice, { borderBottomWidth: 0 }]}>
+                            <TextNormal>Amount</TextNormal>
+                            <TextSemiBold style={{ color: lightColor.price, fontSize: 18 }}>
+                                {formatPrice(data?.amount || 0)}
+                            </TextSemiBold>
+                        </View>
+                    </View>
+
+                    <View style={{ height: 70 }} />
                 </ScrollView>
             )}
         </View>
@@ -195,6 +274,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 22,
         marginTop: 4,
+    },
+
+    textGray2: { fontSize: 15, color: lightColor.grayout },
+    rowPrice: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        borderBottomWidth: 1,
+        borderBottomColor: lightColor.borderGray,
+        paddingVertical: 10,
     },
 });
 

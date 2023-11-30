@@ -222,25 +222,4 @@ const styles = StyleSheet.create({
         marginVertical: 24,
         marginTop: 32,
     },
-
-    bottomView: {
-        height: 64,
-        width: SCREEN_WIDTH,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 18,
-        justifyContent: 'space-between',
-        position: 'absolute',
-        bottom: 0,
-    },
-    button: {
-        width: '100%',
-        height: 48,
-        borderRadius: 6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-        backgroundColor: lightColor.secondary,
-    },
 });

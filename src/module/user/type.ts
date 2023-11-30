@@ -63,6 +63,7 @@ export interface OrderDetail {
         shipping_info: string;
         shipping_type: string;
         payment_type: string;
+        other_fee: string;
 
         transaction_fee: string;
         transaction_id: string;

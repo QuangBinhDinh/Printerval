@@ -11,9 +11,10 @@ const EVENT_NAME = 'open_paypal_checkout';
 
 interface IProps {
     orderCode: string;
+    orderEmail: string;
 }
 
-const PaypalWebview = ({ orderCode }: IProps) => {
+const PaypalWebview = ({ orderCode, orderEmail }: IProps) => {
     const [visible, setVisible] = useState(false);
     const [url, setUrl] = useState('');
 
@@ -47,7 +48,7 @@ const PaypalWebview = ({ orderCode }: IProps) => {
             // }
 
             onClose();
-            navigate('CheckoutSuccess', { orderCode });
+            navigate('CheckoutSuccess', { orderCode, orderEmail });
             return false;
         } else return true;
     };

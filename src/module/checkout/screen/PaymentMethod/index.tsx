@@ -93,7 +93,7 @@ const PaymentMethod = () => {
 
     const IWillHaveOrder = async () => {
         setPress(true);
-        console.log(cardDetail);
+        // console.log(cardDetail);
         if (!shipAddress) return;
         if (payMethod == 'stripe' && !validCardNumber) {
             return;
@@ -156,7 +156,10 @@ const PaymentMethod = () => {
                     //console.log('Error stripe', error);
                     alertError(error.localizedMessage || 'Undefined error from stripe');
                 } else if (paymentIntent) {
-                    navigate('CheckoutSuccess', { orderCode: order.code });
+                    navigate('CheckoutSuccess', {
+                        orderCode: order.code,
+                        orderEmail: additionalInfo.email,
+                    });
                 } else {
                     alertError('Fatal error occur');
                 }
@@ -233,7 +236,7 @@ const PaymentMethod = () => {
                     <View style={{ height: 16 + insets.bottom / 2 }} />
                 </ScrollView>
 
-                <PaypalWebview orderCode={orderCode} />
+                <PaypalWebview orderCode={orderCode} orderEmail={additionalInfo.email} />
             </View>
         </StripeProvider>
     );

@@ -55,6 +55,7 @@ type RootStackParams = {
     };
     CheckoutSuccess: {
         orderCode: string;
+        orderEmail: string;
     };
 
     OrderDetail: {

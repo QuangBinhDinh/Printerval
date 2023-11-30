@@ -19,7 +19,7 @@ import { api } from '@api/service';
 const CheckoutSuccessScreen = () => {
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
-    const { params: { orderCode } = {} } = useRoute<CheckoutSuccessRouteProp>();
+    const { params: { orderCode, orderEmail } = {} } = useRoute<CheckoutSuccessRouteProp>();
 
     const copyCode = () => {};
 
@@ -27,7 +27,9 @@ const CheckoutSuccessScreen = () => {
         navigate('HomeScreen');
     };
 
-    const toTrackOrder = () => {};
+    const toTrackOrder = () => {
+        navigate('OrderDetail', { orderCode, email: orderEmail, status: 'PENDING' });
+    };
 
     useFocus(() => {
         dispatch(cart.actions.resetCartAfterCheckout());
