@@ -42,7 +42,7 @@ const UserLogged = () => {
                     source={userInfo?.image_url ? { uri: userInfo.image_url } : require('@image/female-avatar.png')}
                 />
                 <View style={styles.contentHeader}>
-                    <View>
+                    <View style={{ width: '85%' }}>
                         <TextSemiBold style={{ fontSize: 16, color: '#444' }}>{userInfo?.full_name}</TextSemiBold>
                         <TextNormal style={{ fontSize: 15 }}>{userInfo?.email}</TextNormal>
                     </View>

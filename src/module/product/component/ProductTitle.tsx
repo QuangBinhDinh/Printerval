@@ -17,14 +17,17 @@ const ProductTitle = ({ detail, category, title }: IProps) => {
             <Pressable style={styles.favButton}>
                 <Icon type="antdesign" name="heart" size={20} color={lightColor.price} />
             </Pressable>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <TextNormal style={{ color: lightColor.secondary }}>{category.name}</TextNormal>
-                <View style={{ flexDirection: 'row' }}>
-                    <StarRating rating={detail.rating_value} width={80} />
-                    <TextNormal
-                        style={{ fontSize: 11, color: lightColor.grayout, marginLeft: 5, marginTop: 3 }}
-                    >{`(${detail.rating_count})`}</TextNormal>
-                </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TextNormal style={styles.categoryName}>{category.name}</TextNormal>
+
+                {detail.rating_count > 0 && (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 24 }}>
+                        <StarRating rating={detail.rating_value} width={80} />
+                        <TextNormal
+                            style={{ fontSize: 11, color: lightColor.grayout, marginLeft: 5, marginTop: 2 }}
+                        >{`(${detail.rating_count})`}</TextNormal>
+                    </View>
+                )}
             </View>
 
             <TextSemiBold style={{ fontSize: 20, marginTop: 8, lineHeight: 25 }}>{title}</TextSemiBold>
@@ -49,6 +52,8 @@ const styles = StyleSheet.create({
 
         width: '100%',
     },
+    categoryName: { color: lightColor.secondary, width: '65%', lineHeight: 21, marginTop: 2 },
+
     favButton: {
         width: 40,
         height: 40,

@@ -11,6 +11,7 @@ import { Icon } from '@rneui/base';
 import { Favorite } from '@assets/svg';
 import { navigate, pushNavigate } from '@navigation/service';
 import { cdnImageV2 } from '@util/cdnV2';
+import { capitalize } from 'lodash';
 
 const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewStyle> }) => {
     const discountText = useMemo(() => {
@@ -45,7 +46,7 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
                 <TextNormal style={styles.ratingText}>{`(${20})`}</TextNormal>
             </View>
             <TextSemiBold style={styles.title} numberOfLines={4}>
-                {he.decode(item.name)}
+                {capitalize(he.decode(item.name))}
             </TextSemiBold>
 
             <TextNormal style={styles.subTitle}>{'Sample Text'}</TextNormal>

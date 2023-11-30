@@ -10,7 +10,7 @@ import { timeBefore } from '@util/index';
 const ReviewCard = ({ item }: { item: ProductReview }) => {
     return (
         <View style={styles.reviewItem} key={item.id}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row' }}>
                     <FastImage style={styles.reviewAvatar} source={{ uri: RANDOM_IMAGE_URL }} />
                     <View style={{ height: 40, marginLeft: 10, justifyContent: 'space-around' }}>

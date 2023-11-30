@@ -103,6 +103,7 @@ const ModalOption = () => {
                             value={keyword}
                             onChangeText={setKeyword}
                             placeholder="Search"
+                            placeholderTextColor={lightColor.grayout}
                         />
                     </View>
                 )}

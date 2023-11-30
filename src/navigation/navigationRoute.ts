@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { ProductFilterArgs } from '@searchResult/service';
-import { Product, ShippingAddress } from '@type/common';
+import { Post, Product, ShippingAddress } from '@type/common';
 
 type RootStackParams = {
     SubCollection: {
@@ -46,7 +46,9 @@ type RootStackParams = {
     };
 
     BlogScreen: {
-        postId: number;
+        post?: Post;
+        postId?: number;
+        isPolicy?: boolean;
     };
     CreateAddress: {
         editAddress?: ShippingAddress;

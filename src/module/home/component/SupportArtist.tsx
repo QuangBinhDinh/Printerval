@@ -16,8 +16,8 @@ const SupportArtist = () => {
         <View style={styles.container}>
             <TextSemiBold style={{ fontSize: 20, lineHeight: 26 }}>
                 Support independent{'\n'}
-                <TextSemiBold style={{ color: lightColor.secondary }}>Artists </TextSemiBold>and
-                <TextSemiBold style={{ color: lightColor.secondary }}> Crafters</TextSemiBold>
+                <TextSemiBold style={{ color: lightColor.secondary, fontSize: 20 }}>Artists </TextSemiBold>and
+                <TextSemiBold style={{ color: lightColor.secondary, fontSize: 20 }}> Crafters</TextSemiBold>
             </TextSemiBold>
 
             <TextNormal style={{ fontSize: 15, marginTop: 14 }}>
@@ -27,9 +27,9 @@ const SupportArtist = () => {
             </TextNormal>
 
             <CardSlider />
-            <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toSelling}>
+            {/* <FancyButton style={styles.button} backgroundColor={lightColor.primary} onPress={toSelling}>
                 <TextSemiBold style={{ fontSize: 15, color: 'white' }}>Start selling</TextSemiBold>
-            </FancyButton>
+            </FancyButton> */}
         </View>
     );
 };

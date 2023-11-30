@@ -58,7 +58,7 @@ const CheckoutPreview = () => {
             >
                 <AddressView />
 
-                <TextSemiBold style={{ fontSize: 18, color: '#444', marginTop: 32 }}>Order review</TextSemiBold>
+                <TextSemiBold style={{ fontSize: 18, color: '#444', marginTop: 24 }}>Order review</TextSemiBold>
 
                 <CheckoutCart />
 

@@ -57,8 +57,8 @@ const SpiceUpView = ({ listImg }: { listImg: string[] }) => {
                     resizeMode="cover"
                 >
                     <TextSemiBold style={{ fontSize: 20, marginTop: 150 }}>
-                        <TextSemiBold style={{ color: lightColor.secondary }}>Printerval</TextSemiBold> Spice up your
-                        life
+                        <TextSemiBold style={{ color: lightColor.secondary, fontSize: 20 }}>Printerval</TextSemiBold>{' '}
+                        Spice up your life
                     </TextSemiBold>
                     <TextNormal style={{ fontSize: 15, marginTop: 14 }}>
                         <TextNormal style={{ color: lightColor.secondary }}>Printerval.com</TextNormal> is an online

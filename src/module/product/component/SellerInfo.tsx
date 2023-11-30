@@ -2,6 +2,7 @@ import { TextSemiBold } from '@components/text';
 import { lightColor } from '@styles/color';
 import { Seller } from '@type/common';
 import { randomizeColor } from '@util/index';
+import { capitalize } from 'lodash';
 import React, { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -18,7 +19,9 @@ const SellerInfo = ({ seller, prodImg }: { seller?: Seller; prodImg?: string }) 
             </View>
             <View style={[styles.content]}>
                 <TextSemiBold style={{ fontSize: 15, marginTop: 0 }}>Designed and sold by</TextSemiBold>
-                <TextSemiBold style={{ color: lightColor.secondary, marginTop: 2 }}>{seller?.name}</TextSemiBold>
+                <TextSemiBold style={{ color: lightColor.secondary, marginTop: 2 }}>
+                    {capitalize(seller?.name.trim())}
+                </TextSemiBold>
             </View>
         </View>
     );
