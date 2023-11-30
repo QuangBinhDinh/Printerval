@@ -36,6 +36,8 @@ import StripeLogo from './payment/Stripe.svg';
 import Visa from './payment/Visa.svg';
 import CheckoutSuccess from './checkout-success.svg';
 import CheckoutFailure from './checkout-failure.svg';
+import NotFoundIcon from './not-found.svg';
+import NoConnectionIcon from './no-connect.svg';
 
 export {
     User,
@@ -76,4 +78,6 @@ export {
     Visa,
     CheckoutFailure,
     CheckoutSuccess,
+    NotFoundIcon,
+    NoConnectionIcon,
 };

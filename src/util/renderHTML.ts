@@ -3,6 +3,7 @@ import { navigate } from '@navigation/service';
 import { capitalize, maxBy } from 'lodash';
 import { Linking } from 'react-native';
 
+//pattern chỉ match với domain https://prinerval.com/{someText} (không có '/' thứ hai )
 const slugPattern = /^https:\/\/printerval\.com\/([^\/?]+)$/;
 
 export const useNavigateFromWebLink = () => {
@@ -31,8 +32,11 @@ export const useNavigateFromWebLink = () => {
 
     const handleMatchingRegex = async (url: string) => {
         const match = url.match(slugPattern);
-        //console.log('Match regex', match);
-        if (!match) return;
+        console.log('Match regex', match);
+        if (!match) {
+            navigate('NotFoundScreen');
+            return;
+        }
 
         var keyword = match[1].split('-')[0];
         try {
@@ -59,6 +63,7 @@ export const useNavigateFromWebLink = () => {
             }
         } catch (e) {
             console.log(e);
+            navigate('NotFoundScreen');
         }
     };
 

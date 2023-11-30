@@ -41,6 +41,7 @@ import CreateAddress from '@user/screen/AddressBook/CreateAddress';
 import ListOrderScreen from '@user/screen/ListOrder';
 import OrderDetail from '@user/screen/OrderDetail';
 import LandingPage from '@home/screen/LandingPage';
+import NotFoundScreen from '../module/utility/NotFoundScreen';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -126,15 +127,17 @@ const Router = () => {
                 <Stack.Screen name="ReportProduct" component={ReportProduct} />
                 <Stack.Screen name="CreateTicket" component={CreateTicket} />
 
+                <Stack.Screen name="CheckoutNavigator" component={CheckoutScreen} />
+                <Stack.Screen name="EditShipAddress" component={EditShipping} />
+                <Stack.Screen name="EditBillAddress" component={EditBilling} />
+
                 <Stack.Screen name="BlogScreen" component={BlogScreen} />
                 <Stack.Screen name="AddressBook" component={AddressBook} />
                 <Stack.Screen name="CreateAddress" component={CreateAddress} />
                 <Stack.Screen name="ListOrderScreen" component={ListOrderScreen} />
                 <Stack.Screen name="OrderDetail" component={OrderDetail} />
 
-                <Stack.Screen name="CheckoutNavigator" component={CheckoutScreen} />
-                <Stack.Screen name="EditShipAddress" component={EditShipping} />
-                <Stack.Screen name="EditBillAddress" component={EditBilling} />
+                <Stack.Screen name="NotFoundScreen" component={NotFoundScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
