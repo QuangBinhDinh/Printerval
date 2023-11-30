@@ -16,6 +16,10 @@ import { normalize } from '@rneui/themed';
 import { SCREEN_WIDTH } from '@util/index';
 import FastImage from 'react-native-fast-image';
 
+import { load } from 'cheerio';
+import { TextNormal, TextSemiBold } from '@components/text';
+import { POLICY_POST_ID } from '@constant/index';
+
 const baseStyle: MixedStyleDeclaration = {
     fontFamily: 'Poppins-Regular',
     color: '#444444',
@@ -30,16 +34,17 @@ const tagsStyles: MixedStyleRecord = {
 
 const BlogScreen = () => {
     const {
-        params: { post, isPolicy, postId },
+        params: { post, postId },
     } = useRoute<BlogScreenRouteProp>();
-
     const { policyPost, blogPost } = useAppSelector(state => state.posts);
+
     //lấy Post/Blog được truyền vào hoặc lấy theo ID
     const blog = post || policyPost.concat(blogPost).find(i => i.id == postId);
 
-    const { imgUrl, html } = extractImageFromHTML(blog?.content || '');
+    //blog này có phải là policy không
+    const isPolicy = POLICY_POST_ID.includes(blog?.id || -1);
 
-    const imageUnavailable = !blog?.image_url.includes('https');
+    const { imgUrl, html } = extractImageFromHTML(blog?.content || '');
 
     const { navigateFromLink } = useNavigateFromWebLink();
 
@@ -60,63 +65,65 @@ const BlogScreen = () => {
             baseStyle={baseStyle}
             tagsStyles={tagsStyles}
             enableExperimentalMarginCollapsing
-            source={{ html: blog?.content || '' }}
+            source={{ html: html }}
             systemFonts={['Poppins-Regular', 'Poppins-Medium', 'Poppins-Bold', 'Poppins-SemiBold']}
         />
     );
 
-    console.log('Image url', html);
+    //console.log('blog', blog?.content);
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={blog?.name || 'Blog'} />
             <View style={{ flex: 1 }}>
-                {imageUnavailable ? (
+                {!imgUrl ? (
                     <Image
                         style={styles.headerImg}
                         source={require('@image/image-blog-default.jpg')}
                         resizeMode="cover"
                     />
                 ) : (
-                    <FastImage style={styles.headerImg} source={{ uri: blog?.image_url }} />
+                    <FastImage style={styles.headerImg} source={{ uri: imgUrl }} />
                 )}
 
                 <ScrollView style={{ flex: 1, backgroundColor: 'transparent' }}>
                     <View style={styles.transparent} />
                     <View style={styles.whiteContainer}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TextNormal style={{ color: lightColor.secondary }}>
+                                {isPolicy ? 'Policy' : 'Blog'}
+                            </TextNormal>
+                            <TextNormal>{blog?.created_at}</TextNormal>
+                        </View>
+
+                        <TextSemiBold style={{ fontSize: 20, lineHeight: 24, marginTop: 8 }}>{blog?.name}</TextSemiBold>
+
                         <HTMLView />
                     </View>
                 </ScrollView>
             </View>
         </View>
     );
-
-    // return (
-    //     <View style={{ flex: 1, backgroundColor: 'white' }}>
-    //         <HeaderScreen title={blog?.name || 'Blog'} />
-    //         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 24 }}>
-    //             <HTMLView />
-    //         </ScrollView>
-    //     </View>
-    // );
 };
 
 export default BlogScreen;
 
 const extractImageFromHTML = (htmlString: string) => {
-    let temp = htmlString;
     let imgUrl = '';
-    const imgRegex = /<img\s+[^>]*src\s*=\s*["']([^"']+)["'][^>]*\s*\/?>/;
 
-    // Match the first img tag
-    const match = htmlString.match(htmlString);
+    var instance = load(htmlString);
 
-    if (match) {
-        imgUrl = match[1];
-        temp = htmlString.replace(imgRegex, '');
+    //remove title center
+    instance('h2[style="text-align: center;"]').remove();
+
+    //extract first image src and remove it
+    const firstImg = instance('img').first();
+    if (firstImg.length > 0) {
+        imgUrl = firstImg.attr('src') || '';
+        firstImg.remove();
     }
 
-    return { html: temp, imgUrl };
+    return { imgUrl, html: instance.html() };
 };
 
 const styles = StyleSheet.create({
