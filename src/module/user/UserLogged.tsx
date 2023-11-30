@@ -46,7 +46,9 @@ const UserLogged = () => {
                         <TextSemiBold style={{ fontSize: 16, color: '#444' }}>{userInfo?.full_name}</TextSemiBold>
                         <TextNormal style={{ fontSize: 15 }}>{userInfo?.email}</TextNormal>
                     </View>
-                    <Image style={{ width: 20, height: 20 }} source={require('@image/user-setting.png')} />
+                    <Pressable hitSlop={10} onPress={() => navigate('ProfileSettings')}>
+                        <Image style={{ width: 20, height: 20 }} source={require('@image/user-setting.png')} />
+                    </Pressable>
                 </View>
             </View>
 

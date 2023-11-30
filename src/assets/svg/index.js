@@ -38,6 +38,7 @@ import CheckoutSuccess from './checkout-success.svg';
 import CheckoutFailure from './checkout-failure.svg';
 import NotFoundIcon from './not-found.svg';
 import NoConnectionIcon from './no-connect.svg';
+import CameraIcon from './camera-icon.svg';
 
 export {
     User,
@@ -80,4 +81,5 @@ export {
     CheckoutSuccess,
     NotFoundIcon,
     NoConnectionIcon,
+    CameraIcon,
 };

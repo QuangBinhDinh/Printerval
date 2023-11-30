@@ -43,6 +43,7 @@ import OrderDetail from '@user/screen/OrderDetail';
 import LandingPage from '@home/screen/LandingPage';
 import NotFoundScreen from '../module/utility/NotFoundScreen';
 import WishlistScreen from '@user/screen/Wishlist';
+import ProfileSettings from '@user/screen/ProfileSettings';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -133,6 +134,7 @@ const Router = () => {
                 <Stack.Screen name="EditBillAddress" component={EditBilling} />
 
                 <Stack.Screen name="BlogScreen" component={BlogScreen} />
+                <Stack.Screen name="ProfileSettings" component={ProfileSettings} />
                 <Stack.Screen name="AddressBook" component={AddressBook} />
                 <Stack.Screen name="CreateAddress" component={CreateAddress} />
                 <Stack.Screen name="ListOrderScreen" component={ListOrderScreen} />
