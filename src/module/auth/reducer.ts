@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ShippingAddress, User } from '@type/common';
+import { Product, ShippingAddress, User } from '@type/common';
 import { userDomain } from '@user/service';
 
 interface Auth {
@@ -22,6 +22,8 @@ interface Auth {
     token: string;
 
     addressBook: ShippingAddress[];
+
+    wishlist: Product[];
 }
 
 const initialState: Auth = {
@@ -33,6 +35,8 @@ const initialState: Auth = {
     token: '',
 
     addressBook: [],
+
+    wishlist: [],
 };
 
 const auth = createSlice({

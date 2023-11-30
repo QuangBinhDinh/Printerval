@@ -13,7 +13,17 @@ import { navigate, pushNavigate } from '@navigation/service';
 import { cdnImageV2 } from '@util/cdnV2';
 import { capitalize } from 'lodash';
 
-const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewStyle> }) => {
+interface IProps {
+    item: Product;
+    style?: StyleProp<ViewStyle>;
+
+    /**
+     * Card này có dùng ở trang wishlist không
+     */
+    wishlist?: boolean;
+}
+
+const DynamicCard = ({ item, style, wishlist }: IProps) => {
     const discountText = useMemo(() => {
         var percent = '';
         var amount = Number(item.high_price) - Number(item.price);
@@ -28,6 +38,8 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
         // console.log(cdnImageV2(item.image_url));
         navigate('DetailProduct', { productId: item.id, productName: item.name }, item.id);
     };
+
+    const pressWishlist = () => {};
     return (
         <Pressable style={[styles.container, style]} onPress={toDetail}>
             {!!discountText && (
@@ -36,8 +48,12 @@ const DynamicCard = ({ item, style }: { item: Product; style?: StyleProp<ViewSty
                 </View>
             )}
 
-            <Pressable style={styles.favButton}>
-                <Favorite width={15} height={15} />
+            <Pressable style={[styles.favButton, wishlist && { borderColor: '#444' }]} onPress={pressWishlist}>
+                {wishlist ? (
+                    <Icon type="antdesign" name="close" size={16} color={'#444'} />
+                ) : (
+                    <Favorite width={15} height={15} />
+                )}
             </Pressable>
 
             <FastImage style={styles.image} source={{ uri: cdnImageV2(item.image_url) }} resizeMode="cover" />
@@ -114,7 +130,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         zIndex: 100,
-        top: 6,
-        right: 6,
+        top: 2,
+        right: 3,
     },
 });

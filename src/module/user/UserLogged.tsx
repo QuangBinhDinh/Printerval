@@ -76,7 +76,7 @@ const UserLogged = () => {
                 <Icon type="feather" name="chevron-right" size={20} color={'#444'} />
             </Pressable>
 
-            <Pressable style={styles.sectionView}>
+            <Pressable style={styles.sectionView} onPress={() => navigate('WishlistScreen')}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.sectionImage} source={require('@image/user-fav.png')} />
                     <TextNormal>Wishlist</TextNormal>
