@@ -44,6 +44,7 @@ import LandingPage from '@home/screen/LandingPage';
 import NotFoundScreen from '../module/utility/NotFoundScreen';
 import WishlistScreen from '@user/screen/Wishlist';
 import ProfileSettings from '@user/screen/ProfileSettings';
+import OrderTracking from '@user/screen/OrderTracking';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -139,6 +140,7 @@ const Router = () => {
                 <Stack.Screen name="CreateAddress" component={CreateAddress} />
                 <Stack.Screen name="ListOrderScreen" component={ListOrderScreen} />
                 <Stack.Screen name="OrderDetail" component={OrderDetail} />
+                <Stack.Screen name="OrderTracking" component={OrderTracking} />
                 <Stack.Screen name="WishlistScreen" component={WishlistScreen} />
 
                 <Stack.Screen name="NotFoundScreen" component={NotFoundScreen} />

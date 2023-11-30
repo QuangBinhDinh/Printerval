@@ -63,6 +63,12 @@ type RootStackParams = {
         orderCode: string;
         status: string;
     };
+
+    OrderTracking: {
+        prodImg: string;
+        orderCode: string;
+        timestamp: string;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -77,3 +83,4 @@ export type BlogScreenRouteProp = RouteProp<RootStackParams, 'BlogScreen'>;
 export type CreateAddressRouteProp = RouteProp<RootStackParams, 'CreateAddress'>;
 export type CheckoutSuccessRouteProp = RouteProp<RootStackParams, 'CheckoutSuccess'>;
 export type OrderDetailRouteProp = RouteProp<RootStackParams, 'OrderDetail'>;
+export type OrderTrackingRouteProp = RouteProp<RootStackParams, 'OrderTracking'>;

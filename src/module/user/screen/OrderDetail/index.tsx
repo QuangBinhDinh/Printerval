@@ -11,6 +11,8 @@ import { OrderProduct } from '@user/type';
 import { cdnImageV2 } from '@util/cdnV2';
 import FastImage from 'react-native-fast-image';
 import { sumBy } from 'lodash';
+import { navigate } from '@navigation/service';
+import { IS_PRODUCT } from '../../../../App';
 
 const OrderDetail = () => {
     const {
@@ -60,6 +62,16 @@ const OrderDetail = () => {
         );
     }, [data, order]);
 
+    const toTrackingOrder = () => {
+        if (!!items && !IS_PRODUCT) {
+            navigate('OrderTracking', {
+                prodImg: items[0]?.image_url,
+                orderCode,
+                timestamp: order?.created_at,
+            });
+        }
+    };
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderScreen title={`Order: ${orderCode}`} />
@@ -80,6 +92,18 @@ const OrderDetail = () => {
                         <OrderProductCard item={item} key={item.id} />
                     ))}
                     <View style={{ height: 8 }} />
+
+                    <Pressable style={styles.sectionGray} onPress={toTrackingOrder}>
+                        <View style={styles.sectionTitleRow}>
+                            <Image
+                                style={{ width: 25, height: 25 }}
+                                source={require('@image/Order/order-delivery.png')}
+                            />
+                            <TextSemiBold style={styles.sectionTitle}>Delivery info</TextSemiBold>
+                        </View>
+
+                        <TextNormal style={{ lineHeight: 21, marginTop: 3 }}>{'Name of shipping company'}</TextNormal>
+                    </Pressable>
 
                     <View style={styles.sectionGray}>
                         <View style={styles.sectionTitleRow}>
@@ -138,6 +162,7 @@ const OrderDetail = () => {
                                 </TextSemiBold>
                             </View>
                         )}
+
                         {Number.parseInt(order.tips) > 0 && (
                             <View style={styles.rowPrice}>
                                 <TextNormal style={styles.textGray2}>Tip</TextNormal>
