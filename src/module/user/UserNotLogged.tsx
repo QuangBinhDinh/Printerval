@@ -45,7 +45,7 @@ const UserNotLogged = () => {
                 </View>
                 <Icon type="feather" name="chevron-right" size={20} color={'#444'} />
             </Pressable>
-            <Pressable style={[styles.sectionView, { borderBottomWidth: 0 }]}>
+            <Pressable style={[styles.sectionView, { borderBottomWidth: 0 }]} onPress={() => navigate('FAQScreen')}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.sectionImage} source={require('@image/user-FAQ.png')} />
                     <TextNormal>FAQ</TextNormal>

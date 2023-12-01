@@ -60,7 +60,7 @@ export const useNavigateFromWebLink = () => {
                         navigate('SearchResult', { title: capitalize(priorSlug.slug), tag_id: priorSlug.target_id });
                     }
                 }
-            }
+            } else navigate('NotFoundScreen');
         } catch (e) {
             console.log(e);
             navigate('NotFoundScreen');

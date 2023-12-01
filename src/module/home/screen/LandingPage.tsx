@@ -6,6 +6,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useAppSelector } from '@store/hook';
 import ProductRow from '@components/product/ProductRow';
+import { normalize } from '@rneui/themed';
 
 const LandingPage = () => {
     const prodHistory = useAppSelector(state => state.category.productHistory);
@@ -37,7 +38,7 @@ export default LandingPage;
 const styles = StyleSheet.create({
     banner: {
         width: SCREEN_WIDTH,
-        height: 240,
+        height: normalize(200),
         //marginTop: 24,
     },
 });
