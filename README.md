@@ -89,12 +89,12 @@ Ngoài ra còn 1 số text đặc biệt như `RadioText` dùng cho RadioButton
 ## Codepush command
 
 IOS:
-`appcenter codepush release-react -a binhchili/Printerval -d Staging -t '*'`
-`appcenter codepush release-react -a binhchili/Printerval -d Production -t '>=1.6'` (latest version)
+- `appcenter codepush release-react -a binhchili/Printerval -d Staging -t '*'`
+- `appcenter codepush release-react -a binhchili/Printerval -d Production -t '>=1.6'` (latest version)
 
 ANDROID:
-`appcenter codepush release-react -a binhchili/Printerval-1 -d Staging -t '*'`
-`appcenter codepush release-react -a binhchili/Printerval-1 -d Production -t '>=1.6'`
+- `appcenter codepush release-react -a binhchili/Printerval-1 -d Staging -t '*'`
+- `appcenter codepush release-react -a binhchili/Printerval-1 -d Production -t '>=1.6'`  (latest version)
 
 Credit by binhchili <br/>
 Contact:  <br/>
