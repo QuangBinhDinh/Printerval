@@ -2,94 +2,100 @@
 
 Welcome to binhchili's git repo. Đọc kỹ hướng dẫn sử dụng trước khi dùng !!!
 
-### Requirement + Install : 
-    Node version 18.6.0. Run npm install . Nếu lỗi run npm install --force <br/>
-    Hiện tại app có 1 lib tự config trong node_module nếu không sẽ bị crash app (react-native-scrollable-tab-view), 
-    sẽ gây crash khi vào màn Order ở phần User. Contact để được hướng dẫn  <br/>
-    <br/>
-    Chạy giả lập trên android :<br/>
-        - Install android 12.0, 11.0<br/>
-        - Install CMake 3.18.1 (SDK tools)<br/>
-    Chạy trên XCode: version 13.2 or higher <br/>
+## Requirement + Install
+Node version 18.6.0. Run yarn install
+IOS install `cd ios && pod install``
+Mac chip M dùng lệnh `cd ios && arch -x86_64 pod install`
 
-### NOTE: Fix 1 số thư viện trong node modules
-    React Native Fast Image : Sửa lại file podspec theo link bug này https://github.com/DylanVann/react-native-fast-image/issues/943
-    React Native Apps Flyer: Cài lại version mới nhất. Link bug : https://github.com/AppsFlyerSDK/appsflyer-android-app/issues/20
-    
-### Cấu trúc thư mục src :
-```
-    - API: cấu hình DOMAIN, axios, các hàm chung get, post , middleware, blah blah, ...
-    - Assets: lưu trữ animation, image (png , svg ,...)
-    - Components
-    - Constants
-    - Modules: folder chứa các màn hình cùng làm 1 chức năng trong app 
-    - Navigation: react navigation của app , xử lý routing 
-    - Store: redux store ,
-    - Styles: define các màu , font 
-    - Util: hàm tiện ích 
-```
-    
-Trong folder modules chứa các folder con . Mỗi folder con này thường gồm các thành phần chung sau :
-```
-    - index.js/tsx : Main file dùng để export, chứa UI của màn hình chính chức năng 
-    - component: File lưu trữ các componen con dùng trong module (cân nhắc chuyển sang folder sau này )
-    - service: File lưu trữ các hàm api ( bao gồm middleware )
-    - reducer: Lưu trữ thông tin (state) của module 
-    - Custom hook ( use...) : Các hàm logic cho UI , xử lý data khi call api (chỉ tách ra khi quá dài hay nhiều data)
-```
-### Addtional note: 
-Giải thích về cách tổ chức redux store của app :
-```
-    Src có 1 folder store, bao gồm các file sau:
-    - index.js: RootStore - export cho Provider ( ở file App.js bên ngoài )
-    - middleware: Các middleware của redux-thunk. Hiện tại chỉ có 1 middleware log ra thời gian xử lý các action dispatch (có thể bỏ)
-    - reducers: RootReducer, state chung của toàn bộ app, lưu trữ các reducer nhỏ hơn 
-    - 1 số reducer dùng chung : ApiReducer, ThemeReducer, CountryReducer 
-```
+Chạy giả lập trên android :
+- Install android 12.0, 11.0
+- Install CMake 3.18.1 (SDK tools)
 
-Giải thích về cách dispatch 1 action trong store (để biết rõ hơn search redux-thunk) .Có 2 loại dispatch :
-```
-    1. Dispatch 1 action thông thường 
-    - Thông tin các action này sẽ được lưu trữ ở file reducer của từng module (vào folder module để xem thêm)
-    - 1 file reducer sẽ được tạo bảo hàm createSlice (đọc thêm redux-thunk), bao gồm initialState, các hàm để set state (được export )
-    - Sử dùng các hàm : 
-        const dispatch = useDispatch();
-        const {action1, action2 } = cart.actions //import cart từ reducer 
-        dispatch(action1(param)) // dispatch action 
+Chạy trên XCode: version 14.0 or higher 
 
-    2. Dispatch 1 action để call api (dispatch async function)
-    - Các hàm để call api trong file service của module.
-    - Sử dụng các hàm được define(createGet, createPost, ....) để tạo 1 hàm trả về 1 async function 
-    - Gọi dispatch call api
-        import {service1} from './service' 
-        dispatch(service1(params))
-```
+Install xong, 1 số lib trong node-modules cần đc fix lại :
+- react-native-scrollable-tab-view: File `index.js` bỏ hàm `getNode()`
+- [react-native-fast-image]('https://github.com/DylanVann/react-native-fast-image/issues/943'): nếu bị crash thì fix theo link 
    
-   Muốn biết các hàm middleware trong phần này xử lý như thế nào, đọc file src/api/dispatch.js hay contact binhchili để được hương dẫn <br/>
+## Knowledge requirement
+- React & React native & Functional components
+- [Custom Hooks]('https://react.dev/learn/reusing-logic-with-custom-hooks')
+- [Redux store]('https://redux.js.org/introduction/getting-started')
+- [Formik]('https://formik.org/docs/api/useFormik') & [Yup validation]('https://github.com/jquense/yup')
+- [Slice function]('https://redux.js.org/usage/migrating-to-modern-redux#reducers-and-actions-with-createslice')
+- [RTK Query]('https://redux.js.org/redux-toolkit/overview')
+    
+## Cấu trúc thư mục src :
+- api: Thông tin config axios, constant request, debug, etc
+- assets: Bao gồm ảnh (.png, .svg, etc), font, animation, etc 
+- components: Các component cơ bản/reuse của app 
+- constant: Hằng số 
+- module: App được xây dựng dựa vào module, mỗi module sẽ phục vụ 1 chức năng cụ thể. 1 module có thể gồm nhiều screen, nhiều component khác
+- navigation: Cấu trúc navigation(luồng đi) của app 
+- store: Nơi lưu trữ redux store, config store + middleware 
+- styles: Các styles dùng trong app 
+- types: Kiểu dữ liệu được dùng nhiều
+- util: Function hay sử dụng chung 
 
-Cách check log khi dispatch action :
-```
-    - Khi đang debug trên giả lập android , nhấn tổ hợp (MAC) cmd + D , nhấn open Debugger sẽ mở Chrome 
-    - 1 action call api sẽ có 3 status : 
-        BEGIN_fetch_sth: bắt đầu call api, sẽ log ra url sắp call + param (xem trong payload của action)
-        fetch_sth_SUCCESS: call api thành công ,sẽ log ra data trả về (điều kiện thành công khi data.status = 'success')
-        fetch_sth_FAIL: không thoả mãn điều kiện trên 
-    - 1 action set thông thường chỉ log ra 1 dòng SET_doing_sth , bao gồm payload 
-    - Check action and reducer của API trong folder: src/store/api 
-```
+## Cấu trúc của 1 module 
+1 module app gồm các thành phần cơ bản sau: 
 
-### Codepush command
-```
-    IOS:
-    appcenter codepush release-react -a binhchili/Printerval -d Staging -t '*'
-    appcenter codepush release-react -a binhchili/Printerval -d Production -t '>=1.6' (latest version)
+- File `index.tsx`: Màn hình chính của module đó 
+- Folder `component` : Các component được sử dụng cho module đó 
+- File `service.ts` : Các service (query, mutation) được dùng cho module, giải thích sau 
+- File `reducer.ts`: Lưu trữ các state dùng cho toàn bộ module (chỉ tạo khi thây cần thiết)
+- File `type.ts`: Kiểu dữ liêu dùng cho module, thường là các kiểu response, request của query trong `service.ts`
 
-    ANDROID:
-    appcenter codepush release-react -a binhchili/Printerval-1 -d Staging -t '*'
-    appcenter codepush release-react -a binhchili/Printerval-1 -d Production -t '>=1.6'
-```
-<br/>
-<br/>
+Nếu module đó có nhiều screen liên quan, 1 folder `screen` nên được tạo 
+
+    
+## RTK Query: 
+Trước khi hiểu về luồng call endpoint của app , đọc guide về [RTK Query]('https://redux.js.org/redux-toolkit/overview') này
+
+File `api/service.ts` tạo ra các domain để gọi endpoint tới. Hiện tại app đang call tới 3 domain => 3 base query được tạo 
+Để hiểu thêm về cách xử lý data trả về success/error, đọc hàm `axiosBaseQuery`. Có thời gian thì có thể custom lại để optimal hơn 
+
+File `api/constant.ts` sẽ có 1 trường `SERVICE_DEBUG`. Nếu muốn log ra dữ liệu trả về từ query nào thì điền vào mảng 
+
+Mỗi module thường có file `service.ts` để inject endpoint vào. Muốn callendpoint nào thì sử dụng các hook đã được build sẵn từ đó ra 
+
+Có 2 kiểu query được sử dụng 
+- `useFetchSomethingQuerry`: đơn giản là fetch data ngay khi component mount và trả về result 
+- `useLazyFetchSomethingQuerry`: Promise function , trả về data để tự xử lý. Dùng cho lazy load
+
+1 số trường hợp sau khi fetch api cần set data vào redux store (user cart, etc, ...) thì dùng matching trong reducer để hứng data trả về
+Example: `cart/reducer.ts`
+
+Ngoài ra còn 1 số kĩ năng advanced về rtk query nữa sẽ hươngs dẫn sau 
+
+## Sơ lược về các component hay sử dụng 
+Folder `src/components` gồm sub folder sau 
+
+- hooks: Các hook thường sử dụng. 
+- input: Textinput sử dụng cho app. Có 2 loại input là text input và option input(`InputOption`). Đọc thêm về cách sử dụng input cũng như validate các trường ở file `CreateAddress.tsx`
+- list: Swiper image hiển thị ảnh product 
+- loading: Các component loading khi call api. Đặt component này ở màn bao quát toàn bộ screen 
+- popup: Các popup thông báo dùng chung của app. Đã export thành các function để tiện sử dụng: `alertSuccess()`, `alertError()` , `showMessage()`
+- product: Gồm các product card sử dụng trong các list hiển thị product. `DynamicCard` sẽ có height tuỳ biến dùng cho list dọc  còn `HorizonCard` dùng cho list ngang(`ProductRow`)
+- text: Bắt buộc phải sử dụng text này do có sử dụng font cho app. Có 2 loại `TextNormal` và `TextSemiBold`. Chưa có kế hoạch thêm 
+Ngoài ra còn 1 số text đặc biệt như `RadioText` dùng cho RadioButton 
+
+- `FancyButton.tsx`: Button có animation khi nhấn đê tạo cảm giác. Có thể customize lại cho đẹp 
+- `HeaderScreen.tsx`: Header dùng chung cho toàn bộ screen app 
+
+1 số comp khác nữa tự khám phá
+
+
+## Codepush command
+
+IOS:
+`appcenter codepush release-react -a binhchili/Printerval -d Staging -t '*'`
+`appcenter codepush release-react -a binhchili/Printerval -d Production -t '>=1.6'` (latest version)
+
+ANDROID:
+`appcenter codepush release-react -a binhchili/Printerval-1 -d Staging -t '*'`
+`appcenter codepush release-react -a binhchili/Printerval-1 -d Production -t '>=1.6'`
+
 Credit by binhchili <br/>
 Contact:  <br/>
     - dragonlava99@gmail.com (Skype)  <br/>
