@@ -110,12 +110,12 @@ const VariantSection = ({
                                         <Image style={styles.optionIcon} source={require('@image/style-guide.png')} />
                                         <TextNormal style={{ fontSize: 13 }}>Style guide</TextNormal>
                                     </Pressable>
-                                ) : (
+                                ) : title == 'size' ? (
                                     <Pressable style={{ flexDirection: 'row' }} hitSlop={8} onPress={toSizeGuide}>
                                         <Image style={styles.optionIcon} source={require('@image/size-guide.png')} />
                                         <TextNormal style={{ fontSize: 13 }}>Size guide</TextNormal>
                                     </Pressable>
-                                )}
+                                ) : null}
                             </View>
                             <ScrollView
                                 style={styles.optionRow}
