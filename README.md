@@ -15,13 +15,13 @@ Chạy trên XCode: version 14.0 or higher
 
 Install xong, 1 số lib trong node-modules cần đc fix lại :
 - react-native-scrollable-tab-view: File `index.js` bỏ hàm `getNode()`
-- [react-native-fast-image]('https://github.com/DylanVann/react-native-fast-image/issues/943'): nếu bị crash thì fix theo link 
+- [react-native-fast-image](https://github.com/DylanVann/react-native-fast-image/issues/943): nếu bị crash thì fix theo link 
    
 ## Knowledge requirement
 - React & React native & Functional components
-- [Custom Hooks]('https://react.dev/learn/reusing-logic-with-custom-hooks')
-- [Redux store]('https://redux.js.org/introduction/getting-started')
-- [Formik]('https://formik.org/docs/api/useFormik') & [Yup validation]('https://github.com/jquense/yup')
+- [Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
+- [Redux store](https://redux.js.org/introduction/getting-started)
+- [Formik](https://formik.org/docs/api/useFormik) & [Yup validation](https://github.com/jquense/yup)
 - [Slice function]('https://redux.js.org/usage/migrating-to-modern-redux#reducers-and-actions-with-createslice')
 - [RTK Query]('https://redux.js.org/redux-toolkit/overview')
     
