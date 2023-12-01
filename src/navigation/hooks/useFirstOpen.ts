@@ -2,6 +2,7 @@ import { useLazyFetchCountriesQuery, useLazyFetchPaymentConfigQuery } from '@api
 import { useLoginFirstOpen } from '@auth/hook/useLoginFirstOpen';
 import { POST_EXPIRE_DAY, STORAGE_KEY } from '@constant/index';
 import { useLazyFetchPostByIdQuery, useLazyFetchPrintervalPostQuery } from '@home/service';
+import { navigate } from '@navigation/service';
 import { createSelector } from '@reduxjs/toolkit';
 import config from '@store/configReducer';
 import { useAppDispatch, useAppSelector } from '@store/hook';
@@ -103,9 +104,19 @@ export const useFirstOpen = () => {
     };
 
     useEffect(() => {
-        if (loginState !== 'uninitialize') {
-            RNBootSplash.hide({ fade: true, duration: 1000 });
-        }
+        const checkIntro = async () => {
+            if (loginState !== 'uninitialize') {
+                RNBootSplash.hide({ fade: true, duration: 1000 });
+
+                // var flag = await storage.get(STORAGE_KEY.INTRO_FLAG);
+                // if (!!flag) {
+                //     navigate('App');
+                //     RNBootSplash.hide({ fade: true, duration: 1000 });
+                // } else RNBootSplash.hide({ fade: true, duration: 1000 });
+            }
+        };
+
+        checkIntro();
     }, [loginState]);
 
     useEffect(() => {

@@ -48,6 +48,7 @@ import OrderTracking from '@user/screen/OrderTracking';
 import FAQ from '@user/screen/FAQ';
 import SellerPage from '@product/screen/SellerPage';
 import NotficationScreen from '@notification/index';
+import IntroScreen from '@intro/index';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -101,20 +102,9 @@ const Router = () => {
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
             >
+                <Stack.Screen name="Intro" component={IntroScreen} options={{ animationEnabled: false }} />
                 <Stack.Screen name="App" component={BottomTabs} options={{ animationEnabled: false }} />
-                <Stack.Screen
-                    name="Detail"
-                    component={DetailScreen}
-                    options={{
-                        cardStyleInterpolator: ({ current: { progress } }) => {
-                            return { cardStyle: { opacity: progress } };
-                        },
-                    }}
-                    sharedElements={route => {
-                        const { url } = route.params;
-                        return [url];
-                    }}
-                />
+
                 <Stack.Screen name="LandingPage" component={LandingPage} />
                 <Stack.Screen name="CartNavigator" component={CartScreen} />
                 <Stack.Screen name="SearchResult" component={SearchResult} />

@@ -68,6 +68,11 @@ export const STORAGE_KEY = {
      * Token dùng để add to cart, product history , etc
      */
     CUSTOMER_TOKEN: 'CustomerToken',
+
+    /**
+     * Flag đánh dấu app đã mở intro lần đầu chưa
+     */
+    INTRO_FLAG: 'IntroFlag',
 };
 
 export const ORDER_SIZE = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
