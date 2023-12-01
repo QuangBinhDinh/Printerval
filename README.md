@@ -22,8 +22,8 @@ Install xong, 1 số lib trong node-modules cần đc fix lại :
 - [Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 - [Redux store](https://redux.js.org/introduction/getting-started)
 - [Formik](https://formik.org/docs/api/useFormik) & [Yup validation](https://github.com/jquense/yup)
-- [Slice function]('https://redux.js.org/usage/migrating-to-modern-redux#reducers-and-actions-with-createslice')
-- [RTK Query]('https://redux.js.org/redux-toolkit/overview')
+- [Slice function](https://redux.js.org/usage/migrating-to-modern-redux#reducers-and-actions-with-createslice)
+- [RTK Query](https://redux.js.org/redux-toolkit/overview)
     
 ## Cấu trúc thư mục src :
 - api: Thông tin config axios, constant request, debug, etc
@@ -50,7 +50,7 @@ Nếu module đó có nhiều screen liên quan, 1 folder `screen` nên được
 
     
 ## RTK Query: 
-Trước khi hiểu về luồng call endpoint của app , đọc guide về [RTK Query]('https://redux.js.org/redux-toolkit/overview') này
+Trước khi hiểu về luồng call endpoint của app , đọc guide về [RTK Query](https://redux.js.org/redux-toolkit/overview) này
 
 File `api/service.ts` tạo ra các domain để gọi endpoint tới. Hiện tại app đang call tới 3 domain => 3 base query được tạo 
 Để hiểu thêm về cách xử lý data trả về success/error, đọc hàm `axiosBaseQuery`. Có thời gian thì có thể custom lại để optimal hơn 
