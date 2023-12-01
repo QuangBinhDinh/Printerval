@@ -18,7 +18,9 @@ interface IProps {
     product: Product;
 }
 const DeliverySection = ({ data, country, product }: IProps) => {
-    const locale = getLocales()[0].countryCode.toLowerCase();
+    // debug trên chrome dùng getLocales sẽ bị crash !!
+    // const locale = getLocales()[0].countryCode.toLowerCase();
+    const locale = 'us';
 
     const renderTimeShipping = (defaultMinTime: number, defaultMaxTime: number) => {
         const minTime = moment().add(defaultMinTime, 'days').format('ll');

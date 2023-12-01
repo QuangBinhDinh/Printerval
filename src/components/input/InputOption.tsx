@@ -13,9 +13,9 @@ interface IProps {
 
     errorStyle?: StyleProp<TextStyle>;
 
-    error: string | undefined;
+    error?: string | undefined;
 
-    touched: boolean | undefined;
+    touched?: boolean | undefined;
 
     title: string;
 

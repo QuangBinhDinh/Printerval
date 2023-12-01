@@ -44,7 +44,8 @@
             "@cart": "./src/module/cart",
             "@checkout": "./src/module/checkout",
             "@notification": "./src/module/notification",
-            "@intro": "./src/module/intro"
+            "@intro": "./src/module/intro",
+            "@guide": "./src/module/guide"
           }
         }
       ],

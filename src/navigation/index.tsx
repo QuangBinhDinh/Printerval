@@ -49,6 +49,8 @@ import FAQ from '@user/screen/FAQ';
 import SellerPage from '@product/screen/SellerPage';
 import NotficationScreen from '@notification/index';
 import IntroScreen from '@intro/index';
+import SelectSizeGuide from '@guide/SelectSize';
+import SizeGuideResult from '@guide/SizeGuideResult';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -139,6 +141,8 @@ const Router = () => {
                 <Stack.Screen name="FAQScreen" component={FAQ} />
 
                 <Stack.Screen name="NotficationScreen" component={NotficationScreen} />
+                <Stack.Screen name="SelectSizeGuide" component={SelectSizeGuide} />
+                <Stack.Screen name="SizeGuideResult" component={SizeGuideResult} />
 
                 <Stack.Screen name="NotFoundScreen" component={NotFoundScreen} />
             </Stack.Navigator>

@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { ProductFilterArgs } from '@searchResult/service';
-import { Post, Product, Seller, ShippingAddress } from '@type/common';
+import { Post, Product, Seller, ShippingAddress, SizeGuide } from '@type/common';
 
 type RootStackParams = {
     SubCollection: {
@@ -73,6 +73,14 @@ type RootStackParams = {
     SellerPage: {
         seller: Seller;
     };
+
+    SelectSize: {
+        productId: number;
+    };
+
+    SizeGuideResult: {
+        result: SizeGuide;
+    };
 };
 
 export type SubCollectionRouteProp = RouteProp<RootStackParams, 'SubCollection'>;
@@ -89,3 +97,5 @@ export type CheckoutSuccessRouteProp = RouteProp<RootStackParams, 'CheckoutSucce
 export type OrderDetailRouteProp = RouteProp<RootStackParams, 'OrderDetail'>;
 export type OrderTrackingRouteProp = RouteProp<RootStackParams, 'OrderTracking'>;
 export type SellerPageRouteProp = RouteProp<RootStackParams, 'SellerPage'>;
+export type SelectSizeRouteProp = RouteProp<RootStackParams, 'SelectSize'>;
+export type SizeGuideResultRouteProp = RouteProp<RootStackParams, 'SizeGuideResult'>;

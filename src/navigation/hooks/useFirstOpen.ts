@@ -106,13 +106,13 @@ export const useFirstOpen = () => {
     useEffect(() => {
         const checkIntro = async () => {
             if (loginState !== 'uninitialize') {
-                RNBootSplash.hide({ fade: true, duration: 1000 });
+                // RNBootSplash.hide({ fade: true, duration: 1000 });
 
-                // var flag = await storage.get(STORAGE_KEY.INTRO_FLAG);
-                // if (!!flag) {
-                //     navigate('App');
-                //     RNBootSplash.hide({ fade: true, duration: 1000 });
-                // } else RNBootSplash.hide({ fade: true, duration: 1000 });
+                var flag = await storage.get(STORAGE_KEY.INTRO_FLAG);
+                if (!!flag) {
+                    navigate('App');
+                    RNBootSplash.hide({ fade: true, duration: 1000 });
+                } else RNBootSplash.hide({ fade: true, duration: 1000 });
             }
         };
 

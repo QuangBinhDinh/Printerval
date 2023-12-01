@@ -58,6 +58,10 @@ const VariantSection = ({
         navigate('StyleGuide', { product_id: detailVariant.product_id, style_id, type_id });
     }, [displaySelected, mappings]);
 
+    const toSizeGuide = () => {
+        navigate('SelectSizeGuide', { productId: detailVariant?.product_id });
+    };
+
     return (
         <View style={{ width: '100%', marginTop: 24 }}>
             {Object.entries(options).map(([title, ids], index) => {
@@ -107,7 +111,7 @@ const VariantSection = ({
                                         <TextNormal style={{ fontSize: 13 }}>Style guide</TextNormal>
                                     </Pressable>
                                 ) : (
-                                    <Pressable style={{ flexDirection: 'row' }} hitSlop={8}>
+                                    <Pressable style={{ flexDirection: 'row' }} hitSlop={8} onPress={toSizeGuide}>
                                         <Image style={styles.optionIcon} source={require('@image/size-guide.png')} />
                                         <TextNormal style={{ fontSize: 13 }}>Size guide</TextNormal>
                                     </Pressable>

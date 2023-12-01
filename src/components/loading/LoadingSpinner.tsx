@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Lottie from 'lottie-react-native';
 
-const LoadingSpinner = ({ visible }: { visible: boolean }) => {
+const LoadingSpinner = ({ visible, darkmode }: { visible: boolean; darkmode?: boolean }) => {
     if (!visible) return null;
     return (
         <View
@@ -11,7 +11,7 @@ const LoadingSpinner = ({ visible }: { visible: boolean }) => {
                 {
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: 'rgba(255,255,255,0.35)',
+                    backgroundColor: darkmode ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.35)',
                     zIndex: 500,
                 },
             ]}

@@ -250,3 +250,32 @@ export interface ShipMethod {
      */
     max_date: string;
 }
+
+export interface SizeGuide {
+    id: number;
+    parent_id: number;
+    title: string;
+    value: string;
+
+    display_name: string;
+
+    sizes: string[];
+
+    sizes_data: {
+        [x: string]: {
+            cm: string[];
+            inch: string[];
+        };
+    };
+
+    dimensions: string[];
+
+    infographics: string[];
+}
+
+export interface SizeData {
+    [x: string]: {
+        cm: string[];
+        inch: string[];
+    };
+}

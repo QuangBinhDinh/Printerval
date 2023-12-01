@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { RootState } from '@store/store';
 import { getVersion, isPinOrFingerprintSet } from 'react-native-device-info';
 import { SERVICE_DEBUG } from './constant';
-import { Country, Slug } from '@type/common';
+import { Country, SizeGuide, Slug } from '@type/common';
 
 const GLOBAL_URL = 'https://glob.api.printerval.com/';
 
@@ -139,11 +139,17 @@ export const globalApi = createApi({
             'User-Agent': `printervalApp/${getVersion()}`,
         },
     }),
-    endpoints: build => ({}),
+    endpoints: build => ({
+        fetchSizeGuide: build.query<SizeGuide[], { productId: number; type: string }>({
+            query: ({ productId, type }) => ({ url: `size-guide/customer-size-guide/${productId}?type=${type}` }),
+            transformResponse: res => res.result.list_size_guides.map((i: any) => ({ ...i, value: i.title })),
+        }),
+    }),
 });
 
 export const { useLazyFetchSlugQuery, useLazyFetchPaymentConfigQuery, useLazyFetchCountriesQuery } = api;
 export const { usePostImageMutation } = domainApi;
+export const { useFetchSizeGuideQuery } = globalApi;
 
 /**
  * Handle error response của Printerval, trả về 1 message duy nhất
