@@ -46,6 +46,7 @@ import WishlistScreen from '@user/screen/Wishlist';
 import ProfileSettings from '@user/screen/ProfileSettings';
 import OrderTracking from '@user/screen/OrderTracking';
 import FAQ from '@user/screen/FAQ';
+import SellerPage from '@product/screen/SellerPage';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -130,6 +131,7 @@ const Router = () => {
                 <Stack.Screen name="AllReview" component={AllReview} />
                 <Stack.Screen name="ReportProduct" component={ReportProduct} />
                 <Stack.Screen name="CreateTicket" component={CreateTicket} />
+                <Stack.Screen name="SellerPage" component={SellerPage} />
 
                 <Stack.Screen name="CheckoutNavigator" component={CheckoutScreen} />
                 <Stack.Screen name="EditShipAddress" component={EditShipping} />

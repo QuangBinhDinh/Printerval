@@ -4,13 +4,23 @@ import { Seller } from '@type/common';
 import { randomizeColor } from '@util/index';
 import { capitalize } from 'lodash';
 import React, { memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { navigate } from '@navigation/service';
 
 const SellerInfo = ({ seller, prodImg }: { seller?: Seller; prodImg?: string }) => {
     const random_bg = useMemo(() => randomizeColor(1)[0], []);
+
+    const toSellerPage = () => {
+        console.log(seller);
+
+        if (seller) {
+            var newSeller: Seller = { ...seller, ...(!seller.image_avatar && { image_avatar: prodImg }) };
+            navigate('SellerPage', { seller: newSeller });
+        }
+    };
     return (
-        <View style={styles.container}>
+        <Pressable style={styles.container} onPress={toSellerPage}>
             <View style={[styles.avatar]}>
                 <FastImage
                     style={{ width: '100%', height: '100%' }}
@@ -23,7 +33,7 @@ const SellerInfo = ({ seller, prodImg }: { seller?: Seller; prodImg?: string }) 
                     {capitalize(seller?.name.trim())}
                 </TextSemiBold>
             </View>
-        </View>
+        </Pressable>
     );
 };
 
@@ -41,7 +51,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 6,
         overflow: 'hidden',
-        backgroundColor: '#999',
+        backgroundColor: lightColor.graybg,
     },
     content: {
         flex: 1,
