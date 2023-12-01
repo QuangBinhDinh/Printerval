@@ -9,6 +9,8 @@ import { formatPrice } from '@util/index';
 import { Product } from '@type/common';
 import { navigate } from '@navigation/service';
 import { useAppSelector } from '@store/hook';
+import { getLocales } from 'react-native-localize';
+import FastImage from 'react-native-fast-image';
 
 interface IProps {
     country: string;
@@ -16,6 +18,8 @@ interface IProps {
     product: Product;
 }
 const DeliverySection = ({ data, country, product }: IProps) => {
+    const locale = getLocales()[0].countryCode.toLowerCase();
+
     const renderTimeShipping = (defaultMinTime: number, defaultMaxTime: number) => {
         const minTime = moment().add(defaultMinTime, 'days').format('ll');
         const maxTime = moment().add(defaultMaxTime, 'days').format('ll');
@@ -42,7 +46,7 @@ const DeliverySection = ({ data, country, product }: IProps) => {
         <View style={styles.container}>
             {!!data && (
                 <View style={styles.section}>
-                    <Image style={styles.iconLeft} source={{ uri: '' }} />
+                    <FastImage style={styles.iconLeft} source={{ uri: `https://flagcdn.com/48x36/${locale}.png` }} />
                     <View style={{ flex: 1, paddingLeft: 10 }}>
                         <TextSemiBold style={{ color: '#444', fontSize: 15 }}>Delivery</TextSemiBold>
                         {Object.entries(data).map(item => (
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f1f1f1',
     },
     iconLeft: {
-        width: 22,
-        height: 22,
+        width: 24,
+        height: 18,
     },
 });
