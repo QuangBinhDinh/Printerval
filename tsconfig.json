@@ -36,6 +36,7 @@
       "@product/*": ["./src/module/product/*"],
       "@cart/*": ["./src/module/cart/*"],
       "@checkout/*": ["./src/module/checkout/*"],
+      "@notification/*": ["./src/module/notification/*"],
     }
 
   },

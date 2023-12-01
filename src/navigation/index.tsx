@@ -47,6 +47,7 @@ import ProfileSettings from '@user/screen/ProfileSettings';
 import OrderTracking from '@user/screen/OrderTracking';
 import FAQ from '@user/screen/FAQ';
 import SellerPage from '@product/screen/SellerPage';
+import NotficationScreen from '@notification/index';
 
 const Stack = createSharedElementStackNavigator();
 
@@ -146,6 +147,8 @@ const Router = () => {
                 <Stack.Screen name="OrderTracking" component={OrderTracking} />
                 <Stack.Screen name="WishlistScreen" component={WishlistScreen} />
                 <Stack.Screen name="FAQScreen" component={FAQ} />
+
+                <Stack.Screen name="NotficationScreen" component={NotficationScreen} />
 
                 <Stack.Screen name="NotFoundScreen" component={NotFoundScreen} />
             </Stack.Navigator>

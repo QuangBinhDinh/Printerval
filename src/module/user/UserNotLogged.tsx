@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
         width: 21,
         height: 21,
         marginRight: 10,
-        backgroundColor: lightColor.graybg,
+        //backgroundColor: lightColor.graybg,
     },
 });

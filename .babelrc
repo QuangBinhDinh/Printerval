@@ -42,7 +42,8 @@
             "@user": "./src/module/user",
             "@product": "./src/module/product",
             "@cart": "./src/module/cart",
-            "@checkout": "./src/module/checkout"
+            "@checkout": "./src/module/checkout",
+            "@notification": "./src/module/notification"
           }
         }
       ],

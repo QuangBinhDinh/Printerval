@@ -54,7 +54,7 @@ const UserLogged = () => {
 
             <View style={{ height: 70 * DESIGN_RATIO, width: '100%' }} />
 
-            <Pressable style={styles.sectionView}>
+            <Pressable style={styles.sectionView} onPress={() => navigate('NotficationScreen')}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.sectionImage} source={require('@image/user-bell.png')} />
                     <TextNormal>Notification</TextNormal>
@@ -143,6 +143,5 @@ const styles = StyleSheet.create({
         width: 21,
         height: 21,
         marginRight: 10,
-        backgroundColor: lightColor.graybg,
     },
 });
