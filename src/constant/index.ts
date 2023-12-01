@@ -18,7 +18,7 @@ export const CACHE_TIME_SECONDS = 90;
 /**
  * List những screen có màu background (để đổi màu status bar thành trắng)
  */
-export const SCREEN_WITH_COLOR = ['LoginScreen', 'CreateAccount'];
+export const SCREEN_WITH_COLOR = ['LoginScreen', 'CreateAccount', 'Intro'];
 
 export const RELEVANT = [
     {

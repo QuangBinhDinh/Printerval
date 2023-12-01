@@ -29,11 +29,11 @@ const PAGES = [
         source: require('@image/Intro/banner2-min.jpg'),
         content: 'Perfect fit, Free Refund Return and Replacement with "Printerval Guarantee"',
     },
-    {
-        id: 3,
-        source: require('@image/Intro/banner3-min.jpg'),
-        content: 'Choose another country or region to see content specific to your location and shop online.',
-    },
+    // {
+    //     id: 3,
+    //     source: require('@image/Intro/banner3-min.jpg'),
+    //     content: 'Choose another country or region to see content specific to your location and shop online.',
+    // },
 ];
 const IntroScreen = () => {
     const ref = useRef<ScrollView>();
@@ -41,9 +41,12 @@ const IntroScreen = () => {
 
     const [curPage, setPage] = useState(0);
 
+    //Đã hết màn intro chưa
+    const endOfIntro = curPage == PAGES.length - 1;
+
     //scroll hết intro sẽ vào app
     const scrollNext = () => {
-        if (curPage < 3) {
+        if (!endOfIntro) {
             ref.current?.scrollTo({ y: 0, x: PAGE_WIDTH * (curPage + 1) });
         } else {
             navigate('App');
@@ -81,8 +84,7 @@ const IntroScreen = () => {
             return (
                 <TextSemiBold style={styles.whiteText}>
                     100% <TextSemiBold style={styles.highlightText}>Happy{'\n'}</TextSemiBold>
-                    100%{''}
-                    <TextSemiBold style={styles.highlightText}>Love</TextSemiBold>
+                    100% <TextSemiBold style={styles.highlightText}>Love</TextSemiBold>
                 </TextSemiBold>
             );
         return (
@@ -123,7 +125,9 @@ const IntroScreen = () => {
                     </Pressable>
 
                     <Pressable style={styles.nextButton} onPress={scrollNext}>
-                        <TextSemiBold style={{ fontSize: 18, color: 'white', marginTop: 1 }}>Next</TextSemiBold>
+                        <TextSemiBold style={{ fontSize: 18, color: 'white', marginTop: 1 }}>
+                            {endOfIntro ? `Let's go` : 'Next'}
+                        </TextSemiBold>
                     </Pressable>
                 </View>
 
@@ -168,7 +172,7 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     nextButton: {
-        width: 120,
+        paddingHorizontal: 32,
         height: 42,
         justifyContent: 'center',
         alignItems: 'center',
